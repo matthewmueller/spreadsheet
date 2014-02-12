@@ -1,0 +1,36 @@
+{
+  "name": "table",
+  "repo": "matthewmueller/table",
+  "description": "create tables with excel-like features",
+  "version": "0.0.1",
+  "keywords": [],
+  "dependencies": {
+    "component/domify": "*",
+    "component/emitter": "*",
+    "yields/isArray": "*",
+    "matthewmueller/extend": "*",
+    "component/classes": "*",
+    "component/event": "*",
+    "component/props": "*",
+    "yields/uniq": "*"
+  },
+  "development": {},
+  "license": "MIT",
+  "main": "lib/table.js",
+  "scripts": [
+    "lib/table.js",
+    "lib/selection.js",
+    "lib/cell.js",
+    "lib/utils.js",
+    "lib/type.js",
+    "lib/tokens.js",
+    "lib/regex.js",
+    "lib/expand.js"
+  ],
+  "templates": [
+    "template.html"
+  ],
+  "styles": [
+    "table.css"
+  ]
+}

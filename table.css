@@ -1,0 +1,67 @@
+.table {
+  width: 100%;
+  background-color: transparent;
+  border-spacing: 0;
+  border-collapse: collapse;
+  *border-collapse: collapse;
+  border-left: 0;
+  table-layout: fixed;
+}
+
+.table input {
+  font: inherit;
+  width: 100%;
+  height: inherit;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  background: none;
+  display: block;
+}
+
+.table input:focus {
+  outline: none;
+}
+
+.table + .table {
+  margin-top: 10px;
+}
+
+.table td {
+  padding: 8px;
+  line-height: 20px;
+  text-align: left;
+  border: 1px solid #dddddd;
+  content: '';
+}
+
+.table td.editable {
+  padding: 0;
+  position: relative;
+}
+
+.table td.editable input {
+  padding: 8px;
+  position: relative;
+}
+
+.table .active input {
+  position: relative;
+}
+
+.table .active::after {
+  content: '\0';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  border: 2px solid #4285F4;
+  top: -2px;
+  left: -2px;
+}
+
+/* empty cells take up same space */
+.table td:empty:after {
+  content: '.';
+  visibility: hidden;
+}
+

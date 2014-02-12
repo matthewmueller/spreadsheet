@@ -1,0 +1,40 @@
+<html>
+<head>
+  <title>table component</title>
+  <link rel="stylesheet" href="../build/build.css">
+  <style>
+    table {
+      border: 1px solid #ccc;
+      border-collapse: collapse;
+    }
+
+    table tr {
+      border: 1px solid green;
+      min-height: 40px;
+      min-width: 40px;
+    }
+
+    table td {
+      border: 1px solid #ccc;
+      padding: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Calculations</h1>
+  <script src="../build/build.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    var Table = require('table');
+    var table = Table();
+    table.select('A1:A9').insert([12, 3, 42, 1, 5, 2, 1, 10]).editable();
+    table.select('B1:B9').insert([11, 23, 13, 2, 18, 9, 6, 31]).editable();
+    table.select('C1:C9').calc(':A + :B')
+
+    table.on('change A4', function(curr, prev) {
+      console.log('A4 changed: curr: %s, prev: %s', curr, prev);
+    })
+    document.body.appendChild(table.el);
+    console.log(table.select(':1').range('A', 'F').selection);
+  </script>
+</body>
+</html>
