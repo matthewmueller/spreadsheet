@@ -26,17 +26,21 @@
   <script type="text/javascript">
     var Table = require('table');
     var table = Table();
-    table.select('A1:H9').insert(['A1', 'B', 'C', 'D', 'E', 'F', 'G', 'H'])
-    table.select('A2:A9').insert([2, 3, 4, 5, 6, 7, 8, 9])
-
-    table.select('B2:C8').insert(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p']);
     document.body.appendChild(table.el);
 
-    table.select('B3:C5').insert(['z', 'y', 'x', 'w']).editable();
-    table.select('F7:H9').insert(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']);
-    table.select('B2:C3').calc(':1 + :2')
-    table.select(':2')
-    table.select(':A')
+    window.table = table;
+    table.insert('A5', 5)
+
+//     table.select('A1:H9').insert(['A1', 'B', 'C', 'D', 'E', 'F', 'G', 'H'])
+//     table.select('A2:A9').insert([2, 3, 4, 5, 6, 7, 8, 9])
+
+//     table.select('B2:C8').insert(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p']);
+// ble.select('B3:C5').insert(['z', 'y', 'x', 'w']).editable();
+//     table.select('F7:H9').insert(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']);
+//     table.select('B2:C3').calc(':1 + :2')
+//     table.select(':2')
+//     ta
+//     table.select(':A')
   </script>
 </body>
 </html>

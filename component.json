@@ -25,7 +25,8 @@
     "lib/type.js",
     "lib/tokens.js",
     "lib/regex.js",
-    "lib/expand.js"
+    "lib/expand.js",
+    "lib/match.js"
   ],
   "templates": [
     "template.html"
