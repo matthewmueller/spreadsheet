@@ -50,6 +50,7 @@
   border: 2px solid #4285F4;
   top: -2px;
   left: -2px;
+  pointer-events: none;
 }
 
 /* empty cells take up same space */
