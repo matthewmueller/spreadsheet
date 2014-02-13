@@ -26,15 +26,16 @@
   <script type="text/javascript">
     var Table = require('table');
     var table = Table();
-    table.select('A1:A9').insert([12, 3, 42, 1, 5, 2, 1, 10]).editable();
-    table.select('B1:B9').insert([11, 23, 13, 2, 18, 9, 6, 31]).editable();
-    table.select('C1:C9').calc(':A + :B')
 
-    table.on('change A4', function(curr, prev) {
-      console.log('A4 changed: curr: %s, prev: %s', curr, prev);
-    })
+    table.select('A1:A9').insert([12, 3, 42, 1, 5, 2, 1, 10, '']).editable().format('$');
+    table.select('B1:B9').insert([11, 23, 13, 2, 18, 9, 6, 31, '']).editable().format('$');
+    table.select('C1:C9').calc(':A + :B').format('$')
+
+    // table.on('change A4', function(curr, prev) {
+    //   console.log('A4 changed: curr: %s, prev: %s', curr, prev);
+    // })
     document.body.appendChild(table.el);
-    console.log(table.select(':1').range('A', 'F').selection);
+    // console.log(table.select(':1').range('A', 'F').selection);
   </script>
 </body>
 </html>

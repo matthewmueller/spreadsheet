@@ -10,9 +10,11 @@
     "yields/isArray": "*",
     "matthewmueller/extend": "*",
     "component/classes": "*",
+    "component/events": "*",
     "component/event": "*",
     "component/props": "*",
-    "yields/uniq": "*"
+    "yields/uniq": "*",
+    "adamwdraper/Numeral-js": "*"
   },
   "development": {},
   "license": "MIT",
@@ -25,7 +27,8 @@
     "lib/type.js",
     "lib/tokens.js",
     "lib/regex.js",
-    "lib/expand.js"
+    "lib/expand.js",
+    "lib/match.js"
   ],
   "templates": [
     "template.html"
