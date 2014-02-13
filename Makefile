@@ -1,5 +1,5 @@
 
-build: components index.js spreadsheet.css
+build: components spreadsheet.css
 	@component build
 
 components: component.json
@@ -8,4 +8,4 @@ components: component.json
 clean:
 	rm -fr build components
 
-.PHONY: clean
+.PHONY: build clean
