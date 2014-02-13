@@ -3,7 +3,7 @@
 
   create spreadsheets with excel-like features
 
-  ![spreadsheet](https://i.cloudup.com/FzHm6CQCcV.png)
+  ![spreadsheet](https://i.cloudup.com/3TK3f5Cg6V.png)
 
 ## Installation
 
