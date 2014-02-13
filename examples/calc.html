@@ -30,6 +30,7 @@
     spreadsheet.select('A1:A9').insert([12, 3, 42, 1, 5, 2, 1, 10, '']).editable().format('$');
     spreadsheet.select('B1:B9').insert([11, 23, 13, 2, 18, 9, 6, 31, '']).editable().format('$');
     spreadsheet.select('C1:C9').calc(':A + :B').format('$')
+    spreadsheet.select('D1:D9').calc(':A + :C').format('$')
 
     // spreadsheet.on('change A4', function(curr, prev) {
     //   console.log('A4 changed: curr: %s, prev: %s', curr, prev);
