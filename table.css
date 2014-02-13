@@ -6,6 +6,7 @@
   *border-collapse: collapse;
   border-left: 0;
   table-layout: fixed;
+  color: #222;
 }
 
 .table input {
@@ -28,28 +29,20 @@
 }
 
 .table td {
-  padding: 8px;
+  padding: 0px;
+  position: relative;
   line-height: 20px;
   text-align: left;
   border: 1px solid #dddddd;
   content: '';
 }
 
-.table td.editable {
-  padding: 0;
-  position: relative;
-}
-
-.table td.editable input {
+.table td input {
   padding: 8px;
-  position: relative;
+  color: inherit;
 }
 
-.table .active input {
-  position: relative;
-}
-
-.table .active::after {
+.table td.active::after {
   content: '\0';
   width: 100%;
   height: 100%;

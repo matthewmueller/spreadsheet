@@ -29,9 +29,11 @@
     document.body.appendChild(table.el);
 
     window.table = table;
-    table.insert('A5', 5)
 
-//     table.select('A1:H9').insert(['A1', 'B', 'C', 'D', 'E', 'F', 'G', 'H'])
+
+    table.select('A1:H9').insert(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'])
+    // table.select('A1').insert(['C', 'B', 'C', 'D', 'E', 'F', 'G', 'H'])
+    table.select('A2:H9').insert(['', '', 'C', 'D', 'E', 'F', 'G', 'H']).editable();
 //     table.select('A2:A9').insert([2, 3, 4, 5, 6, 7, 8, 9])
 
 //     table.select('B2:C8').insert(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p']);

@@ -10,9 +10,11 @@
     "yields/isArray": "*",
     "matthewmueller/extend": "*",
     "component/classes": "*",
+    "component/events": "*",
     "component/event": "*",
     "component/props": "*",
-    "yields/uniq": "*"
+    "yields/uniq": "*",
+    "adamwdraper/Numeral-js": "*"
   },
   "development": {},
   "license": "MIT",
