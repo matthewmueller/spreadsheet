@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>table component</title>
+  <title>spreadsheet component</title>
   <link rel="stylesheet" href="../build/build.css">
   <style>
     table {
@@ -24,17 +24,17 @@
   <h1>Calculations</h1>
   <script src="../build/build.js" type="text/javascript"></script>
   <script type="text/javascript">
-    var Table = require('table');
-    var table = Table();
+    var Spreadsheet = require('spreadsheet');
+    var spreadsheet = Spreadsheet();
 
-    table.select('A1:A9').insert([12, 3, 42, 1, 5, 2, 1, 10, '']).editable().format('$');
-    table.select('B1:B9').insert([11, 23, 13, 2, 18, 9, 6, 31, '']).editable().format('$');
-    table.select('C1:C9').calc(':A + :B').format('$')
+    spreadsheet.select('A1:A9').insert([12, 3, 42, 1, 5, 2, 1, 10, '']).editable().format('$');
+    spreadsheet.select('B1:B9').insert([11, 23, 13, 2, 18, 9, 6, 31, '']).editable().format('$');
+    spreadsheet.select('C1:C9').calc(':A + :B').format('$')
 
-    // table.on('change A4', function(curr, prev) {
+    // spreadsheet.on('change A4', function(curr, prev) {
     //   console.log('A4 changed: curr: %s, prev: %s', curr, prev);
     // })
-    document.body.appendChild(table.el);
+    document.body.appendChild(spreadsheet.el);
     // console.log(table.select(':1').range('A', 'F').selection);
   </script>
 </body>

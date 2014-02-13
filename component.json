@@ -1,7 +1,7 @@
 {
-  "name": "table",
-  "repo": "matthewmueller/table",
-  "description": "create tables with excel-like features",
+  "name": "spreadsheet",
+  "repo": "matthewmueller/spreadsheet",
+  "description": "create spreadsheets with excel-like features",
   "version": "0.0.1",
   "keywords": [],
   "dependencies": {
@@ -18,9 +18,9 @@
   },
   "development": {},
   "license": "MIT",
-  "main": "lib/table.js",
+  "main": "lib/spreadsheet.js",
   "scripts": [
-    "lib/table.js",
+    "lib/spreadsheet.js",
     "lib/selection.js",
     "lib/cell.js",
     "lib/utils.js",
@@ -30,10 +30,7 @@
     "lib/expand.js",
     "lib/match.js"
   ],
-  "templates": [
-    "template.html"
-  ],
   "styles": [
-    "table.css"
+    "spreadsheet.css"
   ]
 }

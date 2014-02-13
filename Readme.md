@@ -1,13 +1,13 @@
 
-# table
+# spreadsheet
 
-  create tables with excel-like features
+  create spreadsheets with excel-like features
 
 ## Installation
 
   Install with [component(1)](http://component.io):
 
-    $ component install matthewmueller/table
+    $ component install matthewmueller/spreadsheet
 
 ## API
 
