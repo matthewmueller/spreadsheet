@@ -49,7 +49,7 @@ spreadsheet
   .select(':2') // Select the entire 2nd row
   .select(':A') // Select the entire A column
   .select('D4, A10:F3, :3, :C') // Select many
-``
+```
 
 ### Selection
 
