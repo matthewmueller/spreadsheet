@@ -18,6 +18,10 @@
       border: 1px solid #ccc;
       padding: 5px;
     }
+
+    .bold {
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -26,19 +30,21 @@
   <script type="text/javascript">
     var Spreadsheet = require('spreadsheet');
     var spreadsheet = Spreadsheet();
+    document.body.appendChild(spreadsheet.el);
 
     spreadsheet
-      .select('A1:A9').insert([12, 3, 42, 1, 5, 2, 1, 10]).editable().format('$')
-      .select('B1:B9').insert([11, 23, 13, 2, 18, 9, 6, 31, '']).editable().format('$')
-      .select('C1:C9').calc(':A + :B').format('$')
-      .select('D1:D9').calc(':A + :C').format('$')
-      .select('A10, B10').insert(['Revenues', 'Expenses'])
+      .select('B1, C1, D1').insert(['Revenues', 'Expenses', 'Profit']).addClass('bold')
+      .select('A2:A9').insert(years([1, 2, 3, 4, 5, 6, 7, 8])).addClass('bold')
+      .select('B2:B9').insert([10, 12, 32, 43, 53, 23, 32, 43]).format('$').editable()
+      .select('C2:C9').insert([32, 11, 22, 33, 45, 42, 10, 32]).format('$').editable()
+      .select('D2:D9').calc(':B - :C').format('$')
 
-    // spreadsheet.on('change A4', function(curr, prev) {
-    //   console.log('A4 changed: curr: %s, prev: %s', curr, prev);
-    // })
-    document.body.appendChild(spreadsheet.el);
-    // console.log(table.select(':1').range('A', 'F').selection);
+    function years(arr) {
+      return arr.map(function(item) {
+        return 'Year ' + item;
+      })
+    }
+
   </script>
 </body>
 </html>
