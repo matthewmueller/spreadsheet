@@ -40,6 +40,9 @@
 .spreadsheet td input {
   padding: 8px;
   color: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .spreadsheet td.active::after {
