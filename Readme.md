@@ -103,6 +103,11 @@ Add a class to each cell in the selection.
 spreadsheet.select('A1:A9').addClass('bold')
 ```
 
+## TODO
+
+- merging cells
+-
+
 ## License
 
   MIT
