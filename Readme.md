@@ -11,6 +11,8 @@
 
     $ component install matthewmueller/spreadsheet
 
+  Or include the the files in the `/dist` folder
+
 ## Example
 
 ```js
