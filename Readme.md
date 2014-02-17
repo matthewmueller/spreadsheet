@@ -11,6 +11,8 @@
 
     $ component install matthewmueller/spreadsheet
 
+  Or include the the files in the `/dist` folder
+
 ## Example
 
 ```js
@@ -102,6 +104,11 @@ Add a class to each cell in the selection.
 ```js
 spreadsheet.select('A1:A9').addClass('bold')
 ```
+
+## TODO
+
+- merging cells
+-
 
 ## License
 
