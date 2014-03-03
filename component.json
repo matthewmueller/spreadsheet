@@ -14,7 +14,8 @@
     "component/event": "*",
     "component/props": "*",
     "yields/uniq": "*",
-    "adamwdraper/Numeral-js": "*"
+    "adamwdraper/Numeral-js": "*",
+    "yields/shortcuts": "0.2.0"
   },
   "development": {},
   "license": "MIT",
