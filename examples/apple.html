@@ -1,0 +1,69 @@
+<html>
+<head>
+  <title>LR Model - Apple</title>
+  <link rel="stylesheet" href="/build/build.css">
+  <style>
+    .vertical-heading {
+      width: 200%;
+    }
+
+    .h1 input {
+      font-size: 18px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .growth input {
+      padding-left: 20px;
+      font-style: italic;
+      color: #0E54B8;
+    }
+  </style>
+</head>
+<body>
+  <script src="/build/build.js"></script>
+  <script>
+    var Spreadsheet = require('spreadsheet');
+    var spreadsheet = Spreadsheet();
+    document.body.appendChild(spreadsheet.el);
+
+    // headings
+    spreadsheet.select('A4:A30')
+      .insert(['Company Model', null, 'iPhones', 'Growth', 'Macs', 'Growth', 'App Stores', 'Growth', 'Other', 'Growth', null, 'Revenue', 'Growth', null, 'Cost of Goods Sold', null, 'Gross Profit', 'Margin', null, 'Selling, General & Administrative Expenses', '% of Revenue', null, 'Earnings (EBITDA)', 'Margin', null, 'Capital Expenditures', 'Capital Expenditures as a % of Revenue']).attr('colspan', 3);
+
+    spreadsheet.select('B4:O4')
+      .insert(['FYE 2012', 'FYE 2013', 'Q2 2013', 'Q3 2013', 'Q4 2013', 'Q1 2014', 'LTM', 'Q2 2014', 'Q3 2014', 'Q4 2015', 'Q1 2016', 'Year 1 Prj', 'Year 2 Prj', 'Year 3 Prj']);
+
+    // Add class to top header
+    spreadsheet.select(':4')
+      .addClass('h1')
+
+    // Add class to growth
+    spreadsheet.select('A7, A9, A11, A13, A16')
+      .addClass('growth')
+
+    // iPhone revenue
+    spreadsheet.select('B6:O6')
+      .insert(['772', 872, 201, 193, 209, 277, 881, 231, 222, 241, 319, 1013, 1115, 1226])
+      .format('$')
+
+    // past iPhone growth
+    spreadsheet.select('B7:C7')
+      .insert([.10, .129])
+      .format('%')
+
+    // editable iPhone growth
+    spreadsheet.select('I7:O7')
+      .insert([.15, .15, .15, .15, .15, .10, .10])
+      .format('%')
+      .editable()
+
+    // Mac revenue
+    spreadsheet.select('B8:O8')
+      .insert([965, 1090, 251, 242, 262, 347, 1101, 289, 278, 301, 399, 1267, 1393, 1533])
+      .format('$')
+
+
+  </script>
+</body>
+</html>

@@ -37,7 +37,7 @@
   content: '';
 }
 
-.spreadsheet td input {
+.spreadsheet input {
   padding: 8px;
   color: inherit;
   white-space: nowrap;
