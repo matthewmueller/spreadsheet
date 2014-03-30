@@ -27,6 +27,8 @@
     var spreadsheet = Spreadsheet();
     document.body.appendChild(spreadsheet.el);
 
+    // spreadsheet.select('A4:C4').insert(['Company Model']).merge();
+
     // headings
     spreadsheet.select('A4:A30')
       .insert(['Company Model', '', 'iPhones', 'Growth', 'Macs', 'Growth', 'App Stores', 'Growth', 'Other', 'Growth', '', 'Revenue', 'Growth', '', 'Cost of Goods Sold', '', 'Gross Profit', 'Margin', '', 'Selling, General & Administrative Expenses', '% of Revenue', '', 'Earnings (EBITDA)', 'Margin', '', 'Capital Expenditures', 'Capital Expenditures as a % of Revenue']).attr('colspan', 3);

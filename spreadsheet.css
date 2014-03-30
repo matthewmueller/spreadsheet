@@ -28,17 +28,22 @@
   margin-top: 10px;
 }
 
+.spreadsheet tr {
+  height: 2em;
+}
+
 .spreadsheet td {
-  padding: 0px;
+  padding: 0px 4px;
   position: relative;
-  line-height: 20px;
   text-align: left;
   border: 1px solid #dddddd;
   content: '';
 }
 
 .spreadsheet input {
-  padding: 8px;
+  height: inherit;
+  line-height: inherit;
+  /*padding: 8px;*/
   color: inherit;
   white-space: nowrap;
   overflow: hidden;

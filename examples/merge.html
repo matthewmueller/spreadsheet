@@ -1,0 +1,24 @@
+<html>
+<head>
+  <title>LR Model - Apple</title>
+  <link rel="stylesheet" href="/build/build.css">
+  <style>
+  </style>
+</head>
+<body>
+  <script src="/build/build.js"></script>
+  <script>
+    var Spreadsheet = require('spreadsheet');
+    var spreadsheet = Spreadsheet();
+    document.body.appendChild(spreadsheet.el);
+
+    spreadsheet.select('A1:C2').insert(['A1', 'B1', 'C1', 'A2', 'B2', 'C2'])
+    spreadsheet.select('A3:B5').insert(['A3:B5']).merge();
+    spreadsheet.select('A6:C6').insert(['A6', 'B6', 'C6'])
+    spreadsheet.select('B7:C15').merge().insert(['B7:C15']);
+    spreadsheet.select('A16:C16').insert(['A16', 'B16', 'C16']);
+    spreadsheet.select('A10:A14').merge().insert(['A10:A14', 'blah'])
+
+  </script>
+</body>
+</html>
