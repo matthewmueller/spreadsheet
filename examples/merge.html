@@ -19,6 +19,17 @@
     spreadsheet.select('A16:C16').insert(['A16', 'B16', 'C16']);
     spreadsheet.select('A10:A14').merge().insert(['A10:A14', 'blah'])
 
+    document.body.appendChild(document.createElement('hr'));
+
+    spreadsheet = Spreadsheet();
+    document.body.appendChild(spreadsheet.el);
+
+    spreadsheet.select('A1:A3').merge().insert(['A1', 'A2', 'A3'])
+    spreadsheet.select('B1:D3').mergeCols().insert(['B1:D1', 'B2:D2', 'B3:D3']);
+    spreadsheet.select('E1:E3').insert(['E1', 'E2', 'E3'])
+    spreadsheet.select('A4:E4').insert(['A4', 'B4', 'C4', 'D4', 'E4'])
+
+    // spreadsheet.select('A5:D7').mergeRows().insert(['Col A', 'Col B', 'Col C', 'Col D'])
   </script>
 </body>
 </html>
