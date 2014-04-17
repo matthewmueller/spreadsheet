@@ -20,6 +20,10 @@
   display: block;
 }
 
+.spreadsheet input[disabled] {
+  pointer-events: none;
+}
+
 .spreadsheet input:focus {
   outline: none;
 }
@@ -70,3 +74,38 @@
 .spreadsheet td.hidden {
   display: none;
 }
+
+.spreadsheet .editable {
+  color: #4285F4;
+  font-weight: 600;
+}
+
+/*.editable {
+ -webkit-animation: color_change 1s infinite alternate;
+ -moz-animation: color_change 1s infinite alternate;
+ -ms-animation: color_change 1s infinite alternate;
+ -o-animation: color_change 1s infinite alternate;
+ animation: color_change 1s infinite alternate;
+}
+
+@-webkit-keyframes color_change {
+ from { color: inherit; }
+ to { color: #4285F4; }
+}
+/*@-moz-keyframes color_change {
+ from { color: blue; }
+ to { color: green; }
+}
+@-ms-keyframes color_change {
+ from { color: blue; }
+ to { color: green; }
+}
+@-o-keyframes color_change {
+ from { color: blue; }
+ to { color: green; }
+}
+@keyframes color_change {
+ from { color: #ccc; }
+ to { color: inherit; }
+}
+*/
