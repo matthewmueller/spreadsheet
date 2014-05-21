@@ -17,7 +17,9 @@
     "adamwdraper/Numeral-js": "*",
     "yields/shortcuts": "0.2.0",
     "yields/k": "0.6.1",
-    "matthewmueller/delegates": "0.0.4"
+    "matthewmueller/delegates": "0.0.4",
+    "discore/closest": "0.1.2",
+    "bmcmahen/modifier": "0.0.1"
   },
   "development": {},
   "license": "MIT",
