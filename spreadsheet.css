@@ -51,7 +51,7 @@
 }
 
 .spreadsheet tbody th div {
-  -webkit-transform: translateX(2.5em);
+  -webkit-transform: translateX(100%);
 }
 
 .spreadsheet.headings th div {
