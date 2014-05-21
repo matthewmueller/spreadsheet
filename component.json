@@ -15,12 +15,16 @@
     "component/props": "*",
     "yields/uniq": "*",
     "adamwdraper/Numeral-js": "*",
-    "yields/shortcuts": "0.2.0"
+    "yields/shortcuts": "0.2.0",
+    "yields/k": "0.6.1",
+    "matthewmueller/delegates": "0.0.4"
   },
   "development": {},
   "license": "MIT",
-  "main": "lib/spreadsheet.js",
+  "main": "index.js",
   "scripts": [
+    "index.js",
+    "lib/workbook.js",
     "lib/spreadsheet.js",
     "lib/selection.js",
     "lib/cell.js",
