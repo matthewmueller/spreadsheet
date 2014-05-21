@@ -1,6 +1,5 @@
 .spreadsheet {
   width: 100%;
-  background-color: transparent;
   border-spacing: 0;
   border-collapse: collapse;
   *border-collapse: collapse;
@@ -16,7 +15,6 @@
   border: 0;
   margin: 0;
   padding: 0;
-  background: none;
   display: block;
 }
 
@@ -32,6 +30,62 @@
   margin-top: 10px;
 }
 
+/*.spreadsheet thead,
+.spreadsheet tbody {
+  z-index: 1;
+}
+*/
+.spreadsheet th {
+  position: relative;
+  overflow: hidden;
+}
+
+.spreadsheet th div {
+  display: block;
+  position: relative;
+  transition: -webkit-transform ease-out .2s;
+}
+
+.spreadsheet thead th div {
+  -webkit-transform: translateY(2em);
+}
+
+.spreadsheet tbody th div {
+  -webkit-transform: translateX(2.5em);
+}
+
+.spreadsheet.headings th div {
+  -webkit-transform: translateY(0);
+  -webkit-transform: translateX(0);
+}
+
+/*
+.spreadsheet thead tr,
+.spreadsheet tbody th {
+  position: relative;
+  z-index: -1;
+  transition: -webkit-transform ease-out .3s,
+              opacity ease-out .3s;
+}
+
+.spreadsheet thead tr {
+  -webkit-transform: translateY(2em);
+}
+
+.spreadsheet.headings thead tr {
+  opacity: 1;
+  -webkit-transform: translateY(0em);
+}
+
+.spreadsheet tbody th {
+  -webkit-transform: translateX(2.5em);
+}
+
+.spreadsheet.headings tbody th {
+  opacity: 1;
+  -webkit-transform: translateX(0);
+}*/
+
 .spreadsheet tr {
   height: 2em;
 }
@@ -41,7 +95,6 @@
   position: relative;
   text-align: left;
   border: 1px solid #dddddd;
-  content: '';
 }
 
 .spreadsheet input {
