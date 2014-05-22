@@ -1,11 +1,16 @@
+.spreadsheet * {
+  /*box-sizing: border-box;*/
+}
+
 .spreadsheet {
   width: 100%;
   border-spacing: 0;
   border-collapse: collapse;
   *border-collapse: collapse;
   border-left: 0;
-  table-layout: fixed;
   color: #222;
+  font-family: helvetica;
+  font-weight: 300;
 }
 
 .spreadsheet input {
@@ -30,31 +35,65 @@
   margin-top: 10px;
 }
 
-/*.spreadsheet thead,
-.spreadsheet tbody {
-  z-index: 1;
-}
-*/
 .spreadsheet th {
+  font: inherit;
+  text-align: center;
   position: relative;
-  overflow: hidden;
+  /*overflow-y: hidden;*/
+  /*overflow-x: visible;*/
+  /*overflow-y: hidden;*/
+  width: 30px;
 }
 
-.spreadsheet th div {
-  display: block;
-  position: relative;
+.spreadsheet th > div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  height: 32px;
+  line-height: 32px;
+}
+
+.spreadsheet th div div {
+  background: #f2f2f2;
   transition: -webkit-transform ease-out .2s;
 }
 
-.spreadsheet thead th div {
-  -webkit-transform: translateY(2em);
+.spreadsheet tbody th {
+  /*border-right: 2px solid #ccc;*/
 }
 
-.spreadsheet tbody th div {
+.spreadsheet thead th div div {
+  -webkit-transform: translateY(100%);
+  border-left: 1px solid #cdcdcd;
+  border-top: 1px solid #cdcdcd;
+}
+
+.spreadsheet thead th:last-child > div {
+  right: -1px;
+}
+
+.spreadsheet thead th:last-child div div {
+  border-right: 1px solid #cdcdcd;
+}
+
+.spreadsheet tbody th div div {
+  border-left: 1px solid #cdcdcd;
+  border-top: 1px solid #cdcdcd;
   -webkit-transform: translateX(100%);
 }
 
-.spreadsheet.headings th div {
+.spreadsheet tbody tr:last-child th > div {
+  padding-bottom: 1px;
+}
+
+.spreadsheet tbody tr:last-child th div div {
+  border-bottom: 1px solid #cdcdcd;
+  height: 31px;
+}
+
+.spreadsheet.headings th div div {
   -webkit-transform: translateY(0);
   -webkit-transform: translateX(0);
 }
@@ -94,7 +133,23 @@
   padding: 0px 4px;
   position: relative;
   text-align: left;
-  border: 1px solid #dddddd;
+  border: 1px solid #f2f2f2;
+}
+
+.spreadsheet tr:first-child td {
+  border-top: 1px solid #cdcdcd;
+}
+
+.spreadsheet td:first-of-type {
+  border-left: 1px solid #cdcdcd;
+}
+
+.spreadsheet td:last-of-type {
+  border-right: 1px solid #cdcdcd;
+}
+
+.spreadsheet tr:last-child td {
+  border-bottom: 1px solid #cdcdcd;
 }
 
 .spreadsheet input {
