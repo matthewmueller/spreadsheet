@@ -17,8 +17,9 @@
       max-width: 30px;
     }
 
-    .bold {
-      font-weight: bold;
+    .italic {
+      font-weight: normal;
+      font-style: italic;
     }
   </style>
 </head>
@@ -31,8 +32,8 @@
     document.body.appendChild(spreadsheet.el);
 
     spreadsheet
-      .select('B1, C1, D1').insert(['Revenues', 'Expenses', 'Profit']).addClass('bold')
-      .select('A2:A9').insert(years([1, 2, 3, 4, 5, 6, 7, 8])).addClass('bold')
+      .select('B1, C1, D1').insert(['Revenues', 'Expenses', 'Profit']).addClass('italic')
+      .select('A2:A9').insert(years([1, 2, 3, 4, 5, 6, 7, 8])).addClass('italic')
       .select('B2:B9').insert([10, 12, 32, 43, 53, 23, 32, 43]).format('$').editable()
       .select('C2:C9').insert([32, 11, 22, 33, 45, 42, 10, 32]).format('$').editable()
       .select('D2:D9').calc(':B - :C').format('$')
