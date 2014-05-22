@@ -1,13 +1,13 @@
 .spreadsheet * {
-  /*box-sizing: border-box;*/
+  box-sizing: border-box;
 }
 
 .spreadsheet {
   width: 100%;
   border-spacing: 0;
-  border-collapse: collapse;
-  *border-collapse: collapse;
   border-left: 0;
+  border-collapse: separate;
+  table-layout: fixed;
   color: #222;
   font-family: helvetica;
   font-weight: 300;
@@ -37,105 +37,81 @@
 }
 
 .spreadsheet th {
+  padding: 0;
   font: inherit;
   text-align: center;
   position: relative;
-  /*overflow-y: hidden;*/
-  /*overflow-x: visible;*/
-  /*overflow-y: hidden;*/
+  overflow: hidden;
   width: 30px;
 }
 
-.spreadsheet th > div {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  overflow: hidden;
+.spreadsheet th div {
   height: 32px;
   line-height: 32px;
-}
-
-.spreadsheet th div div {
   background: #f2f2f2;
-  transition: -webkit-transform ease-out .2s;
+  -webkit-transition: -webkit-transform ease-out .2s;
+  -moz-transition: -moz-transform ease-out .2s;
+  -ms-transition: -ms-transform ease-out .2s;
+  -o-transition: -o-transform ease-out .2s;
+  transition: transform ease-out .2s;
 }
 
-.spreadsheet tbody th {
-  /*border-right: 2px solid #ccc;*/
-}
-
-.spreadsheet thead th div div {
+.spreadsheet thead th div {
   -webkit-transform: translateY(100%);
+  -moz-transform: translateY(100%);
+  -ms-transform: translateY(100%);
+  -o-transform: translateY(100%);
+  transform: translateY(100%);
   border-left: 1px solid #cdcdcd;
   border-top: 1px solid #cdcdcd;
 }
 
-.spreadsheet thead th:last-child > div {
-  right: -1px;
-}
-
-.spreadsheet thead th:last-child div div {
+.spreadsheet thead th:last-child div {
   border-right: 1px solid #cdcdcd;
 }
 
-.spreadsheet tbody th div div {
-  border-left: 1px solid #cdcdcd;
+.spreadsheet tbody th div {
+  /*border-left: 1px solid #cdcdcd;*/
   border-top: 1px solid #cdcdcd;
+  border-left: 1px solid #cdcdcd;
   -webkit-transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  -o-transform: translateX(100%);
+  transform: translateX(100%);
 }
 
-.spreadsheet tbody tr:last-child th > div {
-  padding-bottom: 1px;
-}
-
-.spreadsheet tbody tr:last-child th div div {
+.spreadsheet tbody tr:last-child th div {
   border-bottom: 1px solid #cdcdcd;
-  height: 31px;
 }
 
-.spreadsheet.headings th div div {
-  -webkit-transform: translateY(0);
-  -webkit-transform: translateX(0);
+.spreadsheet.headings th div {
+  -webkit-transform: translate(0);
+  -moz-transform: translate(0);
+  -ms-transform: translate(0);
+  -o-transform: translate(0);
+  transform: translate(0);
 }
-
-/*
-.spreadsheet thead tr,
-.spreadsheet tbody th {
-  position: relative;
-  z-index: -1;
-  transition: -webkit-transform ease-out .3s,
-              opacity ease-out .3s;
-}
-
-.spreadsheet thead tr {
-  -webkit-transform: translateY(2em);
-}
-
-.spreadsheet.headings thead tr {
-  opacity: 1;
-  -webkit-transform: translateY(0em);
-}
-
-.spreadsheet tbody th {
-  -webkit-transform: translateX(2.5em);
-}
-
-.spreadsheet.headings tbody th {
-  opacity: 1;
-  -webkit-transform: translateX(0);
-}*/
 
 .spreadsheet tr {
   height: 2em;
 }
 
+/**
+ * In between
+ */
+
 .spreadsheet td {
   padding: 0px 4px;
   position: relative;
-  text-align: left;
-  border: 1px solid #f2f2f2;
+  border-right: 1px solid #f2f2f2;
+  border-bottom: 1px solid #f2f2f2;
+
 }
+
+/**
+ * Outsides
+ */
 
 .spreadsheet tr:first-child td {
   border-top: 1px solid #cdcdcd;
@@ -154,6 +130,7 @@
 }
 
 .spreadsheet input {
+  text-align: inherit;
   height: inherit;
   line-height: inherit;
   /*padding: 8px;*/
@@ -163,11 +140,12 @@
   text-overflow: ellipsis;
 }
 
-.spreadsheet td.highlighted::after {
+.spreadsheet td.highlighted:after {
   content: '\0';
   width: 100%;
   height: 100%;
   position: absolute;
+  z-index: 1;
   border: 2px solid #333;
   top: -2px;
   left: -2px;
