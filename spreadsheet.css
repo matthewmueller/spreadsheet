@@ -25,6 +25,7 @@
 
 .spreadsheet input[disabled] {
   pointer-events: none;
+  background: none;
 }
 
 .spreadsheet input:focus {
