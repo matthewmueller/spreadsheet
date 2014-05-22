@@ -1,8 +1,4 @@
-.spreadsheet * {
-  box-sizing: border-box;
-}
-
-.spreadsheet {
+.spreadsheet table {
   width: 100%;
   border-spacing: 0;
   border-left: 0;
@@ -14,6 +10,10 @@
 
   /* prevent text flicker in safari */
   -webkit-backface-visibility: hidden;
+}
+
+.spreadsheet * {
+  box-sizing: border-box;
 }
 
 .spreadsheet input {
@@ -48,6 +48,10 @@
   width: 30px;
 }
 
+.spreadsheet tr {
+  height: 2em;
+}
+
 .spreadsheet th div {
   height: 32px;
   line-height: 32px;
@@ -59,13 +63,17 @@
   transition: transform ease-out .2s;
 }
 
+.spreadsheet thead th:first-of-type div {
+  border-left: 1px solid #cdcdcd;
+}
+
 .spreadsheet thead th div {
   -webkit-transform: translateY(100%);
   -moz-transform: translateY(100%);
   -ms-transform: translateY(100%);
   -o-transform: translateY(100%);
   transform: translateY(100%);
-  border-left: 1px solid #cdcdcd;
+  border-right: 1px solid #cdcdcd;
   border-top: 1px solid #cdcdcd;
 }
 
