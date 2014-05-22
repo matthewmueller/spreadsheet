@@ -11,6 +11,9 @@
   color: #222;
   font-family: helvetica;
   font-weight: 300;
+
+  /* prevent text flicker in safari */
+  -webkit-backface-visibility: hidden;
 }
 
 .spreadsheet input {
@@ -93,10 +96,6 @@
   transform: translate(0);
 }
 
-.spreadsheet tr {
-  height: 2em;
-}
-
 /**
  * In between
  */
@@ -140,28 +139,6 @@
   text-overflow: ellipsis;
 }
 
-.spreadsheet td.highlighted:after {
-  content: '\0';
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  z-index: 1;
-  border: 2px solid #333;
-  top: -2px;
-  left: -2px;
-  pointer-events: none;
-}
-
-.spreadsheet td.editable.highlighted::after {
-  border-color: #4285F4;
-}
-
-/* empty cells take up same space */
-.spreadsheet td:empty:after {
-  content: '.';
-  visibility: hidden;
-}
-
 .spreadsheet td.hidden {
   display: none;
 }
@@ -169,6 +146,17 @@
 .spreadsheet .editable {
   color: #4285F4;
   font-style: italic;
+}
+
+.outline {
+  border: 2px solid #333;
+  pointer-events: none;
+  z-index: 1;
+  position: absolute;
+}
+
+.outline.editable {
+  border-color: #4285F4;
 }
 
 /*.editable {

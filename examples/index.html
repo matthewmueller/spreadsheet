@@ -2,17 +2,6 @@
 <head>
   <title>spreadsheet component</title>
   <link rel="stylesheet" href="../build/build.css">
-  <style>
-    table {
-      /*border: 1px solid #ccc;*/
-      border-collapse: collapse;
-    }
-
-    table td {
-      border: 1px solid #ccc;
-      padding: 5px;
-    }
-  </style>
 </head>
 <body>
   <h1>spreadsheet component</h1>
@@ -28,6 +17,7 @@
 
     spreadsheet.select('A1:H1').insert(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'])
     spreadsheet.select('A2:H2').insert(['C', 'D', 'E', 'F', 'G', 'H']).editable();
+    spreadsheet.select('A3:H3').insert(['C', 'D', 'E', 'F', 'G', 'H']).editable();
 
     var spreadsheet2 = Spreadsheet();
     spreadsheet2.select('A1:H1').insert(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'])
