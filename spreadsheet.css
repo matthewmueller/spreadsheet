@@ -1,19 +1,70 @@
+.spreadsheet {
+  position: relative;
+  padding-left: 32px;
+  font-family: helvetica;
+  font-weight: 300;
+  color: #222;
+}
+
+.spreadsheet * {
+  box-sizing: border-box;
+}
+
 .spreadsheet table {
   width: 100%;
   border-spacing: 0;
   border-left: 0;
   border-collapse: separate;
   table-layout: fixed;
-  color: #222;
-  font-family: helvetica;
-  font-weight: 300;
 
   /* prevent text flicker in safari */
   -webkit-backface-visibility: hidden;
 }
 
-.spreadsheet * {
-  box-sizing: border-box;
+/**
+ * Row headings
+ */
+
+.spreadsheet .row-heading {
+  position: absolute;
+  padding-top: 32px;
+  left: 0;
+  width: 32px;
+  height: 100%;
+  text-align: center;
+  overflow: hidden;
+}
+
+.spreadsheet .row-heading div {
+  height: 2em;
+  line-height: 2em;
+  width: 100%;
+  background: #f2f2f2;
+  border-bottom: 1px solid #cdcdcd;
+  border-left: 1px solid #cdcdcd;
+  -webkit-transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  -o-transform: translateX(100%);
+  transform: translateX(100%);
+  -webkit-transition: -webkit-transform ease-out .2s;
+  -moz-transition: -moz-transform ease-out .2s;
+  -ms-transition: -ms-transform ease-out .2s;
+  -o-transition: -o-transform ease-out .2s;
+  transition: transform ease-out .2s;
+
+}
+
+.spreadsheet.headings .row-heading div {
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+}
+
+.spreadsheet .row-heading div:first-of-type {
+  border-top: 1px solid #cdcdcd;
 }
 
 .spreadsheet input {
@@ -45,7 +96,6 @@
   text-align: center;
   position: relative;
   overflow: hidden;
-  width: 30px;
 }
 
 .spreadsheet tr {
