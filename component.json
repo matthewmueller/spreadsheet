@@ -4,6 +4,7 @@
   "description": "create spreadsheets with excel-like features",
   "version": "0.0.1",
   "keywords": [],
+  "remotes": ["https://raw.githubusercontent.com"],
   "dependencies": {
     "component/domify": "*",
     "component/emitter": "*",
