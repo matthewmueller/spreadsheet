@@ -22,8 +22,17 @@
     .header {
       font-weight: normal;
       font-style: italic;
-
     }
+
+    table th,
+    table tr {
+      -webkit-transition: all ease-out .7s;
+      -moz-transition: all ease-out .7s;
+      -ms-transition: all ease-out .7s;
+      -o-transition: all ease-out .7s;
+      transition: all ease-out .7s;
+    }
+
   </style>
 </head>
 <body>
@@ -33,7 +42,7 @@
     var Spreadsheet = require('spreadsheet');
     var spreadsheet = Spreadsheet();
     document.body.appendChild(spreadsheet.el);
-
+    window.sheet = spreadsheet;
     spreadsheet
       .select('1').insert(['', 'Revenues', 'Expenses', 'Profit']).addClass('header')
       .select('B:C').width('250px')
@@ -41,7 +50,8 @@
       .select('B2:B9').insert([10, 12, 32, 43, 53, 23, 32, 43]).format('$').editable()
       .select('C2:C9').insert([32, 11, 22, 33, 45, 42, 10, 32]).format('$').editable()
       .select('D2:D9').calc('{B} - {C} - 1').format('$')
-      .select('4:5').height(200)
+      .select('11').insert([32, 32, 43, 454])
+      .select('10').height(10)
 
 
     function years(arr) {
