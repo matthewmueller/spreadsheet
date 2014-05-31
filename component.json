@@ -21,7 +21,8 @@
     "matthewmueller/delegates": "0.0.4",
     "discore/closest": "0.1.2",
     "bmcmahen/modifier": "0.0.1",
-    "matthewmueller/per-frame": "2.0.0"
+    "matthewmueller/per-frame": "2.0.0",
+    "matthewmueller/mini-tokenizer": "0.1.2"
   },
   "development": {},
   "license": "MIT",

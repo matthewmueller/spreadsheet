@@ -35,11 +35,14 @@
     document.body.appendChild(spreadsheet.el);
 
     spreadsheet
-      .select('B1, C1, D1').insert(['Revenues', 'Expenses', 'Profit']).addClass('header')
+      .select('1').insert(['', 'Revenues', 'Expenses', 'Profit']).addClass('header')
       .select('A2:A9').insert(years([1, 2, 3, 4, 5, 6, 7, 8])).addClass('header')
       .select('B2:B9').insert([10, 12, 32, 43, 53, 23, 32, 43]).format('$').editable()
       .select('C2:C9').insert([32, 11, 22, 33, 45, 42, 10, 32]).format('$').editable()
-      .select('D2:D9').calc(':B - :C').format('$')
+      .select('D2:D9').calc('{B} - {C} - 1').format('$')
+
+    // spreadsheet
+    //   .select('H:G').fill()
 
 
     function years(arr) {
