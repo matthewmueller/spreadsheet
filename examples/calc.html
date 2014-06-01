@@ -42,11 +42,20 @@
     var Spreadsheet = require('spreadsheet');
     var spreadsheet = Spreadsheet();
     document.body.appendChild(spreadsheet.el);
+<<<<<<< Updated upstream
     window.sheet = spreadsheet;
     spreadsheet
       .select('1').insert(['', 'Revenues', 'Expenses', 'Profit']).addClass('header')
       .select('B:C').width('250px')
+=======
+    
+    spreadsheet.classes.add('headings');
+
+    spreadsheet
+      .select('B1, C1, D1, E1').insert(['Revenues', 'Expenses', 'Profit', 'Total']).addClass('header')
+>>>>>>> Stashed changes
       .select('A2:A9').insert(years([1, 2, 3, 4, 5, 6, 7, 8])).addClass('header')
+      .select('E2:E9').calc(':C - :D').format('$')
       .select('B2:B9').insert([10, 12, 32, 43, 53, 23, 32, 43]).format('$').editable()
       .select('C2:C9').insert([32, 11, 22, 33, 45, 42, 10, 32]).format('$').editable()
       .select('D2:D9').calc('{B} - {C} - 1').format('$')

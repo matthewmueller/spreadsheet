@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+<head>
+  <title>spreadsheet component</title>
+  <link rel="stylesheet" href="../build/build.css">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <style>
+    .spreadsheet {
+      max-width: 640px;
+    }
+    table {
+      /*border-collapse: collapse;*/
+      font-size: 9pt;
+      text-align: right;
+
+    }
+
+    table .headers {
+      text-align: left;
+    }
+
+
+    table td {
+      /*border: 1px solid #ccc;*/
+      padding: 5px;
+    }
+
+    table th {
+      max-width: 30px;
+    }
+
+    .header {
+      font-weight: normal;
+      font-style: italic;
+      font-family: Arial;
+
+    }
+
+    .col_merge {
+      text-align: center;
+      font-weight: bold;
+      border-bottom: solid black 1px !important;
+    }
+
+  </style>
+</head>
+<body>
+  <h1 style="font-family:verdana; font-size:10pt">LR Model Template</h1>
+  <script src="../build/build.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    var Spreadsheet = require('spreadsheet');
+    var spreadsheet = Spreadsheet();
+    document.body.appendChild(spreadsheet.el);
+    
+
+    // inputs
+    var company_name = 'Amazon'
+    var rev_title_1 = 'Net Product Sales'
+    var rev_title_2 = 'Net Service Sales'
+    var rev_title_3 = 'Rev 3'
+    var rev_title_4 = 'Rev 4'
+    var rev_title_5 = 'Rev 5'
+    var rev_title_6 = 'Rev 6'
+    var rev_title_7 = 'Rev 7'
+
+    // quarter forecast titles ['Q1', 'Q2', 'Q3', 'Q4']
+    forecast_periods = ['Act', 'Proj', 'Proj', 'Proj']
+
+    // enter excel dates
+    // [LTM, FY+1, FY+2, FY+3, FY+4, FY+5]
+    num_dates = [41729, 42004, 42369, 42735, 43100, 43465]
+
+    // enter excel dates
+    hist_text_dates = ['Dec-09', 'Dec-10', 'Dec-11', 'Dec-12', 'Dec-13', 'Jun-13', 'Sep-13', 'Dec-13', 'Mar-14', 'Mar-14']
+    proj_text_dates = ['Mar-14', 'Jun-14', 'Sep-14', 'Dec-14', 'Dec-14', 'Dec-15', 'Dec-16', 'Dec-17', 'Dec-18']
+
+    // enter excel dates
+    hist_period_text_dates = ['FY 09', 'FY 10', 'FY 11', 'FY 12', 'FY 13', 'Q2', 'Q3', 'Q4', 'Q1', 'LTM']
+    proj_period_text_dates = ['Q1', 'Q2', 'Q3', 'Q4']
+
+    // Revenue Growth Historical
+      // [FY-3, FY-2, FY-1, FY, Q-3, Q-2, Q-1, Q, LTM]
+    rev_fin_hist_1 = [22273, 30792, 42000, 51733, 60903, 12752, 13808, 21072, 15705]
+    rev_fin_hist_2 = [2236, 3412, 6077, 9360, 13549, 2952, 3284, 4515, 4036]
+    rev_fin_hist_3 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    rev_fin_hist_4 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    rev_fin_hist_5 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    rev_fin_hist_6 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    rev_fin_hist_7 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+    rev_q_growth_1 = [0.18173, 0.19591, 0.16118, 0.183410, .17825]
+    rev_q_growth_2 = [0.44493, 0.4531, 0.44665, 0.441940, .44644]
+    rev_q_growth_3 = [0, 0, 0, 0, 0]
+    rev_q_growth_4 = [0, 0, 0, 0, 0]
+    rev_q_growth_5 = [0, 0, 0, 0, 0]
+    rev_q_growth_6 = [0, 0, 0, 0, 0]
+    rev_q_growth_7 = [0, 0, 0, 0, 0]
+    rev_q_growth_tot = [0.22362, 0.23801, 0.20308, 0.228440, .22111]
+
+    spreadsheet.el.querySelector('thead').style.display = 'none';
+
+    // spreadsheet
+    spreadsheet.select('A1:X60').fill()
+    // spreadsheet.classes.add('headings');
+      // .select('B1, C1, D1, E1').insert(['Revenues', 'Expenses', 'Profit', 'Total']).addClass('header')
+      // .select('A2:A9').insert(years([1, 2, 3, 4, 5, 6, 7, 8])).addClass('header')
+      // .select('E2:E9').calc(':C - :D').format('$')
+      // .select('B2:B9').insert([10, 12, 32, 43, 53, 23, 32, 43]).format('$').editable()
+      // .select('C2:C9').insert([32, 11, 22, 33, 45, 42, 10, 32]).format('$').editable()
+      // .select('D2:D9').calc(':B - :C').format('$')
+      // .select('A1:A49').insert([''])
+    
+    //column titles
+    spreadsheet.select('A1:D49').mergeCols().addClass('headers')
+      .insert(['', '', '', '', '', '', 
+              company_name + ' Model',
+              '',
+              'Revenue Growth Assumptions:',
+              rev_title_1 + ' Growth',
+              rev_title_2 + ' Growth',
+              rev_title_3 + ' Growth',
+              rev_title_4 + ' Growth',
+              rev_title_5 + ' Growth',
+              rev_title_6 + ' Growth',
+              rev_title_7 + ' Growth',
+              'Total Revenue Growth',
+              '',
+              'Implied Forecast:',
+              '  '+rev_title_1,
+              '  '+rev_title_2,                                
+              '  '+rev_title_3,
+              '  '+rev_title_4,
+              '  '+rev_title_5,
+              '  '+rev_title_6,
+              '  '+rev_title_7,
+              'Total Revenue',
+              'Growth',
+              '',
+              'Cost of Goods',
+              '',
+              'Gross Profit',
+              'GP Margin',
+              '',
+              'SG&A Expenses',
+              '% of Revenue',
+              '',
+              'EBIT',
+              'EBIT Margin',
+              '',
+              '(+) D&A',
+              '',
+              'EBITDA',
+              'EBITDA Margin',
+              '',
+              'Capital Expenditures',
+              '% of Revenue',
+              '',
+              'Stock Price Analysis',
+              '',
+              '5-Year Exit Method',
+              'Exit in Year 5 at',
+              'Assumed Discount Rate',
+              'Implied Fair Value per Share',
+              'Current Trading Price',
+              ' Discount/(Premium) to Current Price',
+              'Your Rating'
+              ])
+
+    spreadsheet.select('A1:X1').insert(['A', 'E', 'F', 'G', 'H', 'I',
+                                        'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+                                        'S', 'T', 'U', 'V', 'W', 'X'])
+
+    // merged rows
+    spreadsheet.select('P4:S4').mergeCols().insert(['Quarterly Projections']).addClass('col_merge')
+    spreadsheet.select('P5:S5').insert(forecast_periods)
+    spreadsheet.select('T4:X4').mergeCols().insert(['Long-term Projections']).addClass('col_merge')
+
+    // historical date titles
+      //excel number of days entered
+    spreadsheet.select('N5').insert(num_dates[0])
+    spreadsheet.select('T5:X5').insert(num_dates.slice(1))
+
+      //text date format entered
+    spreadsheet.select('E6:N6').insert(hist_text_dates)
+    spreadsheet.select('P6:X6').insert(proj_text_dates)
+
+      //text period format entered
+    spreadsheet.select('E7:N7').insert(hist_period_text_dates)
+    spreadsheet.select('P7:X7').insert(proj_period_text_dates)
+
+    // input historical
+    spreadsheet.select('E20:M20').insert(rev_fin_hist_1)
+    spreadsheet.select('E21:M21').insert(rev_fin_hist_2)
+    spreadsheet.select('E22:M22').insert(rev_fin_hist_3)
+    spreadsheet.select('E23:M23').insert(rev_fin_hist_4)
+    spreadsheet.select('E24:M24').insert(rev_fin_hist_5)
+    spreadsheet.select('E25:M25').insert(rev_fin_hist_6)
+    spreadsheet.select('E26:M26').insert(rev_fin_hist_7)
+    spreadsheet.select('N20:N26').calc(':J + :K + :L + :M')
+    
+    // sum totals
+    spreadsheet.select('E27').calc('E20 + E21 + E22 + E23 + E24 + E25 + E26')
+    spreadsheet.select('F27').calc('F20 + F21 + F22 + F23 + F24 + F25 + F26')
+    spreadsheet.select('G27').calc('G20 + G21 + G22 + G23 + G24 + G25 + G26')
+    spreadsheet.select('H27').calc('H20 + H21 + H22 + H23 + H24 + H25 + H26')
+    spreadsheet.select('I27').calc('I20 + I21 + I22 + I23 + I24 + I25 + I26')
+    spreadsheet.select('J27').calc('J20 + J21 + J22 + J23 + J24 + J25 + J26')
+    spreadsheet.select('K27').calc('K20 + K21 + K22 + K23 + K24 + K25 + K26')
+    spreadsheet.select('L27').calc('L20 + L21 + L22 + L23 + L24 + L25 + L26')
+
+
+    //'J20+K20+L20+M20'
+    // hide historical annual and quarterly data
+    // spreadsheet.select(':E, :F, :G, :H, :J, :K, :L, :M').hide()
+
+    // hide projected quarterly data
+    spreadsheet.select(':P, :Q, :R, :S').hide()
+
+    // hide projected annual data
+    spreadsheet.select(':T, :U, :V, :W, :X').hide()
+
+
+    // spreadsheet.select(':1,:2,:3').hide()
+
+
+
+    function years(arr) {
+      return arr.map(function(item) {
+        return 'Year ' + item;
+      })
+    }
+
+  </script>
+</body>
+</html>
