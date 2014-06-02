@@ -39,6 +39,7 @@
   <h1>Calculations</h1>
   <script src="../build/build.js" type="text/javascript"></script>
   <script type="text/javascript">
+    var domify = require('domify');
     var Spreadsheet = require('spreadsheet');
     var spreadsheet = Spreadsheet();
     document.body.appendChild(spreadsheet.el);
@@ -50,8 +51,6 @@
       .select('B2:B9').insert([10, 12, 32, 43, 53, 23, 32, 43]).format('$').editable()
       .select('C2:C9').insert([32, 11, 22, 33, 45, 42, 10, 32]).format('$').editable()
       .select('D2:D9').calc('{B} - {C} - 1').format('$')
-      .select('11').insert([32, 32, 43, 454])
-      .select('10').height(10)
 
 
     function years(arr) {
@@ -59,6 +58,12 @@
         return 'Year ' + item;
       })
     }
+
+    // var el = spreadsheet.el;
+    // var tr = el.querySelector('thead tr:first-of-type');
+    // var rowhead = tr.querySelector('.rowhead');
+    // var layer = domify('<th class = "layer"></th>')
+    // tr.insertBefore(layer, rowhead.nextSibling);
 
   </script>
 </body>

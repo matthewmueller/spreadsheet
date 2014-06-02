@@ -109,11 +109,11 @@
   transition: transform ease-out .2s;
 }
 
-.spreadsheet thead th:first-child {
+.spreadsheet thead th.rowhead {
   width: 32px;
 }
 
-.spreadsheet thead th:nth-child(2) div {
+.spreadsheet thead .colhead.first div {
   border-left: 1px solid #cdcdcd;
 }
 
@@ -135,7 +135,19 @@
   border-top: 1px solid #cdcdcd;
 }
 
-.spreadsheet tbody th div {
+.spreadsheet thead th.layer {
+  width: 8px;
+}
+
+.spreadsheet tbody th.layer {
+  background: #4285F4;
+}
+
+.spreadsheet tbody th.layer + td {
+  border-left: none;
+}
+
+.spreadsheet tbody th.rowhead div {
   border-bottom: 1px solid #cdcdcd;
   border-left: 1px solid #cdcdcd;
   -webkit-transform: translateX(100%);
@@ -145,7 +157,8 @@
   transform: translateX(100%);
 }
 
-.spreadsheet.headings th div {
+.spreadsheet.headings th.rowhead div,
+.spreadsheet.headings th.colhead div {
   -webkit-transform: translate(0);
   -moz-transform: translate(0);
   -ms-transform: translate(0);
