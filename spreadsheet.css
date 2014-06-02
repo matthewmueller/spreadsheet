@@ -24,7 +24,7 @@
  * Row headings
  */
 
-.spreadsheet tbody tr th{
+.spreadsheet tbody tr th {
   left: 0;
   width: 32px;
   height: 100%;
@@ -131,19 +131,18 @@
   border-right: 1px solid #cdcdcd;
 }
 
-.spreadsheet tbody th div {
-  /*border-left: 1px solid #cdcdcd;*/
+.spreadsheet tbody tr:first-child th div {
   border-top: 1px solid #cdcdcd;
+}
+
+.spreadsheet tbody th div {
+  border-bottom: 1px solid #cdcdcd;
   border-left: 1px solid #cdcdcd;
   -webkit-transform: translateX(100%);
   -moz-transform: translateX(100%);
   -ms-transform: translateX(100%);
   -o-transform: translateX(100%);
   transform: translateX(100%);
-}
-
-.spreadsheet tbody tr:last-child th div {
-  border-bottom: 1px solid #cdcdcd;
 }
 
 .spreadsheet.headings th div {
