@@ -1,6 +1,5 @@
 .spreadsheet {
   position: relative;
-  padding-left: 32px;
   font-family: helvetica;
   font-weight: 300;
   color: #222;
@@ -25,9 +24,7 @@
  * Row headings
  */
 
-.spreadsheet .row-heading {
-  position: absolute;
-  padding-top: 32px;
+.spreadsheet tbody tr th{
   left: 0;
   width: 32px;
   height: 100%;
@@ -35,13 +32,12 @@
   overflow: hidden;
 }
 
-.spreadsheet .row-heading div {
+.spreadsheet tbody tr th div {
   height: 2em;
   line-height: 2em;
   width: 100%;
   background: #f2f2f2;
-  border-bottom: 1px solid #cdcdcd;
-  border-left: 1px solid #cdcdcd;
+    border-left: 1px solid #cdcdcd;
   -webkit-transform: translateX(100%);
   -moz-transform: translateX(100%);
   -ms-transform: translateX(100%);
@@ -113,7 +109,11 @@
   transition: transform ease-out .2s;
 }
 
-.spreadsheet thead th:first-of-type div {
+.spreadsheet thead th:first-child {
+  width: 32px;
+}
+
+.spreadsheet thead th:nth-child(2) div {
   border-left: 1px solid #cdcdcd;
 }
 
