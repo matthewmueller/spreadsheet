@@ -90,40 +90,41 @@
     // ***********************************************************
 
     //Paste
-        // inputs
-    var company_name = "The Wendy's Company";
-    var valuation_date = 41788;
+    // inputs
+    var company_name = "McDonald's Corp.";
+    var valuation_date = 41793;
 
-    var trading_price = 9.35;
+    var trading_price = 101.45;
 
-    var EBITDA_exit = 12.2;
-    var rev_exit = 1.88;
-    var growth_exit = 0.035;
-    var pe_exit = 39.97;
+    var EBITDA_exit = 11;
+    var rev_exit = 3.95;
+    var growth_exit = 0.03;
+    var pe_exit = 18.69;
 
-    var discount_rate = 0.11;
-    var equity_discount_rate = 0.13;
+    var discount_rate = 0.075;
+    var equity_discount_rate = 0.085;
 
     // balance sheet inputs
-    var debt = 1461.57;
-    var interest_rate = 0.04;
-    var tax_rate = 0.35;
-    var dep_prior_ppe = 0.109;
-    var lastest_nwc = -61.373;
-    var fiscal_year_end_nwc = -88.93;
+    var debt = 13926.8;
+    var interest_rate = 0.039;
+    var tax_rate = 0.32;
+    var dep_prior_ppe = 0.062;
+    var lastest_nwc = 75.3000000000002;
+    var fiscal_year_end_nwc = -98.3999999999999;
+    
+    // [(-) Unconsolidated Investments, (-) Deferred Revenue Cash Adjustment, (+/-) Other, (+) Non-Controlling Interests, (+) Debt, (-) Cash]
+    var equity_waterfall = [-1223.8, 0, 22.8499999999998, 0, 13926.8, -2743.8];
+    var shares_outstanding = 999.869424872523;
 
-    var equity_waterfall = [-79.909, 0, -2.031375, 0, 1461.57, -384.695];
-    var shares_outstanding = 377.248128502674;
+    var change_in_ltm_nwc = 266.2;
+    var change_in_ytd_nwc = -173.7;
 
-    var change_in_ltm_nwc = -14.126;
-    var change_in_ytd_nwc = -27.557;
-
-    var lastest_ppe = 1146.996;
+    var lastest_ppe = 25650;
 
 
     // enter excel dates
     // [LTM, FY+1, FY+2, FY+3, FY+4, FY+5]
-    var ltm_num_dates = 41701;
+    var ltm_num_dates = 41729;
     var proj_num_dates = [42004, 42369, 42735, 43100, 43465];
 
 
@@ -138,10 +139,10 @@
 
 
     // income statement inputs
-    var rev_title_1 = "     Franchise Revenues";
-    var rev_title_2 = "     Sales";
-    var rev_title_3 = "   Segment 3";
-    var rev_title_4 = "   Segment 4";
+    var rev_title_1 = "   United States (U.S.)";
+    var rev_title_2 = "   Europe";
+    var rev_title_3 = "   Asia/Pacific, Middle East and Africa (APMEA)";
+    var rev_title_4 = "   Other Countries & Corporate";
     var rev_title_5 = "   Segment 5";
     var rev_title_6 = "   Segment 6";
     var rev_title_7 = "   Segment 7";
@@ -149,54 +150,53 @@
 
     // historical revenue growth by segment
       // [FY-4, FY-3, FY-2, FY-1, FY, YTD Prior Prior, YTD Prior, YTD]
-    var hist_rev_fin_1 = [302.853, 296.358, 304.814, 306.919, 321.581, 73.258, 73.009, 90.566];
-    var hist_rev_fin_2 = [2134.242, 2079.081, 2126.544, 2198.323, 2165.829, 519.929, 530.673, 432.63];
-    var hist_rev_fin_3 = [0, 0, 0, 0, 0, 0, 0, 0];
-    var hist_rev_fin_4 = [0, 0, 0, 0, 0, 0, 0, 0];
+    var hist_rev_fin_1 = [7943.8, 8111.6, 8528.2, 8813.7, 8851.3, 2102.3, 2088.5, 2054.1];
+    var hist_rev_fin_2 = [9273.8, 9569.2, 10886.4, 10827.4, 11299.8, 2535.5, 2586.4, 2712.2];
+    var hist_rev_fin_3 = [4337, 5065.5, 6019.5, 6391.1, 6477.2, 1556.6, 1593.7, 1618.8];
+    var hist_rev_fin_4 = [1190.1, 1328.3, 1571.9, 1534.8, 1477.4, 352.2, 336.7, 315.2];
     var hist_rev_fin_5 = [0, 0, 0, 0, 0, 0, 0, 0];
     var hist_rev_fin_6 = [0, 0, 0, 0, 0, 0, 0, 0];
     var hist_rev_fin_7 = [0, 0, 0, 0, 0, 0, 0, 0];
 
 
     // historical cogs, sg&a, d&a, and capex
-    var hist_cogs_fin = [-1812.056, -1756.954, -1815.328, -1880.463, -1825.507, '', -460.64475, -374.00675];
-    var hist_sga_fin = [-487.211, -438.357, -415.079, -434.364, -475.976, '', -117.06325, -112.34325];
-    var hist_da_fin = [134.063, 126.846, 122.992, 146.976, 182.359, '', 51.797, 42.021];
+    var hist_cogs_fin = [-12651.2, -13059.5, -14837.9, -15223.7, -15578.6, '', -3726, -3767.1];
+    var hist_sga_fin = [-3535.9, -3711.1, -3875.2, -3982.2, -4010, '', -991.7, -1037.5];
+    var hist_da_fin = [1216.2, 1276.2, 1415, 1488.5, 1585.1, '', 391.1, 410.4];
 
 
     // ytd [dep, amort]
-    var hist_ltm_da = [-133.974, -38.609];
-    var hist_ytd_da = [-32.36875, -9.65225];
-    var hist_capex_fin = [101.914, 147.969, 146.763, 197.59, 224.245, '', 39.977, 53.058];
+    var hist_ltm_da = [-1518.1, -86.3];
+    var hist_ytd_da = [-388.825, -21.575];
+    var hist_capex_fin = [1952.1, 2135.5, 2729.8, 3049.2, 2824.7, '', 634.2, 568.8];
 
 
     // all segments
-    var ytd_prior_rev_growth = [-0.0034, 0.0207, 0, 0, 0, 0, 0, 0.0177];
-    var ltm_rev_growth = [0.1059, -0.064, 0, 0, 0, 0, 0, -0.0433];
+    var ytd_prior_rev_growth = [-0.0066, 0.0201, 0.0238, -0.044, 0, 0, 0, 0.009];
+    var ltm_rev_growth = [0.0019, 0.0503, 0.0115, -0.0417, 0, 0, 0, 0.0208];
 
 
     // interest expense
-    var ltm_interest_exp = -61.042;
-    var ytd_interest_exp = -12.994;
+    var ltm_interest_exp = -528.8;
+    var ytd_interest_exp = -135;
 
       // projected inputs
-      var proj_rev_growth_1 = [0.106, 0.106, 0.106, 0.106, 0.106];
-      var proj_rev_growth_2 = [-0.063, -0.063, -0.063, -0.063, -0.063];
-      var proj_rev_growth_3 = [0, 0, 0, 0, 0];
-      var proj_rev_growth_4 = [0, 0, 0, 0, 0];
+      var proj_rev_growth_1 = [0.006, 0.022, 0.03, 0.03, 0.03];
+      var proj_rev_growth_2 = [0.05, 0.05, 0.05, 0.055, 0.055];
+      var proj_rev_growth_3 = [0.042, 0.06, 0.07, 0.075, 0.075];
+      var proj_rev_growth_4 = [-0.007, 0.01, 0.01, 0.01, 0];
       var proj_rev_growth_5 = [0, 0, 0, 0, 0];
       var proj_rev_growth_6 = [0, 0, 0, 0, 0];
       var proj_rev_growth_7 = [0, 0, 0, 0, 0];
 
       var proj_seg_rev_growth = [proj_rev_growth_1, proj_rev_growth_2, proj_rev_growth_3, proj_rev_growth_4, proj_rev_growth_5, proj_rev_growth_6, proj_rev_growth_7];
 
-      var proj_total_rev_growth = [-0.041, -0.038, -0.034, -0.03, -0.025];
-      var proj_gp_margin = [0.277, 0.277, 0.277, 0.277, 0.277];
-      var proj_sga_margin = [0.196, 0.196, 0.196, 0.196, 0.196];
-      var proj_ebit_margin = [0.082, 0.082, 0.082, 0.082, 0.082];
-      var proj_capex_margin = [0.098, 0.098, 0.098, 0.098, 0.098];
-      var proj_nwc = [-0.03, -0.03, -0.03, -0.03, -0.03];
-
+      var proj_total_rev_growth = [0.031, 0.042, 0.047, 0.05, 0.05];
+      var proj_gp_margin = [0.443, 0.443, 0.444, 0.454, 0.454];
+      var proj_sga_margin = [0.134, 0.13, 0.124, 0.124, 0.124];
+      var proj_ebit_margin = [0.309, 0.313, 0.32, 0.33, 0.33];
+      var proj_capex_margin = [0.102, 0.098, 0.095, 0.085, 0.085];
+      var proj_nwc = [0.003, 0.003, 0.003, 0.003, 0.003];
 
     // ***********************************************************
     // Start Assumption Collection
