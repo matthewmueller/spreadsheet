@@ -4,7 +4,9 @@
   "description": "create spreadsheets with excel-like features",
   "version": "0.0.1",
   "keywords": [],
-  "remotes": ["https://raw.githubusercontent.com"],
+  "remotes": [
+    "https://raw.githubusercontent.com"
+  ],
   "dependencies": {
     "component/domify": "*",
     "component/emitter": "*",
@@ -22,13 +24,15 @@
     "discore/closest": "0.1.2",
     "bmcmahen/modifier": "0.0.1",
     "matthewmueller/per-frame": "2.0.0",
-    "matthewmueller/mini-tokenizer": "0.1.2"
+    "matthewmueller/mini-tokenizer": "0.1.2",
+    "visionmedia/jade": "1.3.1"
   },
   "development": {},
   "license": "MIT",
   "main": "index.js",
   "scripts": [
     "index.js",
+    "template.js",
     "lib/workbook.js",
     "lib/spreadsheet.js",
     "lib/selection.js",
