@@ -203,7 +203,7 @@
     // ***********************************************************
 
     var Spreadsheet = require('spreadsheet');
-    var spreadsheet = Spreadsheet('Q137');
+    var spreadsheet = window.spreadsheet = Spreadsheet('Q137');
     document.body.appendChild(spreadsheet.el);
 
     // column titles
