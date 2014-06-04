@@ -24,8 +24,13 @@ var workbook = new Workbook;
 
 /**
  * Initialize `spreadsheet`
+ *
+ * @param {Number} cols
+ * @param {Number} rows
+ * @return {Spreadsheet}
+ * @api public
  */
 
-function spreadsheet() {
-  return workbook.spreadsheet();
+function spreadsheet(cols, rows) {
+  return workbook.spreadsheet(cols, rows);
 }

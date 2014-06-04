@@ -39,28 +39,29 @@
   <h1>Calculations</h1>
   <script src="../build/build.js" type="text/javascript"></script>
   <script type="text/javascript">
+    var domify = require('domify');
     var Spreadsheet = require('spreadsheet');
-    var spreadsheet = Spreadsheet();
+    console.time('draw');
+    var spreadsheet = Spreadsheet('Q137');
+    console.timeEnd('draw');
+
     document.body.appendChild(spreadsheet.el);
-<<<<<<< Updated upstream
-    window.sheet = spreadsheet;
-    spreadsheet
-      .select('1').insert(['', 'Revenues', 'Expenses', 'Profit']).addClass('header')
-      .select('B:C').width('250px')
-=======
+    window.spreadsheet = spreadsheet;
     
     spreadsheet.classes.add('headings');
 
-    spreadsheet
-      .select('B1, C1, D1, E1').insert(['Revenues', 'Expenses', 'Profit', 'Total']).addClass('header')
->>>>>>> Stashed changes
+    var s = spreadsheet
       .select('A2:A9').insert(years([1, 2, 3, 4, 5, 6, 7, 8])).addClass('header')
-      .select('E2:E9').calc(':C - :D').format('$')
-      .select('B2:B9').insert([10, 12, 32, 43, 53, 23, 32, 43]).format('$').editable()
-      .select('C2:C9').insert([32, 11, 22, 33, 45, 42, 10, 32]).format('$').editable()
-      .select('D2:D9').calc('{B} - {C} - 1').format('$')
-      .select('11').insert([32, 32, 43, 454])
-      .select('10').height(10)
+      .select('B, C').each(function(cell) {
+        cell.val(~~(Math.random() * 100))
+      })
+      console.time('calcs');
+      s.select('D').calc('{B} - {C}').format('$')
+      s.select('E').calc('{D} + 100').format('$')
+      console.timeEnd('calcs');
+      s.select('B1, C1, D1, E1').insert(['Revenues', 'Expenses', 'Profit', 'Total']).addClass('header')
+      // .select('B2:B9').insert([10, 12, 32, 43, 53, 23, 32, 43]).format('$').editable()
+      // .select('C2:C9').insert([32, 11, 22, 33, 45, 42, 10, 32]).format('$').editable()
 
 
     function years(arr) {
@@ -68,6 +69,12 @@
         return 'Year ' + item;
       })
     }
+
+    // var el = spreadsheet.el;
+    // var tr = el.querySelector('thead tr:first-of-type');
+    // var rowhead = tr.querySelector('.rowhead');
+    // var layer = domify('<th class = "layer"></th>')
+    // tr.insertBefore(layer, rowhead.nextSibling);
 
   </script>
 </body>

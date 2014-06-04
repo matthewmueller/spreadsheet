@@ -1,0 +1,53 @@
+//- TODO: compile with jade CLI
+//- For now: http://jade-lang.com/demo/
+
+- var letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+- var heads = headers == undefined ? true : headers
+- var l = layers || 3
+- var r = rows || 10
+- var c = cols || 10 
+
+mixin filler(n)
+  - for (var i = 0; i < n; i++)
+    th.filler
+
+mixin rowhead(value)
+  th=value
+
+mixin th(n)
+  - for (var i = 0; i < n; i++)
+    th(name=letters[i]): div=letters[i]
+
+mixin layerhead(n)
+  - for (var i = 0; i < n; i++)
+    th.layerhead
+
+mixin layer(n)
+  - for (var i = 0; i < n; i++)
+    th.layer
+
+mixin td(n)
+  - for (var i = 0; i < n; i++)
+    td
+      input(type='text' disabled='disabled')
+
+.spreadsheet
+  table
+    thead
+      if (heads)
+        tr.colhead
+          th.rowhead
+          +layerhead(l)
+          +th(c)
+      - for (var i = 0; i < l; i++)
+        tr.layer
+          +filler(l + (heads ? 1 : 0))
+          +layer(c)
+    tbody
+      - for (var i = 1; i <= r; i++)
+        tr(name=i)
+          if (heads)
+            th.rowhead: div=i
+          +layer(l)
+          +td(c)
+

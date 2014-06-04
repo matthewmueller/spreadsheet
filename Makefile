@@ -1,5 +1,5 @@
 
-build: components spreadsheet.css
+build: components spreadsheet.css template.js
 	@component build
 
 components: component.json
@@ -23,4 +23,4 @@ dist-minify: dist/spreadsheet.js
 clean:
 	rm -fr build components
 
-.PHONY: build clean
+.PHONY: build clean template.js

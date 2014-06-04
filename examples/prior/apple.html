@@ -3,31 +3,19 @@
   <title>LR Model - Apple</title>
   <link rel="stylesheet" href="/build/build.css">
   <style>
-    .vertical-heading {
-      width: 200%;
-    }
 
-    .h1 input {
-      font-size: 18px;
-      text-align: center;
-      font-weight: bold;
-    }
-
-    .growth input {
-      padding-left: 20px;
-      font-style: italic;
-      color: #0E54B8;
-    }
   </style>
 </head>
 <body>
   <script src="/build/build.js"></script>
   <script>
     var Spreadsheet = require('spreadsheet');
-    var spreadsheet = Spreadsheet();
+    var spreadsheet = Spreadsheet('O8');
     document.body.appendChild(spreadsheet.el);
 
     // spreadsheet.select('A4:C4').insert(['Company Model']).merge();
+
+    window.spreadsheet = spreadsheet;
 
     // headings
     spreadsheet.select('A1:C27').mergeCols()
@@ -70,6 +58,8 @@
       .insert([.15, .15, .15, .15, .15, .10, .10])
       .format('%')
       .editable()
+
+
 
     // hide the quarter 4
     // spreadsheet.select(':K').hide();
