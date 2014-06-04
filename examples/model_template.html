@@ -87,118 +87,127 @@
     var spreadsheet = Spreadsheet();
     document.body.appendChild(spreadsheet.el);
     
+    // ***********************************************************
+    // Input Assumptions
+    // ***********************************************************
 
-    // inputs
-    var company_name = 'Amazon';
-    var valuation_date = 41788; // excel date
+    //Paste
+        // inputs
+    var company_name = "The Wendy's Company";
+    var valuation_date = 41788;
 
-    var trading_price = 336.37;
+    var trading_price = 9.35;
 
-    var EBITDA_exit = 37.1;
-    var rev_exit = 2;
-    var growth_exit = .05;
-    var pe_exit = 50;
-    
-    var discount_rate = .11;
+    var EBITDA_exit = 12.2;
+    var rev_exit = 1.88;
+    var growth_exit = 0.035;
+    var pe_exit = 39.97;
 
+    var discount_rate = 0.11;
+    var equity_discount_rate = 0.13;
 
     // balance sheet inputs
-    var debt = 6904;
-    var interest_rate = .0253864426419467;
-    var tax_rate = .35;
-    var dep_prior_ppe = .302;
-    var lastest_nwc = -5929;
-    var fiscal_year_end_nwc = -9066;
+    var debt = 1461.57;
+    var interest_rate = 0.04;
+    var tax_rate = 0.35;
+    var dep_prior_ppe = 0.109;
+    var lastest_nwc = -61.373;
+    var fiscal_year_end_nwc = -88.93;
 
-    var equity_waterfall = [0, 0, -48, 0, -6904, 8666];
-    var shares_outstanding = 475.8674;
+    var equity_waterfall = [-79.909, 0, -2.031375, 0, 1461.57, -384.695];
+    var shares_outstanding = 377.248128502674;
 
-    var change_in_ltm_nwc = 5929;
-    var change_in_ytd_nwc = -3137;
+    var change_in_ltm_nwc = -14.126;
+    var change_in_ytd_nwc = -27.557;
 
-    var lastest_ppe = 12267;
+    var lastest_ppe = 1146.996;
 
 
     // enter excel dates
     // [LTM, FY+1, FY+2, FY+3, FY+4, FY+5]
-    var ltm_num_dates = [41729];
-    var proj_num_dates =  [42004, 42369, 42735, 43100, 43465];
+    var ltm_num_dates = 41701;
+    var proj_num_dates = [42004, 42369, 42735, 43100, 43465];
 
-    
+
     // enter text dates
     var hist_text_dates = ['Dec-09', 'Dec-10', 'Dec-11', 'Dec-12', 'Dec-13', '', 'Mar-13', 'Mar-14', 'Mar-14'];
     var proj_text_dates = ['Dec-14', 'Dec-15', 'Dec-16', 'Dec-17', 'Dec-18'];
 
-    
+
     // enter text periods
     var hist_period_text_dates = ['FY 09', 'FY 10', 'FY 11', 'FY 12', 'FY 13', '', 'YTD Prior', 'YTD', 'LTM'];
     var proj_period_text_dates = ['FY 14', 'FY 15', 'FY 16', 'FY 17', 'FY 18'];
 
-    
-    // income statment inputs
-    var rev_title_1 = '   Net Product Sales';
-    var rev_title_2 = '   Net Service Sales';
-    var rev_title_3 = '   Rev 3';
-    var rev_title_4 = '   Rev 4';
-    var rev_title_5 = '   Rev 5';
-    var rev_title_6 = '   Rev 6';
-    var rev_title_7 = '   Rev 7';
 
-    
+    // income statement inputs
+    var rev_title_1 = "     Franchise Revenues";
+    var rev_title_2 = "     Sales";
+    var rev_title_3 = "   Segment 3";
+    var rev_title_4 = "   Segment 4";
+    var rev_title_5 = "   Segment 5";
+    var rev_title_6 = "   Segment 6";
+    var rev_title_7 = "   Segment 7";
+
+
     // historical revenue growth by segment
-      // [FY-4, FY-3, FY-2, FY-1, FY, space, YTD Prior, YTD]
-    var hist_rev_fin_1 = [22273, 30792, 42000, 51733, 60903, 11249, 13271, 15705];
-    var hist_rev_fin_2 = [2236, 3412, 6077, 9360, 13549, 1937, 2799, 4036];
+      // [FY-4, FY-3, FY-2, FY-1, FY, YTD Prior Prior, YTD Prior, YTD]
+    var hist_rev_fin_1 = [302.853, 296.358, 304.814, 306.919, 321.581, 73.258, 73.009, 90.566];
+    var hist_rev_fin_2 = [2134.242, 2079.081, 2126.544, 2198.323, 2165.829, 519.929, 530.673, 432.63];
     var hist_rev_fin_3 = [0, 0, 0, 0, 0, 0, 0, 0];
     var hist_rev_fin_4 = [0, 0, 0, 0, 0, 0, 0, 0];
     var hist_rev_fin_5 = [0, 0, 0, 0, 0, 0, 0, 0];
     var hist_rev_fin_6 = [0, 0, 0, 0, 0, 0, 0, 0];
     var hist_rev_fin_7 = [0, 0, 0, 0, 0, 0, 0, 0];
 
-    
+
     // historical cogs, sg&a, d&a, and capex
-    var hist_cogs_fin = [-18978, -26561, -37288, -45971, -54181, '', -11801, -14055];
-    var hist_sga_fin = [-4402, -6237, -9927, -14446, -19526, '', -4088, -5540];
-    var hist_da_fin = [378, 568, 1083, 2159, 3253, '', 700, 1010];
+    var hist_cogs_fin = [-1812.056, -1756.954, -1815.328, -1880.463, -1825.507, '', -460.64475, -374.00675];
+    var hist_sga_fin = [-487.211, -438.357, -415.079, -434.364, -475.976, '', -117.06325, -112.34325];
+    var hist_da_fin = [134.063, 126.846, 122.992, 146.976, 182.359, '', 51.797, 42.021];
 
-    
+
     // ytd [dep, amort]
-    var hist_ltm_da = [-3731, -168];
-    var hist_ytd_da = [-968, -42];
-    var hist_capex_fin = [373, 979, 1811, 3785, 3444, '', 670, 1080];
+    var hist_ltm_da = [-133.974, -38.609];
+    var hist_ytd_da = [-32.36875, -9.65225];
+    var hist_capex_fin = [101.914, 147.969, 146.763, 197.59, 224.245, '', 39.977, 53.058];
 
-    
+
     // all segments
-    var ytd_prior_rev_growth = [0.17975, 0.44525, 0, 0, 0, 0, 0, 0.22111];
-    var ltm_rev_growth = [0.17975, 0.44525, 0, 0, 0, 0, 0, 0.22111];
+    var ytd_prior_rev_growth = [-0.0034, 0.0207, 0, 0, 0, 0, 0, 0.0177];
+    var ltm_rev_growth = [0.1059, -0.064, 0, 0, 0, 0, 0, -0.0433];
 
-    
+
     // interest expense
-    var ltm_interest_exp = -150;
-    var ytd_interest_exp = -42;
+    var ltm_interest_exp = -61.042;
+    var ytd_interest_exp = -12.994;
 
       // projected inputs
-      var proj_rev_growth_1 = [0.178, 0.178, 0.178, 0.178, 0.178];
-      var proj_rev_growth_2 = [0.447, 0.447, 0.447, 0.447, 0.447];
-      var proj_rev_growth_3 = [0,0,0,0,0,0];
-      var proj_rev_growth_4 = [0,0,0,0,0,0];
-      var proj_rev_growth_5 = [0,0,0,0,0,0];
-      var proj_rev_growth_6 = [0,0,0,0,0,0];
-      var proj_rev_growth_7 = [0,0,0,0,0,0];
+      var proj_rev_growth_1 = [0.106, 0.106, 0.106, 0.106, 0.106];
+      var proj_rev_growth_2 = [-0.063, -0.063, -0.063, -0.063, -0.063];
+      var proj_rev_growth_3 = [0, 0, 0, 0, 0];
+      var proj_rev_growth_4 = [0, 0, 0, 0, 0];
+      var proj_rev_growth_5 = [0, 0, 0, 0, 0];
+      var proj_rev_growth_6 = [0, 0, 0, 0, 0];
+      var proj_rev_growth_7 = [0, 0, 0, 0, 0];
 
-      var proj_seg_rev_growth = [proj_rev_growth_1, proj_rev_growth_2, proj_rev_growth_3, proj_rev_growth_4, proj_rev_growth_5, proj_rev_growth_6, proj_rev_growth_7]
+      var proj_seg_rev_growth = [proj_rev_growth_1, proj_rev_growth_2, proj_rev_growth_3, proj_rev_growth_4, proj_rev_growth_5, proj_rev_growth_6, proj_rev_growth_7];
 
-      var proj_total_rev_growth = [0.227, 0.236, 0.246, 0.257, 0.269];
-      var proj_gp_margin = [0.295, 0.3, 0.305, 0.31, 0.315];
-      var proj_sga_margin = [0.268, 0.268, 0.268, 0.268, 0.268];
-      var proj_ebit_margin = [0.027, 0.032, 0.037, 0.042, 0.047];
-      var proj_capex_margin = [0.049, 0.045, 0.04, 0.035, 0.035];
-      var proj_nwc = [-0.1, -0.1, -0.1, -0.1, -0.1];
+      var proj_total_rev_growth = [-0.041, -0.038, -0.034, -0.03, -0.025];
+      var proj_gp_margin = [0.277, 0.277, 0.277, 0.277, 0.277];
+      var proj_sga_margin = [0.196, 0.196, 0.196, 0.196, 0.196];
+      var proj_ebit_margin = [0.082, 0.082, 0.082, 0.082, 0.082];
+      var proj_capex_margin = [0.098, 0.098, 0.098, 0.098, 0.098];
+      var proj_nwc = [-0.03, -0.03, -0.03, -0.03, -0.03];
+
+
+    // ***********************************************************
+    // Start Assumption Collection
+    // ***********************************************************
 
     // spreadsheet.el.querySelector('thead').style.display = 'none';
 
     // spreadsheet
-    spreadsheet.select('A1:Q126').fill()
+    spreadsheet.select('A1:Q137').fill()
 
     // column titles
     spreadsheet.select('A').width(150)
@@ -508,7 +517,7 @@
 // ***************************************************************
 
   // financial statement assumptions
-    spreadsheet.select('A66:A130').addClass('headers')
+    spreadsheet.select('A66:A136').addClass('headers')
       .insert(['',
                '',
                'Calculation Details and Methodology',
@@ -552,10 +561,10 @@
                '  (-) Capital Expenditures',
                'Unlevered Free Cash Flow',
                '',
-               '',
                'DCF Periods',
                'Discount Factor (Middle of Period)',
                'Discount Factor (End of Period)',
+               'Discount Factor - Cost of Equity',
                '',
                'Fair Value per Share Reconcilation',
                '',
@@ -573,7 +582,13 @@
                'Equity Value',
                '  (x) Diluted Shares Outstanding (Mil)',
                'Estimated Fair Value per Share',
-               ''])
+               '',
+               '',
+               'NOL Based on DCF',
+               'NOL Beginning Balance',
+               '(+) Additions',
+               '(-) Usage',
+               'NOL Ending Balance'])
     
     spreadsheet.select('J51').insert(valuation_date)
     spreadsheet.select('J53').insert('EBITDA Multiple')
@@ -587,8 +602,10 @@
     spreadsheet.select('M57').insert([growth_exit]).format('%').editable()
     spreadsheet.select('N57').insert([pe_exit]).editable()
 
-    spreadsheet.select('J58').insert([discount_rate]).editable().format('%')
-    spreadsheet.select('L58:N58').calc('{J58}').format('%')
+    spreadsheet.select('J58').insert(discount_rate).editable().format('%')
+    spreadsheet.select('L58:M58').calc('{J58}').format('%')
+    spreadsheet.select('N58').insert(equity_discount_rate).editable().format('%')
+
 
     spreadsheet.select('J59').calc('{J129}').format('$')
     spreadsheet.select('L59:N59').calc('{129}').format('#')
@@ -688,7 +705,7 @@
     spreadsheet.select('P89').calc('{P86} + {P46} + {O89}').format('$')
 
 
-    // NOL
+    // Actual NOL
     spreadsheet.select('J96').insert([0])
     // - begining balances
     spreadsheet.select('L93').calc('{J96}')
@@ -733,11 +750,8 @@
     spreadsheet.select('H101:I101').calc('{76}').format('$')
     spreadsheet.select('H102:I102').calc('-{101} * {F79}').format('#')
     spreadsheet.select('H103:I103').calc('{101} + {102}').format('$')
-    spreadsheet.select('H104').calc('{J41}').format('#')
     spreadsheet.select('I104').calc('{I41}').format('#')
-    spreadsheet.select('H105').insert(change_in_ltm_nwc).format('#')
     spreadsheet.select('I105').insert(change_in_ytd_nwc).format('#')
-    spreadsheet.select('H106').calc('-{J46}').format('#')
     spreadsheet.select('I106').calc('-{H46}').format('#')
     spreadsheet.select('J101:J107').calc('{L} - {I}').format('#')
     spreadsheet.select('L101:P101').calc('{76}').format('$')
@@ -759,23 +773,25 @@
     spreadsheet.select('Q106').calc('-{P74}*{P47}').format('#')
 
     spreadsheet.select('L107:Q107').calc('{103} + {104} + {105} + {106}').format('$')
-    spreadsheet.select('H107:I107').calc('{103} + {104} + {105} + {106}').format('$')
+    spreadsheet.select('I107').calc('{103} + {104} + {105} + {106}').format('$')
 
     // DCF Periods
-    spreadsheet.select('L110').calc('(({L5} + {J5})/2 - valuation_date)/365').format('##')
-    spreadsheet.select('M110').calc('(({M5} + {L5})/2 - valuation_date)/365').format('##')
-    spreadsheet.select('N110').calc('(({N5} + {M5})/2 - valuation_date)/365').format('##')
-    spreadsheet.select('O110').calc('(({O5} + {N5})/2 - valuation_date)/365').format('##')
-    spreadsheet.select('P110').calc('(({P5} + {O5})/2 - valuation_date)/365').format('##')
+    spreadsheet.select('L109').calc('(({L5} + {J5})/2 - valuation_date)/365').format('##')
+    spreadsheet.select('M109').calc('(({M5} + {L5})/2 - valuation_date)/365').format('##')
+    spreadsheet.select('N109').calc('(({N5} + {M5})/2 - valuation_date)/365').format('##')
+    spreadsheet.select('O109').calc('(({O5} + {N5})/2 - valuation_date)/365').format('##')
+    spreadsheet.select('P109').calc('(({P5} + {O5})/2 - valuation_date)/365').format('##')
 
     // Discount Factors
-    spreadsheet.select('L111').calc('1 / Math.pow((1 + {J58}),{L110})').format('%')
-    spreadsheet.select('M111').calc('1 / Math.pow((1 + {J58}),{M110})').format('%')
-    spreadsheet.select('N111').calc('1 / Math.pow((1 + {J58}),{N110})').format('%')
-    spreadsheet.select('O111').calc('1 / Math.pow((1 + {J58}),{O110})').format('%')
-    spreadsheet.select('P111').calc('1 / Math.pow((1 + {J58}),{P110})').format('%')
+    spreadsheet.select('L110').calc('1 / Math.pow((1 + {J58}),{L109})').format('%')
+    spreadsheet.select('M110').calc('1 / Math.pow((1 + {J58}),{M109})').format('%')
+    spreadsheet.select('N110').calc('1 / Math.pow((1 + {J58}),{N109})').format('%')
+    spreadsheet.select('O110').calc('1 / Math.pow((1 + {J58}),{O109})').format('%')
+    spreadsheet.select('P110').calc('1 / Math.pow((1 + {J58}),{P109})').format('%')
 
-    spreadsheet.select('P112').calc('1 / Math.pow((1 + {J58}),(({P5}-{J5})/365))').format('%')
+    spreadsheet.select('P111').calc('1 / Math.pow((1 + {J58}),(({P5}-{J5})/365))').format('%')
+    spreadsheet.select('P112').calc('1 / Math.pow((1 + {N58}),(({P5}-{J5})/365))').format('%')
+
 
     // Fair value per share reconciliation
     spreadsheet.select('J116:N116').merge().insert(['Exit Method']).addClass('col_merge')
@@ -820,18 +836,37 @@
     spreadsheet.select('N128').insert(shares_outstanding).format('#')
     spreadsheet.select('N129').calc('Math.max({P80}/{N128}*{N57}*{P112}, 0)').format('$$')
 
+    // DCF NOL
+    spreadsheet.select('J136').insert([0])
+    // - begining balances
+    spreadsheet.select('L133').calc('{J136}')
+    spreadsheet.select('M133').calc('{L136}')
+    spreadsheet.select('N133').calc('{M136}')
+    spreadsheet.select('O133').calc('{N136}')
+    spreadsheet.select('P133').calc('{O136}')
 
+    // // - additions balances
+    // spreadsheet.select('J134').calc('0')
+    // spreadsheet.select('L134').calc('0')
+    // spreadsheet.select('M134').calc('0')
+    // spreadsheet.select('N134').calc('0')
+    // spreadsheet.select('O134').calc('0')
 
+    // // - usaage balances
+    // spreadsheet.select('J135').calc('0')
+    // spreadsheet.select('L135').calc('0')
+    // spreadsheet.select('M135').calc('0')
+    // spreadsheet.select('N135').calc('0')
+    // spreadsheet.select('O135').calc('0')
 
-    // hide historical annual and quarterly data
-    // spreadsheet.select(':B, :C, :D, :E, :H, :I').hide()
+    // - ending balances
+    spreadsheet.select('J136').calc('{J133} + {J134} + {J135}')
+    spreadsheet.select('L136').calc('{L133} + {L134} + {L135}')
+    spreadsheet.select('M136').calc('{M133} + {M134} + {M135}')
+    spreadsheet.select('N136').calc('{N133} + {N134} + {N135}')
+    spreadsheet.select('O136').calc('{O133} + {O134} + {O135}')
+    spreadsheet.select('P136').calc('{P133} + {P134} + {P135}')
 
-    // hide projected annual data
-    // spreadsheet.select(':L, :M, :N, :O, :P').hide()
-
-    // spreadsheet.select('1:3').hide()
-    // spreadsheet.select('10:26').hide()
-    // spreadsheet.select('{30}, {31}, {32}, {33}, {34}, {35}, {36}, {37}').height(1)
 
     console.time('select')
 
@@ -857,9 +892,11 @@
     console.time('select last')
     
     spreadsheet.select('J101, J103, J107').format('$')
-    spreadsheet.select('H76:P76, H78:P78, H80:P80, H103:Q103, H107:Q107, J1120:N1120, J127:N127, J129:N129').addClass('total_border')
+    spreadsheet.select('H76:P76, H78:P78, H80:P80, H103:Q103, I107:Q107, J1120:N1120, J127:N127, J129:N129').addClass('total_border')
     
     console.timeEnd('select last')
+
+
 
     function years(arr) {
       return arr.map(function(item) {
