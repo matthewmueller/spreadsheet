@@ -1,0 +1,79 @@
+<html>
+<head>
+  <title>LR Model - Apple</title>
+  <link rel="stylesheet" href="/build/build.css">
+  <style>
+    .vertical-heading {
+      width: 200%;
+    }
+
+    .h1 input {
+      font-size: 18px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .growth input {
+      padding-left: 20px;
+      font-style: italic;
+      color: #0E54B8;
+    }
+  </style>
+</head>
+<body>
+  <script src="/build/build.js"></script>
+  <script>
+    var Spreadsheet = require('spreadsheet');
+    var spreadsheet = Spreadsheet();
+    document.body.appendChild(spreadsheet.el);
+
+    // spreadsheet.select('A4:C4').insert(['Company Model']).merge();
+
+    // headings
+    spreadsheet.select('A1:C27').mergeCols()
+      .insert(['Company Model', '', 'iPhones', 'Growth', 'Macs', 'Growth', 'App Stores', 'Growth', 'Other', 'Growth', '', 'Revenue', 'Growth', '', 'Cost of Goods Sold', '', 'Gross Profit', 'Margin', '', 'Selling, General & Administrative Expenses', '% of Revenue', '', 'Earnings (EBITDA)', 'Margin', '', 'Capital Expenditures', 'Capital Expenditures as a % of Revenue']);
+
+    spreadsheet.select('B1:O1')
+      .insert(['FYE 2012', 'FYE 2013', 'Q2 2013', 'Q3 2013', 'Q4 2013', 'Q1 2014', 'LTM', 'Q2 2014', 'Q3 2014', 'Q4 2015', 'Q1 2016', 'Year 1 Prj', 'Year 2 Prj', 'Year 3 Prj', 'Year 4 Prj', 'Year 5 Prj']);
+
+    // // Add class to top header
+    spreadsheet.select('1')
+      .addClass('h1')
+
+    // // Add class to growth
+    spreadsheet.select('A4, A6, A8, A10, A13')
+      .addClass('growth')
+
+    // iPhone revenue
+    spreadsheet.select('D3:O3')
+      .insert([772, 872, 201, 193, 209, 277, 881])
+      .format('$')
+
+    // past iPhone growth
+    spreadsheet.select('D4:E4')
+      .insert([.10, .129])
+      .format('%')
+
+    // editable iPhone growth
+    spreadsheet.select('I4:O4')
+      .insert([.15, .15, .15, .15, .15, .10, .10])
+      .format('%')
+      .editable()
+
+    // Mac revenue
+    spreadsheet.select('B5:O5')
+      .insert([965, 1090, 251, 242, 262, 347, 1101, 289, 278, 301, 399, 1267, 1393, 1533])
+      .format('$')
+
+    // Mac growth
+    spreadsheet.select('I6:O6')
+      .insert([.15, .15, .15, .15, .15, .10, .10])
+      .format('%')
+      .editable()
+
+    // hide the quarter 4
+    // spreadsheet.select(':K').hide();
+
+  </script>
+</body>
+</html>

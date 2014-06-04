@@ -1,0 +1,162 @@
+<html>
+<head>
+  <title>spreadsheet component</title>
+  <link rel="stylesheet" href="../build/build.css">
+  <style>
+    table {
+      border: 1px solid #ccc;
+      border-collapse: collapse;
+    }
+
+    table tr {
+      border: 1px solid green;
+      min-height: 40px;
+      min-width: 40px;
+    }
+
+    table td {
+      border: 1px solid #ccc;
+      padding: 5px;
+    }
+
+    .bold {
+      font-weight: bold;
+    }
+
+    .top_border {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <h1>Calculations</h1>
+  <script src="../build/build.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    var Spreadsheet = require('spreadsheet');
+    var spreadsheet = Spreadsheet();
+    document.body.appendChild(spreadsheet.el);
+
+    // Dates
+    var FY_Start = 2011;
+    var LTM_Mon = 'Sept-30';
+
+    // Historical financials
+    var rev_hst0 = 108249;
+    var rev_hst1 = 156508;
+    var rev_hst_ltm = 155865;
+
+    var cogs_hst0 = -62617;
+    var cogs_hst1 = -84569;
+    var cogs_hst_ltm = -82635;
+
+    var gp_hst0 = rev_hst0 + cogs_hst0;
+    var gp_hst1 = rev_hst1 + cogs_hst1;
+    var gp_hst_ltm = rev_hst_ltm + cogs_hst_ltm;
+
+    var sga_hst0 = -10028;
+    var sga_hst1 = -13421;
+    var sga_hst_ltm = -13787;
+
+    var ebitda_hst0 = gp_hst0 + sga_hst0;
+    var ebitda_hst1 = gp_hst1 + sga_hst1;
+    var ebitda_hst_ltm = gp_hst_ltm + sga_hst_ltm;
+
+    var capex_hst0 = 4260;
+    var capex_hst1 = 8295;
+    var capex_hst_ltm = 9671;
+
+    var ppe = 16327;
+    var latest_NWC = -13899;
+
+    var cash = 42606;
+    var total_debt = 17000;
+    var uncon_invest = 104014;
+    var non_control_interests = 0;
+    var other = 0;
+
+    var share_count = 900;
+
+    // Market Data
+    var share_price = 524.99;
+
+    function calc_equity_value(share_price, share_count){
+      return share_count * share_price;
+    }
+
+    function calc_enterprise_value(share_price, share_count, cash, total_debt, uncon_invest, non_control_interests, other){
+      return share_price*share_count - cash + total_debt - uncon_invest + non_control_interests - other;
+    }
+
+    // Projections
+    var rev_growth1 = .15;
+    var rev_growth2 = .10;
+    var rev_growth3 = .10;
+    var rev_growth4 = .10;
+    var rev_growth5 = .10;
+
+    var gp_margin1 = .46989381836846;
+    var gp_margin2 = .46989381836846;
+    var gp_margin3 = .46989381836846;
+    var gp_margin4 = .46989381836846;
+    var gp_margin5 = .46989381836846;
+
+    var sga_margin1 = .0884547525101851;
+    var sga_margin2 = .0884547525101851;
+    var sga_margin3 = .0884547525101851;
+    var sga_margin4 = .0884547525101851;
+    var sga_margin5 = .0884547525101851;
+
+    var capex_margin1 = .05;
+    var capex_margin2 = .05;
+    var capex_margin3 = .05;
+    var capex_margin4 = .05;
+    var capex_margin5 = .05;
+
+    spreadsheet
+      .select('A1:S1').insert(['A1', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S']).addClass('bold')
+      .select()
+      .select('B2:I2').insert(['FYE '+FY_Start, 'FYE '+(FY_Start+1), 'LTM '+LTM_Mon,'Year 1 Prj', 'Year 2 Prj', 'Year 3 Prj', 'Year 4 Prj', 'Year 5 Prj']).addClass('bold')
+      .select('A3:A13').insert(['Revenue', '  YoY Growth', 
+                                'COGS',
+                                'Gross Profit', '  Margin', 
+                                'SG&A', '  % of Revenue', 
+                                'EBITDA', '  Margin', 
+                                'Capital Expenditures', '  % of Revenue'])
+      // .select('C2:C9').insert([32, 11, 22, 33, 45, 42, 10, 32]).format('$').editable()
+      // .select('D2:D9').calc(':B - :C').format('$')
+      .select('B3:D3').insert([rev_hst0, rev_hst1, rev_hst_ltm]).format('$')
+      .select('C4:D4').insert(['=C3 / B3 - 1', '=D3 / C3 - 1']).format('%')
+      .select('E4:I4').insert([rev_growth1, rev_growth2, rev_growth3, rev_growth4, rev_growth5]).format('%').editable()
+      .select('E3:I3').insert(['=D3*(1+E4)', '=E3*(1+F4)', '=F3*(1+G4)', '=G3*(1+H4)', '=H3*(1+I4)']).format('$')
+      .select('B5:I5').insert([cogs_hst0, cogs_hst1, cogs_hst_ltm, '=-E3+E6', '=-F3+F6', '=-G3+G6', '=-H3+H6', '=-I3+I6']).format('$')
+      .select('B6:I6').insert([gp_hst0, gp_hst1, gp_hst_ltm, '=E3*E7', '=F3*F7', '=G3*G7', '=H3*H7', '=I3*I7']).format('$')
+      .select('B7:I7').insert(['=B6/B3', '=C6/C3', '=D6/D3', gp_margin1, gp_margin2, gp_margin3, gp_margin4, gp_margin5]).format('%').editable()
+      .select('B8:I8').insert([sga_hst0, sga_hst1, sga_hst_ltm, '=-E3*E9', '=-F3*F9', '=-G3*G9', '=-H3*H9', '=-I3*I9']).format('$')
+      .select('B9:I9').insert(['=-B8/B3', '=-C8/C3', '=-D8/D3', sga_margin1, sga_margin2, sga_margin3, sga_margin4, sga_margin5]).format('%').editable()
+      .select('B10:I10').insert(['=B6+B8', '=C6+C8', '=D6+D8', '=E6+E8', '=F6+F8', '=G6+G8', '=H6+H8', '=I6+I8']).format('$')
+      .select('B11:I11').insert(['=B10/B3', '=C10/C3', '=D10/D3', '=E10/E3', '=F10/F3', '=G10/G3', '=H10/H3', '=I10/I3']).format('%')
+
+
+
+
+    function calc_yoy_growth(arr){
+      return arr.map(function(item) {
+        return item[1] / item[0] - 1;
+      })
+    }
+
+    function calc_grow_yoy(arr){
+      return arr.map(function(item) {
+        return item[0] * (1 + item[1]/100);
+      })
+    }
+
+    function years(arr) {
+      return arr.map(function(item) {
+        return 'Year ' + item;
+      })
+    }
+
+  </script>
+</body>
+</html>
