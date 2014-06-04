@@ -613,7 +613,8 @@
     spreadsheet.select('J62').calc('{J59} / {J60} - 1').format('%')
     spreadsheet.select('L62:N62').calc('{59} / {60} - 1').format('%')
 
-    spreadsheet.select('J64:L64').merge().insert('BUY').addClass('rating')
+
+    spreadsheet.select('J64:L64').merge().calc('{J62} > .1 ? "BUY" : ({J57} == 11 ? "HOLD" : "SELL")').addClass('rating')
 
     // titles
     // merged rows
