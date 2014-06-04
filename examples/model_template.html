@@ -83,10 +83,7 @@
   <h1 style="font-family:verdana; font-size:10pt">LR Model Template</h1>
   <script src="../build/build.js" type="text/javascript"></script>
   <script type="text/javascript">
-    var Spreadsheet = require('spreadsheet');
-    var spreadsheet = Spreadsheet();
-    document.body.appendChild(spreadsheet.el);
-    
+
     // ***********************************************************
     // Input Assumptions
     // ***********************************************************
@@ -204,10 +201,9 @@
     // Start Assumption Collection
     // ***********************************************************
 
-    // spreadsheet.el.querySelector('thead').style.display = 'none';
-
-    // spreadsheet
-    spreadsheet.select('A1:Q137').fill()
+    var Spreadsheet = require('spreadsheet');
+    var spreadsheet = Spreadsheet('Q137');
+    document.body.appendChild(spreadsheet.el);
 
     // column titles
     spreadsheet.select('A').width(150)

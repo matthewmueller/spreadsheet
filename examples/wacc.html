@@ -80,7 +80,7 @@
   <script src="../build/build.js" type="text/javascript"></script>
   <script type="text/javascript">
     var Spreadsheet = require('spreadsheet');
-    var spreadsheet = Spreadsheet();
+    var spreadsheet = Spreadsheet('G30');
     document.body.appendChild(spreadsheet.el);
     
     // ***********************************************************
@@ -107,7 +107,6 @@
     // spreadsheet.el.querySelector('thead').style.display = 'none';
 
     // spreadsheet
-    spreadsheet.select('A1:G30').fill()
 
     // column titles
     spreadsheet.select('A').width(10)

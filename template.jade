@@ -16,7 +16,7 @@ mixin rowhead(value)
 
 mixin th(n)
   - for (var i = 0; i < n; i++)
-    th: div=letters[i]
+    th(name=letters[i]): div=letters[i]
 
 mixin layerhead(n)
   - for (var i = 0; i < n; i++)
@@ -45,7 +45,7 @@ mixin td(n)
           +layer(c)
     tbody
       - for (var i = 1; i <= r; i++)
-        tr
+        tr(name=i)
           if (heads)
             th.rowhead: div=i
           +layer(l)

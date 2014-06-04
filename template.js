@@ -40,7 +40,7 @@ function template(locals) {
     jade_mixins["th"] = function(n) {
         var block = this && this.block, attributes = this && this.attributes || {};
         for (var i = 0; i < n; i++) {
-            buf.push("<th><div>" + jade.escape(null == (jade.interp = letters[i]) ? "" : jade.interp) + "</div></th>");
+            buf.push("<th" + jade.attr("name", letters[i], true, false) + "><div>" + jade.escape(null == (jade.interp = letters[i]) ? "" : jade.interp) + "</div></th>");
         }
     };
     jade_mixins["layerhead"] = function(n) {
@@ -76,7 +76,7 @@ function template(locals) {
     }
     buf.push("</thead><tbody>");
     for (var i = 1; i <= r; i++) {
-        buf.push("<tr>");
+        buf.push("<tr" + jade.attr("name", i, true, false) + ">");
         if (heads) {
             buf.push('<th class="rowhead"><div>' + jade.escape(null == (jade.interp = i) ? "" : jade.interp) + "</div></th>");
         }
