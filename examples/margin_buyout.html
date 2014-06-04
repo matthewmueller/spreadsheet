@@ -1,0 +1,256 @@
+<!doctype html>
+<html>
+<head>
+  <title>Panera Margin Buyout</title>
+  <link rel="stylesheet" href="../build/build.css">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <style>
+    
+    .spreadsheet {
+      max-width: 750px;
+    }
+    
+    table {
+      /*border-collapse: collapse;*/
+      font-size: 7.5pt;
+      text-align: right;
+
+    }
+
+    table .headers {
+      text-align: left;
+    }
+
+
+    .header {
+      font-weight: normal;
+      font-style: italic;
+      font-family: Arial;
+
+    }
+
+    .col_merge {
+      font-weight: bold;
+      text-align: center;
+      border-bottom: solid black 1px !important;
+    }
+
+    .totals {
+      font-weight: bold;
+    }
+
+    .whiteout {
+      color: white !important;
+    }
+
+    .spacer {
+      height: 1px !important;
+    }
+
+    .input_heading {
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .titles {
+      font-weight: bold;
+      border-bottom: solid black 1px !important;
+    }
+
+    .left_border {
+      border-left: solid black 1px !important;
+    }
+
+    .right_border {
+      border-right: solid black 1px !important;
+    }
+
+    .bottom_border {
+      border-bottom: solid black 1px !important;
+      font-weight: bold;
+    }
+
+    .total_border {
+      border-top: solid black 1px !important;
+      border-bottom: solid black 1px !important;
+    }
+
+    .left_align {
+      text-align: left;
+    }
+
+    .comments {
+      background-color: #F7F7F7;
+      text-align: left;
+    }
+
+    .bold {
+      font-weight: bold;
+    }
+
+    .highlight {
+      background-color: #DAEEF3;
+    }
+
+    .italic {
+      font-style: italic;
+    }
+
+
+  </style>
+</head>
+<body>
+  <h1 style="font-family:verdana; font-size:10pt">LR Model Template</h1>
+  <script src="../build/build.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    var Spreadsheet = require('spreadsheet');
+    var spreadsheet = Spreadsheet('G40');
+    document.body.appendChild(spreadsheet.el);
+    
+    // ***********************************************************
+    // Input Assumptions
+    // ***********************************************************
+
+        // inputs
+    var company_name = "Panera Bread Company";
+    var data_date = 'June 5, 2014';
+    var enterprise_value = 4120;
+    var market_cap = 4190;
+    var ltm_ebitda = 413;
+    var margin = .35;
+    var interest_rate = .065;
+    var exit_multiple = enterprise_value / ltm_ebitda;
+    var exit_years = 5;
+    var total_share_value = 3000;
+    var ebitda_growth = .12;
+    var cash_generated = 100 * exit_years
+    var tax_rate = .38;
+
+
+    // ***********************************************************
+    // Start Assumption Collection
+    // ***********************************************************
+
+    // spreadsheet.el.querySelector('thead').style.display = 'none';
+
+    
+    // column titles
+    spreadsheet.select('A').width(10)
+    spreadsheet.select('B').width(200)
+    spreadsheet.select('G').width(250)
+    spreadsheet.select('B1:B40').addClass('headers')
+      .insert(['', 
+               "Illustrative Example - "+company_name, 
+               '($ in millions, except individual brokerage account data)',
+               '',
+               '',
+               '',
+               '',
+               '', 
+               '   Enterprise Value', 
+               '   Market Cap / Equity Value', 
+               '',
+               '   LTM EBITDA', 
+               '     Implied EBITDA Multiple', 
+               '',
+               'Source: Yahoo! Finance',
+               '',
+               '',
+               '',
+               '',
+               '   Projected EBITDA',
+               '     Assumed EBITDA Multiple', 
+               '',
+               'Implied Enterprise Value',
+               '   (+) Cash Generated over 5 Years',
+               'Implied Market Cap',
+               '',
+               '   Cash on Cash Return wihtout Margin',
+               '',
+               '',
+               '',
+               '',
+               'Total Value of Shares',
+               'Marign Used',
+               'After-tax Interest Charges on Margin',
+               'Proceeds from Investment',
+               '',
+               'Cash on Cash Return with Margin',
+               '',
+               'Difference',
+               ])
+  
+      spreadsheet.select("B2:C2").addClass('bold').merge()
+      spreadsheet.select("B3:C3").addClass('bold').merge()
+
+      spreadsheet.select("C4:F4").merge().insert(data_date).addClass('col_merge')
+      spreadsheet.select("F6").insert('Using 35% Margin').addClass('input_heading')
+      spreadsheet.select("C7:F7").insert(['Panera As Is', '', '', 'in Personal Account']).addClass('input_heading').addClass('bottom_border')
+      spreadsheet.select("G7").insert('Comments').addClass('bottom_border').addClass('left_align')
+
+      spreadsheet.select("C9:C10").insert([enterprise_value, market_cap]).editable().format('$')
+      spreadsheet.select("C12").insert(ltm_ebitda).editable().format('$')
+      spreadsheet.select("C13").calc('{C9} / {C12}').format('##')
+
+      spreadsheet.select("F9").insert(total_share_value).editable().format('$')
+      spreadsheet.select("F10").calc('{F9} - ({F9} * margin)').format('#')
+      spreadsheet.select("C10").format('#')
+      
+      spreadsheet.select("F12").calc('{C12}').format('$')
+      spreadsheet.select("F13").calc('{C13}').format('##')
+
+      spreadsheet.select("C17").insert('Panera As Is').addClass('input_heading')
+      spreadsheet.select("C18").insert('5 Years Later').addClass('input_heading').addClass('bottom_border')
+
+      spreadsheet.select("G9").insert('Total value of shares purchased').addClass('comments').addClass('left_align')
+      spreadsheet.select("G10").insert('Value of personal cash invested (excludes margin)').addClass('comments').addClass('left_align')
+      spreadsheet.select("F18:G18").insert('Comments').addClass('bottom_border').addClass('left_align').merge()
+      spreadsheet.select("F20:G20").insert('Assumes 12% growth per year for 5 years').addClass('comments').addClass('left_align').merge()
+      spreadsheet.select("F21:G21").insert('Same as Entry multiple').addClass('comments').addClass('left_align').merge()
+      spreadsheet.select("F23:G23").insert('Projected EBITDA * Assumed EBITDA multiple').addClass('comments').addClass('left_align').merge()
+      spreadsheet.select("F24:G24").insert('Assumes $100 million excess cash generated per year').addClass('comments').addClass('left_align').merge()
+
+      spreadsheet.select("F32:G32").insert('Total value shares grows at the same rate as market cap').addClass('comments').addClass('left_align').merge()
+      spreadsheet.select("F33:G33").insert('Return back funds borrowed on margin').addClass('comments').addClass('left_align').merge()
+      spreadsheet.select("F34:G34").insert('Estimated interest charges on margin (assuming tax-deductible)').addClass('comments').addClass('left_align').merge()
+      spreadsheet.select("F35:G35").insert('Cash proceeds from investment').addClass('comments').addClass('left_align').merge()
+
+      spreadsheet.select('F39:G39').insert("Additional return on each dollar invested").addClass('comments').merge()
+
+
+      spreadsheet.select("C20").calc('{12} * Math.pow((1 + ebitda_growth), exit_years)').format('$')
+      spreadsheet.select("C21").insert(exit_multiple).editable().format('##')
+      spreadsheet.select("C23").calc('{C20}*{C21}').format('$')
+      spreadsheet.select("C24").insert(cash_generated).format('#')
+      spreadsheet.select("C25").calc('{C23} + {C24}').format('$')
+      spreadsheet.select("C27").calc('{C25} / {C10}').format('##')
+
+      spreadsheet.select("C29").insert('Individual Brokerage').addClass('input_heading')
+      spreadsheet.select("C30").insert('Account With Margin').addClass('bottom_border').addClass('input_heading')
+      spreadsheet.select("C32").calc('{C25}/{C10}*{F9}').format('$')
+      spreadsheet.select("C33").calc('-{F9}+{F10}').format('#')
+      spreadsheet.select("C34").calc('({C33} * interest_rate * exit_years)*(1-tax_rate)').format('#')
+      spreadsheet.select("C35").calc('{C32}+{C33}+{C34}').format('#').addClass('border-top').addClass('border-bottom')
+      spreadsheet.select("C37").calc('{C35}/{F10}').format('##')
+      spreadsheet.select("C39").calc('-{C27}+{C37}').format('##')
+      spreadsheet.select("B27:C27, B37:C37, B39:G39").format('##').addClass('highlight').addClass('bold')
+      spreadsheet.select('B15').addClass('italic')
+
+      spreadsheet.select("D, E").width(10)
+      spreadsheet.select('5, 8, 11, 16, 19, 22, 26, 36, 38').height(1)
+
+
+      // spreadsheet.select('A1:G1').insert(['A', 'B', 'C', 'D', 'E', 'F', 'G'])
+
+
+
+
+    function years(arr) {
+      return arr.map(function(item) {
+        return 'Year ' + item;
+      })
+    }
+
+  </script>
+</body>
+</html>
