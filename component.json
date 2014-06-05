@@ -21,7 +21,7 @@
     "yields/shortcuts": "0.2.0",
     "yields/k": "0.6.1",
     "matthewmueller/delegates": "0.0.4",
-    "discore/closest": "0.1.2",
+    "component/closest": "0.1.3",
     "bmcmahen/modifier": "0.0.1",
     "matthewmueller/per-frame": "2.0.0",
     "matthewmueller/mini-tokenizer": "0.1.2",
@@ -43,7 +43,8 @@
     "lib/regex.js",
     "lib/expand.js",
     "lib/match.js",
-    "lib/outline.js"
+    "lib/outline.js",
+    "lib/collapsible.js"
   ],
   "styles": [
     "spreadsheet.css"
