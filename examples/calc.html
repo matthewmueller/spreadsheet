@@ -13,6 +13,7 @@
     table td {
       /*border: 1px solid #ccc;*/
       padding: 5px;
+      text-align: right;
     }
 
     table th {
@@ -20,8 +21,9 @@
     }
 
     .header {
-      font-weight: normal;
+      font-weight: 600;
       font-style: italic;
+      text-align: center;
     }
 
     table th,
@@ -42,33 +44,29 @@
     var domify = require('domify');
     var Spreadsheet = require('spreadsheet');
     console.time('draw');
-    var spreadsheet = Spreadsheet('Q137');
+    var spreadsheet = Spreadsheet('E30');
     console.timeEnd('draw');
 
     document.body.appendChild(spreadsheet.el);
     window.spreadsheet = spreadsheet;
     
-    spreadsheet.classes.add('headings');
+    // spreadsheet.classes.add('headings');
 
-    var s = spreadsheet
-      .select('A2:A9').insert(years([1, 2, 3, 4, 5, 6, 7, 8])).addClass('header')
+    spreadsheet
+      .select('A').each(function(cell, i) { 
+        cell.val('Year ' + i);
+      })
       .select('B, C').each(function(cell) {
         cell.val(~~(Math.random() * 100))
-      })
-      console.time('calcs');
-      s.select('D').calc('{B} - {C}').format('$')
-      s.select('E').calc('{D} + 100').format('$')
-      console.timeEnd('calcs');
-      s.select('B1, C1, D1, E1').insert(['Revenues', 'Expenses', 'Profit', 'Total']).addClass('header')
-      // .select('B2:B9').insert([10, 12, 32, 43, 53, 23, 32, 43]).format('$').editable()
-      // .select('C2:C9').insert([32, 11, 22, 33, 45, 42, 10, 32]).format('$').editable()
+      }).editable()
+      .select('D').calc('{B} - {C}').format('$')
+      .select('E').calc('{D} + 100').format('$')
+      .select('A1, B1, C1, D1, E1').insert(['Years', 'Revenues', 'Expenses', 'Profit', 'Total']).addClass('header')
+      .select('C:D').hide()
+      .select('2:4').hide();
 
-
-    function years(arr) {
-      return arr.map(function(item) {
-        return 'Year ' + item;
-      })
-    }
+      // .select('9:19').collapsible()
+      // .select('10:18').collapsible()
 
     // var el = spreadsheet.el;
     // var tr = el.querySelector('thead tr:first-of-type');

@@ -81,15 +81,6 @@
   padding: 6px;
 }
 
-
-.spreadsheet .layerhead {
-  width: 8px;
-}
-
-.spreadsheet tr.layer {
-  height: 8px;
-}
-
 /**
  * Cell borders
  */
@@ -133,6 +124,10 @@
   border-left: 1px solid #cdcdcd;
 }
 
+.spreadsheet.row-layers .rowhead div {
+  border-right: 1px solid #cdcdcd;
+}
+
 /**
  * Outline styling
  */
@@ -161,7 +156,45 @@
 .spreadsheet thead tr.layer,
 .spreadsheet thead th.layerhead,
 .spreadsheet tbody th.layer {
-  display: none;
+  width: 0;
+  height: 0;
+}
+
+.spreadsheet thead tr.layer.shown {
+  display: table-row;
+}
+
+.spreadsheet thead th.layerhead.shown {
+  width: 16px;
+}
+
+.spreadsheet thead tr.layer.shown {
+  height: 16px;
+}
+
+.spreadsheet th.layer.active {
+  padding: 0 6px;
+  cursor: pointer;
+}
+
+.spreadsheet th.layer.active:last-of-type {
+  padding-left: 0;
+  padding-right: 12px;
+}
+
+.spreadsheet th.layer.active.dot {
+  /*padding: 0 3px;*/
+  position: relative;
+  border-bottom: 4px solid #4285F4;
+}
+
+.spreadsheet th.layer div {
+  height: 100%;
+  width: 100%;
+}
+
+.spreadsheet th.layer.active div {
+  background: #4285F4;
 }
 
 /**

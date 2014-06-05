@@ -52,7 +52,7 @@ function template(locals) {
     jade_mixins["layer"] = function(n) {
         var block = this && this.block, attributes = this && this.attributes || {};
         for (var i = 0; i < n; i++) {
-            buf.push('<th class="layer"></th>');
+            buf.push('<th class="layer"><div></div></th>');
         }
     };
     jade_mixins["td"] = function(n) {
