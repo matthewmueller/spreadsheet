@@ -111,8 +111,7 @@
     var dep_prior_ppe = 0.062;
     var lastest_nwc = 75.3000000000002;
     var fiscal_year_end_nwc = -98.3999999999999;
-<<<<<<< Updated upstream
-    
+
     // [(-) Unconsolidated Investments, (-) Deferred Revenue Cash Adjustment, (+/-) Other, (+) Non-Controlling Interests, (+) Debt, (-) Cash]
     var equity_waterfall = [-1223.8, 0, 22.8499999999998, 0, 13926.8, -2743.8];
     var shares_outstanding = 999.869424872523;
@@ -120,15 +119,6 @@
     var change_in_ltm_nwc = 266.2;
     var change_in_ytd_nwc = -173.7;
 
-=======
-[(-) Unconsolidated Investments, (-) Deferred Revenue Cash Adjustment, (+/-) Other, (+) Non-Controlling Interests, (+) Debt, (-) Cash]
-    var equity_waterfall = [-1223.8, 0, 22.8499999999998, 0, 13926.8, -2743.8];
-    var shares_outstanding = 999.869424872523;
-
-    var change_in_ltm_nwc = 266.2;
-    var change_in_ytd_nwc = -173.7;
-
->>>>>>> Stashed changes
     var lastest_ppe = 25650;
 
 
@@ -204,7 +194,7 @@
       var proj_total_rev_growth = [0.031, 0.042, 0.047, 0.05, 0.05];
       var proj_gp_margin = [0.443, 0.443, 0.444, 0.454, 0.454];
       var proj_sga_margin = [0.134, 0.13, 0.124, 0.124, 0.124];
-      var proj_ebit_margin = [0.309, 0.313, 0.32, 0.33, 0.33];
+      var proj_ebitda_margin = [0.309, 0.313, 0.32, 0.33, 0.33];
       var proj_capex_margin = [0.102, 0.098, 0.095, 0.085, 0.085];
       var proj_nwc = [0.003, 0.003, 0.003, 0.003, 0.003];
 
@@ -213,11 +203,11 @@
     // ***********************************************************
 
     var Spreadsheet = require('spreadsheet');
-    var spreadsheet = window.spreadsheet = Spreadsheet('Q137');
+    var spreadsheet = window.spreadsheet = Spreadsheet('Q142');
     document.body.appendChild(spreadsheet.el);
 
     // column titles
-    spreadsheet.select('A').width(150)
+    spreadsheet.select('A').width(175)
     spreadsheet.select('A1:A65').addClass('headers')
       .insert(['', 
                '', 
@@ -279,8 +269,8 @@
               'Assumed Discount Rate',
               'Implied Fair Value per Share',
               'Current Trading Price',
-              '',
-              ' Discount/(Premium) to Current Price',
+              'Discount/(Premium) to Current Price',
+              'Average Discount / (Premium)',
               '',
               'Your Rating',
               ''])
@@ -289,7 +279,8 @@
                                         'J', 'K', 'L', 'M', 'N', 'O', 'P'])
 
     // merged rows
-    spreadsheet.select('L4:P4').merge().insert(['Projections']).addClass('col_merge')
+    // spreadsheet.select('B4:J4').merge().insert(['Historical Financials']).addClass('col_merge')
+    spreadsheet.select('L4:P4').merge().insert(['Input Projections']).addClass('col_merge')
 
     // historical date titles
       // excel number of days entered
@@ -319,115 +310,115 @@
     spreadsheet.select('B27:J27').calc('{20} + {21} + {22} + {23} + {24} + {25} + {26}').format('$')
 
     // segment and total growth calculate historical
-    spreadsheet.select('C10').calc('{C20} / {B20} - 1').format('%')
-    spreadsheet.select('C11').calc('{C21} / {B21} - 1').format('%')
-    spreadsheet.select('C12').calc('{C22} / {B22} - 1').format('%')
-    spreadsheet.select('C13').calc('{C23} / {B23} - 1').format('%')
-    spreadsheet.select('C14').calc('{C24} / {B24} - 1').format('%')
-    spreadsheet.select('C15').calc('{C25} / {B25} - 1').format('%')
-    spreadsheet.select('C16').calc('{C26} / {B26} - 1').format('%')
-    spreadsheet.select('C17').calc('{C27} / {B27} - 1').format('%')
+    // spreadsheet.select('C10').calc('{C20} / {B20} - 1').format('%')
+    // spreadsheet.select('C11').calc('{C21} / {B21} - 1').format('%')
+    // spreadsheet.select('C12').calc('{C22} / {B22} - 1').format('%')
+    // spreadsheet.select('C13').calc('{C23} / {B23} - 1').format('%')
+    // spreadsheet.select('C14').calc('{C24} / {B24} - 1').format('%')
+    // spreadsheet.select('C15').calc('{C25} / {B25} - 1').format('%')
+    // spreadsheet.select('C16').calc('{C26} / {B26} - 1').format('%')
+    // spreadsheet.select('C17').calc('{C27} / {B27} - 1').format('%')
 
-    spreadsheet.select('D10').calc('{D20} / {C20} - 1').format('%')
-    spreadsheet.select('D11').calc('{D21} / {C21} - 1').format('%')
-    spreadsheet.select('D12').calc('{D22} / {C22} - 1').format('%')
-    spreadsheet.select('D13').calc('{D23} / {C23} - 1').format('%')
-    spreadsheet.select('D14').calc('{D24} / {C24} - 1').format('%')
-    spreadsheet.select('D15').calc('{D25} / {C25} - 1').format('%')
-    spreadsheet.select('D16').calc('{D26} / {C26} - 1').format('%')
-    spreadsheet.select('D17').calc('{D27} / {C27} - 1').format('%')
+    // spreadsheet.select('D10').calc('{D20} / {C20} - 1').format('%')
+    // spreadsheet.select('D11').calc('{D21} / {C21} - 1').format('%')
+    // spreadsheet.select('D12').calc('{D22} / {C22} - 1').format('%')
+    // spreadsheet.select('D13').calc('{D23} / {C23} - 1').format('%')
+    // spreadsheet.select('D14').calc('{D24} / {C24} - 1').format('%')
+    // spreadsheet.select('D15').calc('{D25} / {C25} - 1').format('%')
+    // spreadsheet.select('D16').calc('{D26} / {C26} - 1').format('%')
+    // spreadsheet.select('D17').calc('{D27} / {C27} - 1').format('%')
 
-    spreadsheet.select('E10').calc('{E20} / {D20} - 1').format('%')
-    spreadsheet.select('E11').calc('{E21} / {D21} - 1').format('%')
-    spreadsheet.select('E12').calc('{E22} / {D22} - 1').format('%')
-    spreadsheet.select('E13').calc('{E23} / {D23} - 1').format('%')
-    spreadsheet.select('E14').calc('{E24} / {D24} - 1').format('%')
-    spreadsheet.select('E15').calc('{E25} / {D25} - 1').format('%')
-    spreadsheet.select('E16').calc('{E26} / {D26} - 1').format('%')
-    spreadsheet.select('E17').calc('{E27} / {D27} - 1').format('%')
+    // spreadsheet.select('E10').calc('{E20} / {D20} - 1').format('%')
+    // spreadsheet.select('E11').calc('{E21} / {D21} - 1').format('%')
+    // spreadsheet.select('E12').calc('{E22} / {D22} - 1').format('%')
+    // spreadsheet.select('E13').calc('{E23} / {D23} - 1').format('%')
+    // spreadsheet.select('E14').calc('{E24} / {D24} - 1').format('%')
+    // spreadsheet.select('E15').calc('{E25} / {D25} - 1').format('%')
+    // spreadsheet.select('E16').calc('{E26} / {D26} - 1').format('%')
+    // spreadsheet.select('E17').calc('{E27} / {D27} - 1').format('%')
 
-    spreadsheet.select('F10').calc('{F20} / {E20} - 1').format('%')
-    spreadsheet.select('F11').calc('{F21} / {E21} - 1').format('%')
-    spreadsheet.select('F12').calc('{F22} / {E22} - 1').format('%')
-    spreadsheet.select('F13').calc('{F23} / {E23} - 1').format('%')
-    spreadsheet.select('F14').calc('{F24} / {E24} - 1').format('%')
-    spreadsheet.select('F15').calc('{F25} / {E25} - 1').format('%')
-    spreadsheet.select('F16').calc('{F26} / {E26} - 1').format('%')
-    spreadsheet.select('F17').calc('{F27} / {E27} - 1').format('%')
+    // spreadsheet.select('F10').calc('{F20} / {E20} - 1').format('%')
+    // spreadsheet.select('F11').calc('{F21} / {E21} - 1').format('%')
+    // spreadsheet.select('F12').calc('{F22} / {E22} - 1').format('%')
+    // spreadsheet.select('F13').calc('{F23} / {E23} - 1').format('%')
+    // spreadsheet.select('F14').calc('{F24} / {E24} - 1').format('%')
+    // spreadsheet.select('F15').calc('{F25} / {E25} - 1').format('%')
+    // spreadsheet.select('F16').calc('{F26} / {E26} - 1').format('%')
+    // spreadsheet.select('F17').calc('{F27} / {E27} - 1').format('%')
 
-    spreadsheet.select('H10:H17').insert(ytd_prior_rev_growth).format('%')
-    spreadsheet.select('H28').insert(ytd_prior_rev_growth[ytd_prior_rev_growth.length-1]).format('%')
+    // spreadsheet.select('H10:H17').insert(ytd_prior_rev_growth).format('%')
+    // spreadsheet.select('H28').insert(ytd_prior_rev_growth[ytd_prior_rev_growth.length-1]).format('%')
 
-    spreadsheet.select('I10').calc('{I20} / {H20} - 1').format('%')
-    spreadsheet.select('I11').calc('{I21} / {H21} - 1').format('%')
-    spreadsheet.select('I12').calc('{I22} / {H22} - 1').format('%')
-    spreadsheet.select('I13').calc('{I23} / {H23} - 1').format('%')
-    spreadsheet.select('I14').calc('{I24} / {H24} - 1').format('%')
-    spreadsheet.select('I15').calc('{I25} / {H25} - 1').format('%')
-    spreadsheet.select('I16').calc('{I26} / {H26} - 1').format('%')
-    spreadsheet.select('I17').calc('{I27} / {H27} - 1').format('%')
+    // spreadsheet.select('I10').calc('{I20} / {H20} - 1').format('%')
+    // spreadsheet.select('I11').calc('{I21} / {H21} - 1').format('%')
+    // spreadsheet.select('I12').calc('{I22} / {H22} - 1').format('%')
+    // spreadsheet.select('I13').calc('{I23} / {H23} - 1').format('%')
+    // spreadsheet.select('I14').calc('{I24} / {H24} - 1').format('%')
+    // spreadsheet.select('I15').calc('{I25} / {H25} - 1').format('%')
+    // spreadsheet.select('I16').calc('{I26} / {H26} - 1').format('%')
+    // spreadsheet.select('I17').calc('{I27} / {H27} - 1').format('%')
 
-    spreadsheet.select('J10:J17').insert(ltm_rev_growth).format('%')
+    // spreadsheet.select('J10:J17').insert(ltm_rev_growth).format('%')
 
-    // total revenue growth rates below
-    spreadsheet.select('C28').calc('{C27} / {B27} - 1').format('%')
-    spreadsheet.select('D28').calc('{D27} / {C27} - 1').format('%')
-    spreadsheet.select('E28').calc('{E27} / {D27} - 1').format('%')
-    spreadsheet.select('F28').calc('{F27} / {E27} - 1').format('%')
-    spreadsheet.select('I28').calc('{I27} / {H27} - 1').format('%')
-    spreadsheet.select('J28').insert(ltm_rev_growth[ltm_rev_growth.length-1]).format('%')
+    // // total revenue growth rates below
+    // spreadsheet.select('C28').calc('{C27} / {B27} - 1').format('%')
+    // spreadsheet.select('D28').calc('{D27} / {C27} - 1').format('%')
+    // spreadsheet.select('E28').calc('{E27} / {D27} - 1').format('%')
+    // spreadsheet.select('F28').calc('{F27} / {E27} - 1').format('%')
+    // spreadsheet.select('I28').calc('{I27} / {H27} - 1').format('%')
+    // spreadsheet.select('J28').insert(ltm_rev_growth[ltm_rev_growth.length-1]).format('%')
 
-    //// projected revenue inputs
-      spreadsheet.select('L10:P10').insert(proj_seg_rev_growth[0]).editable().format('%')
-      spreadsheet.select('L11:P11').insert(proj_seg_rev_growth[1]).editable().format('%')
-      spreadsheet.select('L12:P12').insert(proj_seg_rev_growth[2]).editable().format('%')
-      spreadsheet.select('L13:P13').insert(proj_seg_rev_growth[3]).editable().format('%')
-      spreadsheet.select('L14:P14').insert(proj_seg_rev_growth[4]).editable().format('%')
-      spreadsheet.select('L15:P15').insert(proj_seg_rev_growth[5]).editable().format('%')
-      spreadsheet.select('L16:P16').insert(proj_seg_rev_growth[6]).editable().format('%')
-      spreadsheet.select('L17:P17').calc('{28}').format('%')
+    // //// projected revenue inputs
+    //   spreadsheet.select('L10:P10').insert(proj_seg_rev_growth[0]).editable().format('%')
+    //   spreadsheet.select('L11:P11').insert(proj_seg_rev_growth[1]).editable().format('%')
+    //   spreadsheet.select('L12:P12').insert(proj_seg_rev_growth[2]).editable().format('%')
+    //   spreadsheet.select('L13:P13').insert(proj_seg_rev_growth[3]).editable().format('%')
+    //   spreadsheet.select('L14:P14').insert(proj_seg_rev_growth[4]).editable().format('%')
+    //   spreadsheet.select('L15:P15').insert(proj_seg_rev_growth[5]).editable().format('%')
+    //   spreadsheet.select('L16:P16').insert(proj_seg_rev_growth[6]).editable().format('%')
+    //   spreadsheet.select('L17:P17').calc('{28}').format('%')
 
-      spreadsheet.select('L20').calc('({L10}+1) * {F20}').format('$')
-      spreadsheet.select('M20').calc('({M10}+1) * {L20}').format('$')
-      spreadsheet.select('N20').calc('({N10}+1) * {M20}').format('$')
-      spreadsheet.select('O20').calc('({O10}+1) * {N20}').format('$')
-      spreadsheet.select('P20').calc('({P10}+1) * {O20}').format('$')
+    //   spreadsheet.select('L20').calc('({L10}+1) * {F20}').format('$')
+    //   spreadsheet.select('M20').calc('({M10}+1) * {L20}').format('$')
+    //   spreadsheet.select('N20').calc('({N10}+1) * {M20}').format('$')
+    //   spreadsheet.select('O20').calc('({O10}+1) * {N20}').format('$')
+    //   spreadsheet.select('P20').calc('({P10}+1) * {O20}').format('$')
 
-      spreadsheet.select('L21').calc('({L11}+1) * {F21}').format('#')
-      spreadsheet.select('M21').calc('({M11}+1) * {L21}').format('#')
-      spreadsheet.select('N21').calc('({N11}+1) * {M21}').format('#')
-      spreadsheet.select('O21').calc('({O11}+1) * {N21}').format('#')
-      spreadsheet.select('P21').calc('({P11}+1) * {O21}').format('#')
+    //   spreadsheet.select('L21').calc('({L11}+1) * {F21}').format('#')
+    //   spreadsheet.select('M21').calc('({M11}+1) * {L21}').format('#')
+    //   spreadsheet.select('N21').calc('({N11}+1) * {M21}').format('#')
+    //   spreadsheet.select('O21').calc('({O11}+1) * {N21}').format('#')
+    //   spreadsheet.select('P21').calc('({P11}+1) * {O21}').format('#')
 
-      spreadsheet.select('L22').calc('({L12}+1) * {F22}').format('#')
-      spreadsheet.select('M22').calc('({M12}+1) * {L22}').format('#')
-      spreadsheet.select('N22').calc('({N12}+1) * {M22}').format('#')
-      spreadsheet.select('O22').calc('({O12}+1) * {N22}').format('#')
-      spreadsheet.select('P22').calc('({P12}+1) * {O22}').format('#')
+    //   spreadsheet.select('L22').calc('({L12}+1) * {F22}').format('#')
+    //   spreadsheet.select('M22').calc('({M12}+1) * {L22}').format('#')
+    //   spreadsheet.select('N22').calc('({N12}+1) * {M22}').format('#')
+    //   spreadsheet.select('O22').calc('({O12}+1) * {N22}').format('#')
+    //   spreadsheet.select('P22').calc('({P12}+1) * {O22}').format('#')
 
-      spreadsheet.select('L23').calc('({L13}+1) * {F23}').format('#')
-      spreadsheet.select('M23').calc('({M13}+1) * {L23}').format('#')
-      spreadsheet.select('N23').calc('({N13}+1) * {M23}').format('#')
-      spreadsheet.select('O23').calc('({O13}+1) * {N23}').format('#')
-      spreadsheet.select('P23').calc('({P13}+1) * {O23}').format('#')
+    //   spreadsheet.select('L23').calc('({L13}+1) * {F23}').format('#')
+    //   spreadsheet.select('M23').calc('({M13}+1) * {L23}').format('#')
+    //   spreadsheet.select('N23').calc('({N13}+1) * {M23}').format('#')
+    //   spreadsheet.select('O23').calc('({O13}+1) * {N23}').format('#')
+    //   spreadsheet.select('P23').calc('({P13}+1) * {O23}').format('#')
 
-      spreadsheet.select('L24').calc('({L14}+1) * {F24}').format('#')
-      spreadsheet.select('M24').calc('({M14}+1) * {L24}').format('#')
-      spreadsheet.select('N24').calc('({N14}+1) * {M24}').format('#')
-      spreadsheet.select('O24').calc('({O14}+1) * {N24}').format('#')
-      spreadsheet.select('P24').calc('({P14}+1) * {O24}').format('#')
+    //   spreadsheet.select('L24').calc('({L14}+1) * {F24}').format('#')
+    //   spreadsheet.select('M24').calc('({M14}+1) * {L24}').format('#')
+    //   spreadsheet.select('N24').calc('({N14}+1) * {M24}').format('#')
+    //   spreadsheet.select('O24').calc('({O14}+1) * {N24}').format('#')
+    //   spreadsheet.select('P24').calc('({P14}+1) * {O24}').format('#')
 
-      spreadsheet.select('L25').calc('({L15}+1) * {F25}').format('#')
-      spreadsheet.select('M25').calc('({M15}+1) * {L25}').format('#')
-      spreadsheet.select('N25').calc('({N15}+1) * {M25}').format('#')
-      spreadsheet.select('O25').calc('({O15}+1) * {N25}').format('#')
-      spreadsheet.select('P25').calc('({P15}+1) * {O25}').format('#')
+    //   spreadsheet.select('L25').calc('({L15}+1) * {F25}').format('#')
+    //   spreadsheet.select('M25').calc('({M15}+1) * {L25}').format('#')
+    //   spreadsheet.select('N25').calc('({N15}+1) * {M25}').format('#')
+    //   spreadsheet.select('O25').calc('({O15}+1) * {N25}').format('#')
+    //   spreadsheet.select('P25').calc('({P15}+1) * {O25}').format('#')
 
-      spreadsheet.select('L26').calc('({L16}+1) * {F26}').format('#')
-      spreadsheet.select('M26').calc('({M16}+1) * {L26}').format('#')
-      spreadsheet.select('N26').calc('({N16}+1) * {M26}').format('#')
-      spreadsheet.select('O26').calc('({O16}+1) * {N26}').format('#')
-      spreadsheet.select('P26').calc('({P16}+1) * {O26}').format('#')
+    //   spreadsheet.select('L26').calc('({L16}+1) * {F26}').format('#')
+    //   spreadsheet.select('M26').calc('({M16}+1) * {L26}').format('#')
+    //   spreadsheet.select('N26').calc('({N16}+1) * {M26}').format('#')
+    //   spreadsheet.select('O26').calc('({O16}+1) * {N26}').format('#')
+    //   spreadsheet.select('P26').calc('({P16}+1) * {O26}').format('#')
 
       spreadsheet.select('L28:P28').insert(proj_total_rev_growth).editable().format('%')
 
@@ -437,55 +428,55 @@
       spreadsheet.select('O27').calc('({O28}+1) * {N27}').format('$')
       spreadsheet.select('P27').calc('({P28}+1) * {O27}').format('$')
 
-    // cogs
-    spreadsheet.select('B30:I30').insert(hist_cogs_fin).format('#')
-    spreadsheet.select('J30').calc('{F} + {I} - {H}').format('#')
+    // // cogs
+    // spreadsheet.select('B30:I30').insert(hist_cogs_fin).format('#')
+    // spreadsheet.select('J30').calc('{F} + {I} - {H}').format('#')
 
-    //// projected cogs
-    spreadsheet.select('L30:P30').calc('{32} - {27}').format('#')
+    // //// projected cogs
+    // spreadsheet.select('L30:P30').calc('{32} - {27}').format('#')
 
-    // gp
-    spreadsheet.select('B32:F32').calc('{27} + {30}').format('#')
-    spreadsheet.select('H32:J32').calc('{27} + {30}').format('#')
-    spreadsheet.select('B33:F33').calc('{32} / {27}').format('%')
-    spreadsheet.select('H33:J33').calc('{32} / {27}').format('%')
+    // // historical gp
+    // spreadsheet.select('B32:F32').calc('{27} + {30}').format('#')
+    // spreadsheet.select('H32:J32').calc('{27} + {30}').format('#')
+    // spreadsheet.select('B33:F33').calc('{32} / {27}').format('%')
+    // spreadsheet.select('H33:J33').calc('{32} / {27}').format('%')
 
-    //// projected gp inputs
-      spreadsheet.select('L33:P33').insert(proj_gp_margin).editable().format('%')
-      spreadsheet.select('L32').calc('{L27} * {L33}').format('#')
-      spreadsheet.select('M32').calc('{M27} * {M33}').format('#')
-      spreadsheet.select('N32').calc('{N27} * {N33}').format('#')
-      spreadsheet.select('O32').calc('{O27} * {O33}').format('#')
-      spreadsheet.select('P32').calc('{P27} * {P33}').format('#')
+    // //// projected gp inputs
+    //   spreadsheet.select('L33:P33').insert(proj_gp_margin).editable().format('%')
+    //   spreadsheet.select('L32').calc('{L27} * {L33}').format('#')
+    //   spreadsheet.select('M32').calc('{M27} * {M33}').format('#')
+    //   spreadsheet.select('N32').calc('{N27} * {N33}').format('#')
+    //   spreadsheet.select('O32').calc('{O27} * {O33}').format('#')
+    //   spreadsheet.select('P32').calc('{P27} * {P33}').format('#')
 
 
-    // sga
-    spreadsheet.select('B35:I35').insert(hist_sga_fin).format('#')
-    spreadsheet.select('J35').calc('{F} + {I} - {H}').format('#')
-    spreadsheet.select('B36:F36').calc('-{35} / {27}').format('%')
-    spreadsheet.select('H36:J36').calc('-{35} / {27}').format('%')
+    // // historical sga
+    // spreadsheet.select('B35:I35').insert(hist_sga_fin).format('#')
+    // spreadsheet.select('J35').calc('{F} + {I} - {H}').format('#')
+    // spreadsheet.select('B36:F36').calc('-{35} / {27}').format('%')
+    // spreadsheet.select('H36:J36').calc('-{35} / {27}').format('%')
 
-    //// projected sga inputs
-      spreadsheet.select('L36:P36').insert(proj_sga_margin).editable().format('%')
-      spreadsheet.select('L35').calc('-{L27} * {L36}').format('#')
-      spreadsheet.select('M35').calc('-{M27} * {M36}').format('#')
-      spreadsheet.select('N35').calc('-{N27} * {N36}').format('#')
-      spreadsheet.select('O35').calc('-{O27} * {O36}').format('#')
-      spreadsheet.select('P35').calc('-{P27} * {P36}').format('#')
+    // //// projected sga inputs
+    //   spreadsheet.select('L36:P36').insert(proj_sga_margin).editable().format('%')
+    //   spreadsheet.select('L35').calc('-{L27} * {L36}').format('#')
+    //   spreadsheet.select('M35').calc('-{M27} * {M36}').format('#')
+    //   spreadsheet.select('N35').calc('-{N27} * {N36}').format('#')
+    //   spreadsheet.select('O35').calc('-{O27} * {O36}').format('#')
+    //   spreadsheet.select('P35').calc('-{P27} * {P36}').format('#')
 
-    // ebit
+    // historical ebit
     spreadsheet.select('B38:F38').calc('{32} + {35}').format('$')
     spreadsheet.select('H38:J38').calc('{32} + {35}').format('$')
     spreadsheet.select('B39:F39').calc('{38} / {27}').format('%')
     spreadsheet.select('H39:J39').calc('{38} / {27}').format('%')
 
     //// projected ebit inputs
-      spreadsheet.select('L39:P39').insert(proj_ebit_margin).editable().format('%')
-      spreadsheet.select('L38').calc('{L27} * {L39}').format('$')
-      spreadsheet.select('M38').calc('{M27} * {M39}').format('$')
-      spreadsheet.select('N38').calc('{N27} * {N39}').format('$')
-      spreadsheet.select('O38').calc('{O27} * {O39}').format('$')
-      spreadsheet.select('P38').calc('{P27} * {P39}').format('$')
+      spreadsheet.select('L39:P39').calc('{43} / {27}').format('%')
+      spreadsheet.select('L38').calc('{L43} - {L41}').format('$')
+      spreadsheet.select('M38').calc('{M43} - {M41}').format('$')
+      spreadsheet.select('N38').calc('{N43} - {N41}').format('$')
+      spreadsheet.select('O38').calc('{O43} - {O41}').format('$')
+      spreadsheet.select('P38').calc('{P43} - {P41}').format('$')
 
     // d&a
     spreadsheet.select('B41:I41').insert(hist_da_fin).format('#')
@@ -501,8 +492,8 @@
     spreadsheet.select('H44:J44').calc('{43} / {27}').format('%')
 
     //// projected ebitda calc
-    spreadsheet.select('L43:P43').calc('{41} + {38}').format('$')
-    spreadsheet.select('L44:P44').calc('{43} / {27}').format('%')
+    spreadsheet.select('L43:P43').calc('{44} * {27}').format('$')
+    spreadsheet.select('L44:P44').insert(proj_ebitda_margin).editable().format('%')
 
     // capex
     spreadsheet.select('B46:I46').insert(hist_capex_fin).format('#')
@@ -524,7 +515,7 @@
 // ***************************************************************
 
   // financial statement assumptions
-    spreadsheet.select('A66:A136').addClass('headers')
+    spreadsheet.select('A66:A142').addClass('headers')
       .insert(['',
                '',
                'Calculation Details and Methodology',
@@ -591,10 +582,16 @@
                'Estimated Fair Value per Share',
                '',
                '',
+               '',
+               'Average Net Working Capital',
+               '   % of Revenue',
+               '   Excess / (Deficit at End of Quarter)',
+               '',
                'NOL Based on DCF',
+               '',
                'NOL Beginning Balance',
-               '(+) Additions',
-               '(-) Usage',
+               '   (+) Additions',
+               '   (-) Usage',
                'NOL Ending Balance'])
     
     spreadsheet.select('J51').insert(valuation_date)
@@ -620,11 +617,11 @@
     spreadsheet.select('J60').insert([trading_price]).format('#')
     spreadsheet.select('L60:N60').calc('{J60}').format('#')
 
-    spreadsheet.select('J62').calc('{J59} / {J60} - 1').format('%')
-    spreadsheet.select('L62:N62').calc('{59} / {60} - 1').format('%')
+    spreadsheet.select('J61').calc('{J59} / {J60} - 1').format('%')
+    spreadsheet.select('L61:N61').calc('{59} / {60} - 1').format('%')
+    spreadsheet.select('J62').calc('({J61} + {L61} + {M61} + {N61})/4').format('%')
 
-
-    spreadsheet.select('J64:L64').merge().calc('{J62} > .1 ? "BUY" : ({J57} == 11 ? "HOLD" : "SELL")').addClass('rating')
+    spreadsheet.select('J64:L64').merge().calc('{J62} > .15 ? "BUY" : ({J62} < .15 ? "SELL" : "HOLD")').addClass('rating')
 
     // titles
     // merged rows
@@ -680,8 +677,8 @@
 
     // five year projections
     spreadsheet.select('L74:P74').calc('{27}').format('$')
-    spreadsheet.select('L75:P75').calc('{30} + {35}').format('#')
-    spreadsheet.select('L76:P76').calc('{74} + {75}').format('#')
+    spreadsheet.select('L75:P75').calc('{76} - {74}').format('#')
+    spreadsheet.select('L76:P76').calc('{38}').format('#')
     spreadsheet.select('L77:P77').calc('-{F77} * {F75}').format('#')
     spreadsheet.select('L78:P78').calc('{76} + {77}').format('#')    
     spreadsheet.select('L79:P79').calc('-(Math.max({78} * {F79}, 0))').format('#')
@@ -814,6 +811,8 @@
     spreadsheet.select('J128').insert(shares_outstanding).format('#')
     spreadsheet.select('J129').calc('{J127} / {J128}').format('$$')
 
+    // spreadsheet.select('J131').insert()
+
 
     // Revenue Exit
     spreadsheet.select('L118').calc('{J107} * {L111} + {M107} * {M111} + {N107} * {N111} + {O107} * {O111} + {P107} * {P111}').format('#')
@@ -904,6 +903,19 @@
     
     console.timeEnd('select last')
 
+    console.time('hide')
+
+    spreadsheet.select('2:3').hide()
+    
+    // possible smaller row heights
+    spreadsheet.select('5').hide()
+    spreadsheet.select('9:26').hide()
+    // spreadsheet.select('30:42').hide()
+    spreadsheet.select('B:E').hide()
+    spreadsheet.select('H:I').hide()
+
+
+    console.timeEnd('hide')
 
 
     function years(arr) {
