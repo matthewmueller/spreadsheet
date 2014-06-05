@@ -22,7 +22,11 @@ mixin layerhead(n)
   - for (var i = 0; i < n; i++)
     th.layerhead
 
-mixin layer(n)
+mixin collayer(n)
+  - for (var i = 0; i < n; i++)
+    th.layer(name=letters[i]): div
+
+mixin rowlayer(n)
   - for (var i = 0; i < n; i++)
     th.layer: div
 
@@ -42,12 +46,12 @@ mixin td(n)
       - for (var i = 0; i < l; i++)
         tr.layer
           +filler(l + (heads ? 1 : 0))
-          +layer(c)
+          +collayer(c)
     tbody
       - for (var i = 1; i <= r; i++)
         tr(name=i)
           if (heads)
             th.rowhead: div=i
-          +layer(l)
+          +rowlayer(l)
           +td(c)
 
