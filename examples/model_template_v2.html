@@ -7,7 +7,7 @@
   <style>
     .spreadsheet {
       margin: 0 auto;
-      max-width: 1100px;
+      max-width: 650px;
     }
     table {
       /*border-collapse: collapse;*/
@@ -108,17 +108,17 @@
     var debt = 5594;
     var interest_rate = 0.074;
     var tax_rate = 0.35;
-    var dep_prior_ppe = 0.109;
+    var dep_prior_ppe = 0.10949;
     var lastest_nwc = 1039;
     var fiscal_year_end_nwc = 975;
    //[(-) Unconsolidated Investments, (-) Deferred Revenue Cash Adjustment, (+/-) Other, (+) Non-Controlling Interests, (+) Debt, (-) Cash]
-    var equity_waterfall = [-682, 0, -677.6, 0, 5594, -1170];
+    var equity_waterfall = [682, 0, 677.6, 0, -5594, 1170];
     var shares_outstanding = 304.8;
 
     var change_in_ltm_nwc = -1039;
     var change_in_ytd_nwc = -64;
     var avg_nwc = 0.085;
-    var lastest_ppe = 5510;
+    var fy_ppe = 5619;
 
 
     // enter excel dates
@@ -180,7 +180,7 @@
     var ytd_interest_exp = -97;
 
       // projected inputs
-      var proj_rev_growth_1 = [0.046, 0.045, 0.04, 0.035, 0.035];
+      var proj_rev_growth_1 = [0.0457, 0.045, 0.04, 0.035, 0.035];
       var proj_rev_growth_2 = [0, 0, 0, 0, 0];
       var proj_rev_growth_3 = [0, 0, 0, 0, 0];
       var proj_rev_growth_4 = [0, 0, 0, 0, 0];
@@ -190,13 +190,12 @@
 
       var proj_seg_rev_growth = [proj_rev_growth_1, proj_rev_growth_2, proj_rev_growth_3, proj_rev_growth_4, proj_rev_growth_5, proj_rev_growth_6, proj_rev_growth_7];
 
-      var proj_total_rev_growth = [0.046, 0.045, 0.04, 0.035, 0.035];
-      var proj_gp_margin = [0.318, 0.325, 0.345, 0.36, 0.37];
-      var proj_sga_margin = [0.336, 0.32, 0.31, 0.3, 0.29];
-      var proj_ebitda_margin = [-0.018, 0.005, 0.035, 0.06, 0.08];
-      var proj_capex_margin = [0.027, 0.025, 0.025, 0.025, 0.025];
-      var proj_nwc = [0.085, 0.085, 0.085, 0.085, 0.085];
-
+      var proj_total_rev_growth = [0.0457, 0.045, 0.04, 0.035, 0.035];
+      var proj_gp_margin = [0.31808, 0.325, 0.345, 0.36, 0.37];
+      var proj_sga_margin = [0.33582, 0.32, 0.31, 0.3, 0.29];
+      var proj_ebitda_margin = [-0.01774, 0.005, 0.035, 0.06, 0.08];
+      var proj_capex_margin = [0.02697, 0.025, 0.025, 0.025, 0.025];
+      var proj_nwc = [0.08462, 0.085, 0.085, 0.085, 0.085];
 
     // ***********************************************************
     // Start Assumption Collection
@@ -207,7 +206,7 @@
     document.body.appendChild(spreadsheet.el);
 
     // column titles
-    spreadsheet.select('A').width(175)
+    spreadsheet.select('A').width(200)
     spreadsheet.select('A1:A65').addClass('headers')
       .insert(['', 
                '', 
@@ -428,18 +427,18 @@
       spreadsheet.select('O27').calc('({O28}+1) * {N27}').format('$')
       spreadsheet.select('P27').calc('({P28}+1) * {O27}').format('$')
 
-    // // cogs
-    // spreadsheet.select('B30:I30').insert(hist_cogs_fin).format('#')
-    // spreadsheet.select('J30').calc('{F} + {I} - {H}').format('#')
+    // cogs
+    spreadsheet.select('B30:I30').insert(hist_cogs_fin).format('#')
+    spreadsheet.select('J30').calc('{F} + {I} - {H}').format('#')
 
     // //// projected cogs
     // spreadsheet.select('L30:P30').calc('{32} - {27}').format('#')
 
-    // // historical gp
-    // spreadsheet.select('B32:F32').calc('{27} + {30}').format('#')
-    // spreadsheet.select('H32:J32').calc('{27} + {30}').format('#')
-    // spreadsheet.select('B33:F33').calc('{32} / {27}').format('%')
-    // spreadsheet.select('H33:J33').calc('{32} / {27}').format('%')
+    // historical gp
+    spreadsheet.select('B32:F32').calc('{27} + {30}').format('#')
+    spreadsheet.select('H32:J32').calc('{27} + {30}').format('#')
+    spreadsheet.select('B33:F33').calc('{32} / {27}').format('%')
+    spreadsheet.select('H33:J33').calc('{32} / {27}').format('%')
 
     // //// projected gp inputs
     //   spreadsheet.select('L33:P33').insert(proj_gp_margin).editable().format('%')
@@ -450,11 +449,11 @@
     //   spreadsheet.select('P32').calc('{P27} * {P33}').format('#')
 
 
-    // // historical sga
-    // spreadsheet.select('B35:I35').insert(hist_sga_fin).format('#')
-    // spreadsheet.select('J35').calc('{F} + {I} - {H}').format('#')
-    // spreadsheet.select('B36:F36').calc('-{35} / {27}').format('%')
-    // spreadsheet.select('H36:J36').calc('-{35} / {27}').format('%')
+    // historical sga
+    spreadsheet.select('B35:I35').insert(hist_sga_fin).format('#')
+    spreadsheet.select('J35').calc('{F} + {I} - {H}').format('#')
+    spreadsheet.select('B36:F36').calc('-{35} / {27}').format('%')
+    spreadsheet.select('H36:J36').calc('-{35} / {27}').format('%')
 
     // //// projected sga inputs
     //   spreadsheet.select('L36:P36').insert(proj_sga_margin).editable().format('%')
@@ -465,29 +464,29 @@
     //   spreadsheet.select('P35').calc('-{P27} * {P36}').format('#')
 
     // historical ebit
-    spreadsheet.select('B38:F38').calc('{32} + {35}').format('$')
-    spreadsheet.select('H38:J38').calc('{32} + {35}').format('$')
+    spreadsheet.select('B38:F38').calc('{43} + {41}').format('$')
+    spreadsheet.select('H38:J38').calc('{43} + {41}').format('$')
     spreadsheet.select('B39:F39').calc('{38} / {27}').format('%')
     spreadsheet.select('H39:J39').calc('{38} / {27}').format('%')
 
     //// projected ebit inputs
       spreadsheet.select('L39:P39').calc('{43} / {27}').format('%')
-      spreadsheet.select('L38').calc('{L43} - {L41}').format('$')
-      spreadsheet.select('M38').calc('{M43} - {M41}').format('$')
-      spreadsheet.select('N38').calc('{N43} - {N41}').format('$')
-      spreadsheet.select('O38').calc('{O43} - {O41}').format('$')
-      spreadsheet.select('P38').calc('{P43} - {P41}').format('$')
+      spreadsheet.select('L38').calc('{L43} + {L41}').format('$')
+      spreadsheet.select('M38').calc('{M43} + {M41}').format('$')
+      spreadsheet.select('N38').calc('{N43} + {N41}').format('$')
+      spreadsheet.select('O38').calc('{O43} + {O41}').format('$')
+      spreadsheet.select('P38').calc('{P43} + {P41}').format('$')
 
     // d&a
     spreadsheet.select('B41:I41').insert(hist_da_fin).format('#')
     spreadsheet.select('J41').calc('{F} + {I} - {H}').format('#')
 
     //// projected d&a
-      spreadsheet.select('L41:P41').calc('{104}').format('#')
+      spreadsheet.select('L41:P41').calc('-{104}').format('#')
 
     // ebitda
-    spreadsheet.select('B43:F43').calc('{38} + {41}').format('$')
-    spreadsheet.select('H43:J43').calc('{38} + {41}').format('$')
+    spreadsheet.select('B43:F43').calc('{32} + {35}').format('$')
+    spreadsheet.select('H43:J43').calc('{35} + {32}').format('$')
     spreadsheet.select('B44:F44').calc('{43} / {27}').format('%')
     spreadsheet.select('H44:J44').calc('{43} / {27}').format('%')
 
@@ -647,12 +646,14 @@
 
     spreadsheet.select('F84').insert('Dep % of')
     spreadsheet.select('F85').insert('Prior PP&E')
+    spreadsheet.select('F88').insert(hist_period_text_dates[4])
+
     spreadsheet.select('F86').insert(dep_prior_ppe).editable().format('%')
 
     // ltm column
     spreadsheet.select('H74').calc('{J27}').format('$')
-    spreadsheet.select('H75').calc('{J30} + {J35}').format('#')
-    spreadsheet.select('H76').calc('{H74} + {H75}').format('#')
+    spreadsheet.select('H75').calc('{76} - {74}').format('#')
+    spreadsheet.select('H76').calc('{J38}').format('#')
     spreadsheet.select('H77').insert(ltm_interest_exp).format('#')
     spreadsheet.select('H78').calc('{H76} + {H77}').format('#')
     spreadsheet.select('H79').calc('-(Math.max({H78} * {F79}, 0))').format('#')
@@ -660,8 +661,8 @@
 
     // ytd column
     spreadsheet.select('I74').calc('{I27}').format('$')
-    spreadsheet.select('I75').calc('{I30} + {I35}').format('#')
-    spreadsheet.select('I76').calc('{I74} + {I75}').format('#')
+    spreadsheet.select('I75').calc('{76} - {74}').format('#')
+    spreadsheet.select('I76').calc('{38}').format('#')
     spreadsheet.select('I77').insert(ytd_interest_exp).format('#')
     spreadsheet.select('I78').calc('{I76} + {I77}').format('#')
     spreadsheet.select('I79').calc('-(Math.max({I78} * {F79}, 0))').format('#')
@@ -691,9 +692,9 @@
     // depreciation schedule
     spreadsheet.select('H86:H87').insert(hist_ltm_da).format('#')
     spreadsheet.select('I86:I87').insert(hist_ytd_da).format('#')
-    spreadsheet.select('I89').insert(lastest_ppe).format('$')
+    spreadsheet.select('F89').insert(fy_ppe).format('$')
     
-    spreadsheet.select('L86').calc('-{F86} * {I89}').format('#')
+    spreadsheet.select('L86').calc('-{F86} * {F89}').format('#')
     spreadsheet.select('M86').calc('-{F86} * {L89}').format('#')
     spreadsheet.select('N86').calc('-{F86} * {M89}').format('#')
     spreadsheet.select('O86').calc('-{F86} * {N89}').format('#')
@@ -704,7 +705,7 @@
     spreadsheet.select('L87').insert(hist_ltm_da[1]).format('#')
     spreadsheet.select('M87:P87').calc('{H87}').format('#')
 
-    spreadsheet.select('L89').calc('{L86} + {L46} + {I89}').format('$')
+    spreadsheet.select('L89').calc('{L86} + {L46} + {F89}').format('$')
     spreadsheet.select('M89').calc('{M86} + {M46} + {L89}').format('$')
     spreadsheet.select('N89').calc('{N86} + {N46} + {M89}').format('$')
     spreadsheet.select('O89').calc('{O86} + {O46} + {N89}').format('$')
@@ -732,6 +733,8 @@
     spreadsheet.select('M95').calc('-Math.max(0, Math.min({M93}, {M78}))')
     spreadsheet.select('N95').calc('-Math.max(0, Math.min({N93}, {N78}))')
     spreadsheet.select('O95').calc('-Math.max(0, Math.min({O93}, {O78}))')
+    spreadsheet.select('P95').calc('-Math.max(0, Math.min({P93}, {P78}))')
+
 
     // - ending balances
     spreadsheet.select('J96').insert(0)
@@ -759,9 +762,9 @@
     spreadsheet.select('H101:I101').calc('{76}').format('$')
     spreadsheet.select('H102:I102').calc('-Math.max({101}*{F79},0)').format('#')
     spreadsheet.select('H103:I103').calc('{101} + {102}').format('$')
-    spreadsheet.select('I104').calc('{I41}').format('#')
-    spreadsheet.select('I105').insert(change_in_ytd_nwc).format('#')
-    spreadsheet.select('I106').calc('-{H46}').format('#')
+    spreadsheet.select('I104').calc('-{I41}').format('#')
+    spreadsheet.select('I105').calc('{I133}-{J133}').format('#')
+    spreadsheet.select('I106').calc('-{I46}').format('#')
     spreadsheet.select('J101').calc('{L} - {I}').format('#')
     spreadsheet.select('J102').calc('-Math.max(({J101}+{L141})*{F79},0)').format('#')
     spreadsheet.select('J103:J107').calc('{L} - {I}').format('#')
@@ -770,11 +773,11 @@
     spreadsheet.select('M102:P102').calc('-Math.max(({101}+{141})*{F79},0)').format('#')
     spreadsheet.select('L103:P103').calc('{101} + {102}').format('$')
     spreadsheet.select('L104:P104').calc('-({86} + {87})').format('#')
-    spreadsheet.select('L105').calc('-({L82} - fiscal_year_end_nwc)').format('#')
-    spreadsheet.select('M105').calc('-({M82} - {L82})').format('#')
-    spreadsheet.select('N105').calc('-({N82} - {M82})').format('#')
-    spreadsheet.select('O105').calc('-({O82} - {N82})').format('#')
-    spreadsheet.select('P105').calc('-({P82} - {O82})').format('#')
+    spreadsheet.select('L105').calc('-({L133} - {I133})').format('#')
+    spreadsheet.select('M105').calc('-({M133} - {L133})').format('#')
+    spreadsheet.select('N105').calc('-({N133} - {M133})').format('#')
+    spreadsheet.select('O105').calc('-({O133} - {N133})').format('#')
+    spreadsheet.select('P105').calc('-({P133} - {O133})').format('#')
     spreadsheet.select('L106:P106').calc('-{46}').format('#')
 
     spreadsheet.select('Q101').calc('{P43} - {Q104}').format('$')
@@ -810,8 +813,8 @@
     spreadsheet.select('J117:N117').insert(['EBITDA Multiple', '', 'Revenue Multiple', 'Terminal Growth Rate', 'P/E Multiple']).addClass('col_merge')
     
     // EBITDA Exit
-    spreadsheet.select('J118').calc('{J107} * {L111} + {M107} * {M111} + {N107} * {N111} + {O107} * {O111} + {P107} * {P111}').format('#')
-    spreadsheet.select('J119').calc('{J57}*{P43}*{P112}').format('#')
+    spreadsheet.select('J118').calc('{J107} * {L110} + {M107} * {M110} + {N107} * {N110} + {O107} * {O110} + {P107} * {P110}').format('#')
+    spreadsheet.select('J119').calc('{J57}*{P43}*{P111}').format('#')
     spreadsheet.select('J120').calc('{J118} + {J119}').format('$')
     spreadsheet.select('J121:J126').insert(equity_waterfall).format('#')
     spreadsheet.select('J127').calc('Math.max({J120} + {J121} + {J122} + {J123} + {J124} + {J125} + {J126}, 0)').format('$')
@@ -820,8 +823,8 @@
 
 
     // Revenue Exit
-    spreadsheet.select('L118').calc('{J107} * {L111} + {M107} * {M111} + {N107} * {N111} + {O107} * {O111} + {P107} * {P111}').format('#')
-    spreadsheet.select('L119').calc('{L57}*{P27}*{P112}').format('#')
+    spreadsheet.select('L118').calc('{J118}').format('#')
+    spreadsheet.select('L119').calc('{L57}*{P27}*{P111}').format('#')
     spreadsheet.select('L120').calc('{L118} + {L119}').format('$')
     spreadsheet.select('L121:L126').insert(equity_waterfall).format('#')
     spreadsheet.select('L127').calc('Math.max({L120} + {L121} + {L122} + {L123} + {L124} + {L125} + {L126}, 0)').format('$')
@@ -830,8 +833,8 @@
 
 
     // Terminal Growth Exit
-    spreadsheet.select('M118').calc('{J107} * {L111} + {M107} * {M111} + {N107} * {N111} + {O107} * {O111} + {P107} * {P111}').format('#')
-    spreadsheet.select('M119').calc('{Q107}*(1+{M57})/({M58}-{M57})*{P112}+{P96}*{F79}*.2').format('#')
+    spreadsheet.select('M118').calc('{J118}').format('#')
+    spreadsheet.select('M119').calc('{Q107}*(1+{M57})/({M58}-{M57})*{P111}+{P142}*{F79}*.2').format('#')
     spreadsheet.select('M120').calc('{M118} + {M119}').format('$')
     spreadsheet.select('M121:M126').insert(equity_waterfall).format('#')
     spreadsheet.select('M127').calc('Math.max({M120} + {M121} + {M122} + {M123} + {M124} + {M125} + {M126}, 0)').format('$')
@@ -840,13 +843,13 @@
 
 
     // PE Exit
-    spreadsheet.select('N118').calc('{J107} * {L111} + {M107} * {M111} + {N107} * {N111} + {O107} * {O111} + {P107} * {P111}').format('#')
+    spreadsheet.select('N118').calc('{J118}').format('#')    
     spreadsheet.select('N119').calc('{N120}-{N118}').format('#')
     spreadsheet.select('N120').calc('{N127} - {N121} - {N122} - {N123} - {N124} - {N125} - {N126}').format('$')
     spreadsheet.select('N121:N126').insert(equity_waterfall).format('#')
     spreadsheet.select('N127').calc('{N129} * {N128}').format('$')
     spreadsheet.select('N128').insert(shares_outstanding).format('#')
-    spreadsheet.select('N129').calc('Math.max({P80}/{N128}*{N57}*{P112}, 0)').format('$$')
+    spreadsheet.select('N129').calc('Math.max({P78}*(1-{F79})/{N128}*{N57}*{P112}, 0)').format('$$')
 
 
       // text date format entered
@@ -862,7 +865,8 @@
     spreadsheet.select('I134:J134').insert([avg_nwc, avg_nwc])
     spreadsheet.select('L134:P134').insert([avg_nwc, avg_nwc, avg_nwc, avg_nwc, avg_nwc])
 
-    spreadsheet.select('I133:J133').calc('{27}*{134}')
+    spreadsheet.select('I133').calc('{F27}*{134}')
+    spreadsheet.select('J133').calc('{27}*{134}')
     spreadsheet.select('L133:P133').calc('{27}*{134}') 
     spreadsheet.select('J135').calc('lastest_nwc - {J133}')
 
@@ -888,6 +892,7 @@
     spreadsheet.select('M141').calc('-Math.max(0, Math.min({M139}, {M101}))')
     spreadsheet.select('N141').calc('-Math.max(0, Math.min({N139}, {N101}))')
     spreadsheet.select('O141').calc('-Math.max(0, Math.min({O139}, {O101}))')
+    spreadsheet.select('P141').calc('-Math.max(0, Math.min({P139}, {P101}))')
 
 
     // - ending balances
@@ -913,7 +918,7 @@
 
     console.timeEnd('select bunch');
 
-    spreadsheet.select('F74, F76, F78, F84, F85').addClass('input_heading')
+    spreadsheet.select('F74, F76, F78, F84, F85, F88').addClass('input_heading')
 
     spreadsheet.select('6, 99').addClass('titles')
     spreadsheet.select('B7:P7').addClass('titles')
@@ -934,10 +939,12 @@
     spreadsheet.select('5').hide()
     spreadsheet.select('9:26').hide()
     spreadsheet.select('30:42').hide()
-    spreadsheet.select('B:E').hide()
-    // spreadsheet.select('H:I').hide()
-    spreadsheet.select('Q').hide()
+    spreadsheet.select('45:142').hide()
 
+
+    spreadsheet.select('B:E').hide()
+    spreadsheet.select('H:I').hide()
+    spreadsheet.select('Q').hide()
 
     console.timeEnd('hide')
 
