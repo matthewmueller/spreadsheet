@@ -39,6 +39,10 @@
 </head>
 <body>
   <h1>Calculations</h1>
+
+  <input type="text" class="B5">
+  <input type="text" class="B6">
+
   <script src="../build/build.js" type="text/javascript"></script>
   <script type="text/javascript">
     var domify = require('domify');
@@ -64,6 +68,17 @@
       .select('A1, B1, C1, D1, E1').insert(['Years', 'Revenues', 'Expenses', 'Profit', 'Total']).addClass('header')
       .select('C:D').hide()
       .select('2:4').hide();
+
+    document.querySelector('input.B5').addEventListener('input', oninput);
+    document.querySelector('input.B6').addEventListener('input', oninput);
+
+    function oninput(e) {
+      var target = e.target;
+      var val = target.value;
+      var cls = target.className;
+
+      spreadsheet.at(cls).val(val);
+    }
 
       // .select('9:19').collapsible()
       // .select('10:18').collapsible()
