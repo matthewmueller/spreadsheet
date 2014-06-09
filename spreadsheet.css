@@ -132,14 +132,14 @@
  * Outline styling
  */
 
-.outline {
+.spreadsheet .outline {
   border: 2px solid #333;
   pointer-events: none;
   z-index: 1;
   position: absolute;
 }
 
-.outline.editable {
+.spreadsheet .outline.editable {
   border-color: #4285F4;
 }
 
