@@ -38,6 +38,11 @@
   padding: 0;
 }
 
+.spreadsheet th div {
+  height: 100%;
+  width: 100%;
+}
+
 /**
  * Input styling
  */
@@ -165,36 +170,45 @@
 }
 
 .spreadsheet thead th.layerhead.shown {
-  width: 16px;
+  width: 20px;
 }
 
-.spreadsheet thead tr.layer.shown {
+/*.spreadsheet thead tr.layer.shown {
   height: 16px;
 }
+*/
+.spreadsheet tbody th.dot,
+.spreadsheet tbody th.line,
+.spreadsheet tbody th.dash {
+  padding-right: 2px;
+  padding-left: 2px;
+}
 
-.spreadsheet th.layer.active {
-  padding: 0 6px;
+
+.spreadsheet tbody th.dot {
+  padding-top: 15px;
   cursor: pointer;
 }
 
-.spreadsheet th.layer.active:last-of-type {
-  padding-left: 0;
-  padding-right: 12px;
+.spreadsheet tbody th.line,
+.spreadsheet tbody th.dash {
+  padding: 0 8px;
+  cursor: pointer;
 }
 
-.spreadsheet th.layer.active.dot {
-  /*padding: 0 3px;*/
-  position: relative;
-  border-bottom: 4px solid #4285F4;
-}
-
-.spreadsheet th.layer div {
-  height: 100%;
-  width: 100%;
-}
-
-.spreadsheet th.layer.active div {
+.spreadsheet tbody th.dot div {
   background: #4285F4;
+  border-radius: 8px;
+}
+
+
+.spreadsheet tbody th.line div,
+.spreadsheet tbody th.dash div {
+  background: #4285F4;
+}
+
+.spreadsheet tbody th.dash {
+  border-bottom: 3px solid #4285F4;
 }
 
 /**
