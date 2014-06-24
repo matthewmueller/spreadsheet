@@ -11,7 +11,6 @@
     "component/domify": "*",
     "component/emitter": "*",
     "yields/isArray": "*",
-    "matthewmueller/extend": "*",
     "component/classes": "*",
     "component/events": "*",
     "component/event": "*",
