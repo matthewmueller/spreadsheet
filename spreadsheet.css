@@ -38,6 +38,11 @@
   padding: 0;
 }
 
+.spreadsheet th div {
+  height: 100%;
+  width: 100%;
+}
+
 /**
  * Input styling
  */
@@ -153,6 +158,10 @@
   display: none;
 }
 
+.spreadsheet thead .colhead th.no-width {
+  width: 0;
+}
+
 .spreadsheet thead tr.layer,
 .spreadsheet thead th.layerhead,
 .spreadsheet tbody th.layer {
@@ -165,36 +174,115 @@
 }
 
 .spreadsheet thead th.layerhead.shown {
-  width: 16px;
+  width: 20px;
 }
 
 .spreadsheet thead tr.layer.shown {
-  height: 16px;
+  height: 20px;
 }
 
-.spreadsheet th.layer.active {
-  padding: 0 6px;
+.spreadsheet thead th {
+  position: relative;
+}
+
+.spreadsheet th.dot,
+.spreadsheet th.line,
+.spreadsheet th.dash {
   cursor: pointer;
 }
 
-.spreadsheet th.layer.active:last-of-type {
-  padding-left: 0;
-  padding-right: 12px;
+.spreadsheet tbody th.dot,
+.spreadsheet tbody th.line,
+.spreadsheet tbody th.dash {
+  padding-right: 2px;
+  padding-left: 2px;
 }
 
-.spreadsheet th.layer.active.dot {
-  /*padding: 0 3px;*/
-  position: relative;
-  border-bottom: 4px solid #4285F4;
+.spreadsheet tbody th.dot {
+  padding-top: 15px;
 }
 
-.spreadsheet th.layer div {
-  height: 100%;
-  width: 100%;
+.spreadsheet tbody th.line,
+.spreadsheet tbody th.dash {
+  padding: 0 8px;
 }
 
-.spreadsheet th.layer.active div {
+.spreadsheet tbody th.dot div {
   background: #4285F4;
+  border-radius: 8px;
+}
+
+.spreadsheet thead th.dot div {
+  width: 16px;
+  margin: 0 auto;
+}
+
+.spreadsheet thead th.dot div:after,
+.spreadsheet thead th.line div:after,
+.spreadsheet thead th.dash div:after {
+  content: '\0';
+}
+
+.spreadsheet thead th.dot,
+.spreadsheet thead th.line,
+.spreadsheet thead th.dash {
+  overflow: hidden;
+}
+
+.spreadsheet thead th.dot div {
+  position: absolute;
+  right: 0;
+  height: 4px;
+  margin-top: -2px;
+  width: 50%;
+  background: #4285F4;
+}
+
+.spreadsheet thead th.dot.hiding div {
+  background: none;
+}
+
+.spreadsheet thead th.line div {
+  position: absolute;
+  height: 4px;
+  margin-top: -2px;
+  background: #4285F4;
+}
+
+.spreadsheet thead th.dash div {
+  position: absolute;
+  height: 4px;
+  margin-top: -2px;
+  width: 50%;
+  background: #4285F4;
+}
+
+.spreadsheet thead th.dash div:after {
+  background: #4285F4;
+  height: 16px;
+  width: 4px;
+  position: absolute;
+  top: -6px;
+  right: -4px;
+}
+
+.spreadsheet thead th.dot div:after {
+  background: #4285F4;
+  border-radius: 8px;
+  height: 16px;
+  width: 16px;
+  position: absolute;
+  top: -6px;
+  left: -8px;
+}
+
+.spreadsheet tbody th.line div,
+.spreadsheet tbody th.dash div {
+  background: #4285F4;
+}
+
+.spreadsheet tbody th.dash {
+  border-bottom: 3px solid #4285F4;
 }
 
 /**

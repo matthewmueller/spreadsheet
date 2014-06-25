@@ -28,11 +28,11 @@
 
     table th,
     table tr {
-      -webkit-transition: all ease-out .7s;
-      -moz-transition: all ease-out .7s;
-      -ms-transition: all ease-out .7s;
-      -o-transition: all ease-out .7s;
-      transition: all ease-out .7s;
+      -webkit-transition: all ease-out .2s;
+      -moz-transition: all ease-out .2s;
+      -ms-transition: all ease-out .2s;
+      -o-transition: all ease-out .2s;
+      transition: all ease-out .2s;
     }
 
   </style>
@@ -47,9 +47,7 @@
   <script type="text/javascript">
     var domify = require('domify');
     var Spreadsheet = require('spreadsheet');
-    console.time('draw');
     var spreadsheet = Spreadsheet('E30');
-    console.timeEnd('draw');
 
     document.body.appendChild(spreadsheet.el);
     window.spreadsheet = spreadsheet;
@@ -66,8 +64,13 @@
       .select('D').calc('{B} - {C}').format('$')
       .select('E').calc('{D} + 100').format('$')
       .select('A1, B1, C1, D1, E1').insert(['Years', 'Revenues', 'Expenses', 'Profit', 'Total']).addClass('header')
-      .select('C:D').hide()
-      .select('2:4').hide();
+      .select('9:19').collapsible()
+      .select('10:18').collapsible()
+      .select('11:14').collapsible()
+      .select('A:E').collapsible()
+      .select('B:D').collapsible()
+      .select('C:D').collapsible()
+
 
     document.querySelector('input.B5').addEventListener('input', oninput);
     document.querySelector('input.B6').addEventListener('input', oninput);
@@ -79,9 +82,6 @@
 
       spreadsheet.at(cls).val(val);
     }
-
-      // .select('9:19').collapsible()
-      // .select('10:18').collapsible()
 
     // var el = spreadsheet.el;
     // var tr = el.querySelector('thead tr:first-of-type');
