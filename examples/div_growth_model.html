@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dividend Growth Model</title>
+    <link rel="stylesheet" href="../build/build.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <style>
+        .spreadsheet {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        table {
+            /*border-collapse: collapse;*/
+            font-size: 8pt;
+            text-align: right;
+        }
+        table .headers {
+            text-align: left;
+        }
+        .col-merge {
+            font-weight: bold;
+            border-bottom: solid #333333 2px !important;
+            color: #1AA260;
+        }
+        .titles {
+            border-bottom: solid #333333 1px !important;
+            color: #1AA260;
+        }
+        .bold {
+          font-weight: bold;
+        }
+        .top-border {
+            border-top: solid #333333 1px !important;
+        }
+        
+        .borders {
+            border: solid #333333 1px !important;
+            background-color: #f2f2f2 !important;
+        }
+
+        .italic {
+            font-style: italic;
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <h1 style="font-family:verdana; font-size:10pt">LR Model Template</h1>
+    <script src="../build/build.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var Spreadsheet = require('spreadsheet');
+        var spreadsheet = Spreadsheet('G36');
+        document.body.appendChild(spreadsheet.el);
+
+         // ***********************************************************
+         // Input Assumptions
+         // ***********************************************************
+
+         // inputs
+            var company_name = "Panera Bread Company";
+            var div_per_share = 5;
+            var expc_growth = 0.05;
+            var cost_of_equity = 0.09425;
+            var stock_price = 110;
+            var revenue = 5000;
+            var terminal_growth = 0.035;
+            var wacc = 0.125;
+            var op_income = 0.1;
+            var tax_rate = 0.35;
+            var capex = 0.025;
+            var nwc = 0.05;
+            var depreciation = 0.93;
+            var cash = 100;
+            var debt = -5;
+            var non_cont_int = -1;
+            var def_revenue = -1;
+            var uncon_investment = 1;
+            var other = -1;
+            var shares_outstanding = 10;
+
+
+         // ***********************************************************
+         // Start Assumption Collection
+         // ***********************************************************
+
+         // column titles
+        spreadsheet.select('A').width(2)
+         spreadsheet.select('B').width(200)
+         spreadsheet.select('B1:B36').addClass('headers')
+            .insert(['',
+                company_name + ": Stock Price Analysis",
+                '',
+                'Dividend Growth Rate',
+                '',
+                '   Current Dividends per Share',
+                '   Expected Growth Rate',
+                '   Cost of Equity',
+                '',
+                'Free Cash Flow to Firm',
+                '',
+                '   Terminal Growth Rate',
+                '   WACC',
+                '',
+                '   Operating Income % of Sales',
+                '   Tax Rate',
+                '',
+                '   Capital Exp % of Sales',
+                '   Net Working Capital % of Sales',
+                '   Depreciation % of Capital Exp',
+                '',
+                '',
+                '   Enterprise Value',
+                '     (+) Cash',
+                '     (-) Debt',
+                '     (-) Non-Controlling Interests',
+                '     (-) Def Rev Cash Adjustment',
+                '     (+) Unconsolidated Investments',
+                '     (+/-) Other',
+                '   Equity Value',
+                '     (/) Shares Outstanding',
+                '   Implied Fair Value Per Share',
+                '     Stock Price at 6/27/2014',
+                '     Discount / Premium',
+                '',
+                'Sources: SEC Filings and Yahoo! Finance'
+            ])
+
+        spreadsheet.select('E').width(200)
+
+        spreadsheet.select('E6:E21').addClass('headers')
+            .insert(['Gordon Growth Fair Value Per Share',
+                'Stock Price at 6/27/2014',
+                '   Discount / Premium',
+                '',
+                '',
+                '',
+                '',
+                '',
+                'Revenue',
+                'Operating Income',
+                '   (-) Pro-forma Taxes',
+                'Net Operating Profit After Tax',
+                '   (-) Capital Expenditures',
+                '   (-) Working Capital Investment',
+                '   (+) Depreciation',
+                'Normalized Free Cash Flow'
+            ])
+        spreadsheet.select('G').width(1)
+
+        // Divided Growth Model
+        spreadsheet.select('C6').insert(div_per_share).format('$$')
+        spreadsheet.select('C7:C8').insert([expc_growth, cost_of_equity]).format('%').editable()
+        spreadsheet.select('D').width(10)
+
+        spreadsheet.select('F6').calc('{C6}*(1+{C7})/({C8}-{C7})').format('$$')
+        spreadsheet.select('F7').insert(stock_price).format('$$')
+        spreadsheet.select('F8').calc('{F6}/{F7} - 1').format('%')
+
+
+        // Free Cash Flow to Firm
+        spreadsheet.select('C12:C13').insert([terminal_growth, wacc]).format('%').editable()
+        spreadsheet.select('C15:C16').insert([op_income, tax_rate]).format('%').editable()
+        spreadsheet.select('C18:C20').insert([capex, nwc, depreciation]).format('%').editable()
+        spreadsheet.select('F14').insert(revenue).format('$')
+        spreadsheet.select('F15').calc('{F14}*{C15}').format('#')
+        spreadsheet.select('F16').calc('{F15}*-{C16}').format('#')
+        spreadsheet.select('F17').calc('{F15}+{F16}').format('#')
+        spreadsheet.select('F18').calc('{F14}*-{C18}').format('#')
+        spreadsheet.select('F19').calc('{F14}/(1+{C12})*{C19}-{F14}*{C19}').format('#')
+        spreadsheet.select('F20').calc('{F18}*{C20}').format('#')
+        spreadsheet.select('F21').calc('{F17}+{F18}+{F19}+{F20}').format('$')
+
+        spreadsheet.select('C23').calc('Math.max({F21}*(1+{C12})/({C13}-{C12}),0)').format('$')
+        spreadsheet.select('C24').insert(cash).format('#')
+        spreadsheet.select('C25').insert(debt).format('#')
+        spreadsheet.select('C26').insert(non_cont_int).format('#')
+        spreadsheet.select('C27').insert(def_revenue).format('#')
+        spreadsheet.select('C28').insert(uncon_investment).format('#')
+        spreadsheet.select('C29').insert(other).format('#')
+        spreadsheet.select('C30').calc('Math.max({C23}+{C24}+{C25}+{C26}+{C27}+{C28}+{C29},0)').format('$')
+        spreadsheet.select('C31').insert(shares_outstanding)
+        spreadsheet.select('C32').calc('{C30}/{C31}').format('$$')
+        spreadsheet.select('C33').insert(stock_price).format('$$')
+        spreadsheet.select('C34').calc('{C32}/{C33}-1').format('%')
+
+        // Formatting Clean-up
+        spreadsheet.select('B2:F2').merge().addClass('col-merge').addClass('bold')
+        spreadsheet.select('B4:F4').merge().addClass('titles')
+        spreadsheet.select('B10:F10').merge().addClass('titles')
+        spreadsheet.select('E6:F6').addClass('bold')
+        spreadsheet.select('E8:F8, B34:C34').addClass('bold').addClass('borders')
+        spreadsheet.select('E14:F14, E17:F17, E21:F21, B23:C23, B30:C30, B32:C32').addClass('bold')
+        spreadsheet.select('F17, F21, C30, C32').addClass('top-border')
+        spreadsheet.select('B36:F36').merge().addClass('italic')
+
+
+    </script>
+</body>
+
+</html>
