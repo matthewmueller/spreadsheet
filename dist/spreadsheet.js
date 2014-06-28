@@ -472,7 +472,7 @@ var isArray = Array.isArray;
 var str = Object.prototype.toString;
 
 /**
- * Whether or not the given `val`
+ * Wether or not the given `val`
  * is an array.
  *
  * example:
@@ -491,29 +491,6 @@ var str = Object.prototype.toString;
 module.exports = isArray || function (val) {
   return !! val && '[object Array]' == str.call(val);
 };
-
-});
-require.register("matthewmueller-extend/index.js", function(exports, require, module){
-/**
- * Extend an object with another.
- *
- * @param {Object, ...} src, ...
- * @return {Object} merged
- * @api private
- */
-
-module.exports = function(src) {
-  var objs = [].slice.call(arguments, 1), obj;
-
-  for (var i = 0, len = objs.length; i < len; i++) {
-    obj = objs[i];
-    for (var prop in obj) {
-      src[prop] = obj[prop];
-    }
-  }
-
-  return src;
-}
 
 });
 require.register("component-indexof/index.js", function(exports, require, module){
@@ -711,6 +688,99 @@ ClassList.prototype.contains = function(name){
     : !! ~index(this.array(), name);
 };
 
+});
+require.register("component-query/index.js", function(exports, require, module){
+function one(selector, el) {
+  return el.querySelector(selector);
+}
+
+exports = module.exports = function(selector, el){
+  el = el || document;
+  return one(selector, el);
+};
+
+exports.all = function(selector, el){
+  el = el || document;
+  return el.querySelectorAll(selector);
+};
+
+exports.engine = function(obj){
+  if (!obj.one) throw new Error('.one callback required');
+  if (!obj.all) throw new Error('.all callback required');
+  one = obj.one;
+  exports.all = obj.all;
+  return exports;
+};
+
+});
+require.register("component-matches-selector/index.js", function(exports, require, module){
+/**
+ * Module dependencies.
+ */
+
+var query = require('query');
+
+/**
+ * Element prototype.
+ */
+
+var proto = Element.prototype;
+
+/**
+ * Vendor function.
+ */
+
+var vendor = proto.matches
+  || proto.webkitMatchesSelector
+  || proto.mozMatchesSelector
+  || proto.msMatchesSelector
+  || proto.oMatchesSelector;
+
+/**
+ * Expose `match()`.
+ */
+
+module.exports = match;
+
+/**
+ * Match `el` to `selector`.
+ *
+ * @param {Element} el
+ * @param {String} selector
+ * @return {Boolean}
+ * @api public
+ */
+
+function match(el, selector) {
+  if (vendor) return vendor.call(el, selector);
+  var nodes = query.all(selector, el.parentNode);
+  for (var i = 0; i < nodes.length; ++i) {
+    if (nodes[i] == el) return true;
+  }
+  return false;
+}
+
+});
+require.register("discore-closest/index.js", function(exports, require, module){
+var matches = require('matches-selector')
+
+module.exports = function (element, selector, checkYoSelf, root) {
+  element = checkYoSelf ? {parentNode: element} : element
+
+  root = root || document
+
+  // Make sure `element !== document` and `element != null`
+  // otherwise we get an illegal invocation
+  while ((element = element.parentNode) && element !== document) {
+    if (matches(element, selector))
+      return element
+    // After `matches` on the edge case that
+    // the selector matches the root
+    // (when the root is not the document)
+    if (element === root)
+      return  
+  }
+}
 });
 require.register("component-delegate/index.js", function(exports, require, module){
 /**
@@ -978,7 +1048,7 @@ require.register("component-props/index.js", function(exports, require, module){
  * Global Names
  */
 
-var globals = /\b(this|Array|Date|Object|Math|JSON)\b/g;
+var globals = /\b(Array|Date|Object|Math|JSON)\b/g;
 
 /**
  * Return immediate identifiers parsed from `str`.
@@ -1008,7 +1078,7 @@ function props(str) {
   return str
     .replace(/\.\w+|\w+ *\(|"[^"]*"|'[^']*'|\/([^/]+)\//g, '')
     .replace(globals, '')
-    .match(/[$a-zA-Z_]\w*/g)
+    .match(/[a-zA-Z_]\w*/g)
     || [];
 }
 
@@ -1059,43 +1129,6 @@ function prefixed(str) {
     return str + _;
   };
 }
-
-});
-require.register("yields-uniq/index.js", function(exports, require, module){
-
-/**
- * dependencies
- */
-
-try {
-  var indexOf = require('indexof');
-} catch(e){
-  var indexOf = require('indexof-component');
-}
-
-/**
- * Create duplicate free array
- * from the provided `arr`.
- *
- * @param {Array} arr
- * @param {Array} select
- * @return {Array}
- */
-
-module.exports = function (arr, select) {
-  var len = arr.length, ret = [], v;
-  select = select ? (select instanceof Array ? select : [select]) : false;
-
-  for (var i = 0; i < len; i++) {
-    v = arr[i];
-    if (select && !~indexOf(select, v)) {
-      ret.push(v);
-    } else if (!~indexOf(ret, v)) {
-      ret.push(v);
-    }
-  }
-  return ret;
-};
 
 });
 require.register("adamwdraper-numeral-js/numeral.js", function(exports, require, module){
@@ -1955,6 +1988,10 @@ var map = {
   , escape: 27
   , esc: 27
   , space: 32
+  , pageup: 33
+  , pagedown: 34
+  , end: 35
+  , home: 36
   , left: 37
   , up: 38
   , right: 39
@@ -2101,10 +2138,9 @@ var modifiers = {
 
 /**
  * Super key.
- * (must use subscript vs. dot notation to avoid issues with older browsers)
  */
 
-exports[ 'super' ] = 'mac' == os
+exports.super = 'mac' == os
   ? 'command'
   : 'ctrl';
 
@@ -2128,7 +2164,7 @@ exports.handle = function(e, fn){
   // modifiers
   var mod = modifiers[code];
   if ('keydown' == event && mod) {
-    this[ 'super' ] = exports[ 'super' ] == mod;
+    this.super = exports.super == mod;
     this[mod] = true;
     this.modifiers = true;
     return;
@@ -2326,7 +2362,7 @@ exports.ignore = function(e){
  */
 
 function parseKeys(keys){
-  keys = keys.replace('super', exports[ 'super' ]);
+  keys = keys.replace('super', exports.super);
 
   var all = ',' != keys
     ? keys.split(/ *, */)
@@ -2481,79 +2517,7 @@ Delegator.prototype.setter = function(name){
 };
 
 });
-require.register("component-query/index.js", function(exports, require, module){
-function one(selector, el) {
-  return el.querySelector(selector);
-}
-
-exports = module.exports = function(selector, el){
-  el = el || document;
-  return one(selector, el);
-};
-
-exports.all = function(selector, el){
-  el = el || document;
-  return el.querySelectorAll(selector);
-};
-
-exports.engine = function(obj){
-  if (!obj.one) throw new Error('.one callback required');
-  if (!obj.all) throw new Error('.all callback required');
-  one = obj.one;
-  exports.all = obj.all;
-  return exports;
-};
-
-});
-require.register("component-matches-selector/index.js", function(exports, require, module){
-/**
- * Module dependencies.
- */
-
-var query = require('query');
-
-/**
- * Element prototype.
- */
-
-var proto = Element.prototype;
-
-/**
- * Vendor function.
- */
-
-var vendor = proto.matches
-  || proto.webkitMatchesSelector
-  || proto.mozMatchesSelector
-  || proto.msMatchesSelector
-  || proto.oMatchesSelector;
-
-/**
- * Expose `match()`.
- */
-
-module.exports = match;
-
-/**
- * Match `el` to `selector`.
- *
- * @param {Element} el
- * @param {String} selector
- * @return {Boolean}
- * @api public
- */
-
-function match(el, selector) {
-  if (vendor) return vendor.call(el, selector);
-  var nodes = query.all(selector, el.parentNode);
-  for (var i = 0; i < nodes.length; ++i) {
-    if (nodes[i] == el) return true;
-  }
-  return false;
-}
-
-});
-require.register("discore-closest/index.js", function(exports, require, module){
+require.register("component-closest/index.js", function(exports, require, module){
 var matches = require('matches-selector')
 
 module.exports = function (element, selector, checkYoSelf, root) {
@@ -2661,6 +2625,1092 @@ function throttle(fn) {
 }
 
 });
+require.register("matthewmueller-mini-tokenizer/index.js", function(exports, require, module){
+/**
+ * Module Dependencies
+ */
+
+var rrep = /(\$(`|&|'|\d+))/g;
+var slice = [].slice;
+var noop = function(m) { return m[0]; }
+
+/**
+ * Expose `tokens`
+ */
+
+module.exports = tokens;
+
+/**
+ * Create a tokenizer
+ *
+ * @param {Regex} regex
+ * @param {String|Function} rep
+ * @return {Function}
+ */
+
+function tokens(regex, rep) {
+  rep = rep || noop;
+  rep = 'function' == typeof rep ? rep : compile(rep);
+
+  return function(str) {
+    var toks = [];
+
+    str.replace(regex, function() {
+      var args = slice.call(arguments);
+      var tok = rep(args);
+      tok && toks.push(tok);
+    });
+
+    return toks;
+  };
+}
+
+/**
+ * Compile the replacer
+ *
+ * @param {String} str
+ * @return {String}
+ */
+
+function compile(str) {
+  var expr = str.replace(rrep, function(m) {
+    var out = '\' + ($[';
+    out += '&' == m[1] ? 0 : m[1];
+    out += '] || \'\') + \'';
+    return out;
+  })
+
+  expr = '\'' + expr + '\'';
+  return new Function('$', 'return ' + expr);
+}
+
+});
+require.register("visionmedia-jade/lib/runtime.js", function(exports, require, module){
+'use strict';
+
+/**
+ * Merge two attribute objects giving precedence
+ * to values in object `b`. Classes are special-cased
+ * allowing for arrays and merging/joining appropriately
+ * resulting in a string.
+ *
+ * @param {Object} a
+ * @param {Object} b
+ * @return {Object} a
+ * @api private
+ */
+
+exports.merge = function merge(a, b) {
+  if (arguments.length === 1) {
+    var attrs = a[0];
+    for (var i = 1; i < a.length; i++) {
+      attrs = merge(attrs, a[i]);
+    }
+    return attrs;
+  }
+  var ac = a['class'];
+  var bc = b['class'];
+
+  if (ac || bc) {
+    ac = ac || [];
+    bc = bc || [];
+    if (!Array.isArray(ac)) ac = [ac];
+    if (!Array.isArray(bc)) bc = [bc];
+    a['class'] = ac.concat(bc).filter(nulls);
+  }
+
+  for (var key in b) {
+    if (key != 'class') {
+      a[key] = b[key];
+    }
+  }
+
+  return a;
+};
+
+/**
+ * Filter null `val`s.
+ *
+ * @param {*} val
+ * @return {Boolean}
+ * @api private
+ */
+
+function nulls(val) {
+  return val != null && val !== '';
+}
+
+/**
+ * join array as classes.
+ *
+ * @param {*} val
+ * @return {String}
+ */
+exports.joinClasses = joinClasses;
+function joinClasses(val) {
+  return Array.isArray(val) ? val.map(joinClasses).filter(nulls).join(' ') : val;
+}
+
+/**
+ * Render the given classes.
+ *
+ * @param {Array} classes
+ * @param {Array.<Boolean>} escaped
+ * @return {String}
+ */
+exports.cls = function cls(classes, escaped) {
+  var buf = [];
+  for (var i = 0; i < classes.length; i++) {
+    if (escaped && escaped[i]) {
+      buf.push(exports.escape(joinClasses([classes[i]])));
+    } else {
+      buf.push(joinClasses(classes[i]));
+    }
+  }
+  var text = joinClasses(buf);
+  if (text.length) {
+    return ' class="' + text + '"';
+  } else {
+    return '';
+  }
+};
+
+/**
+ * Render the given attribute.
+ *
+ * @param {String} key
+ * @param {String} val
+ * @param {Boolean} escaped
+ * @param {Boolean} terse
+ * @return {String}
+ */
+exports.attr = function attr(key, val, escaped, terse) {
+  if ('boolean' == typeof val || null == val) {
+    if (val) {
+      return ' ' + (terse ? key : key + '="' + key + '"');
+    } else {
+      return '';
+    }
+  } else if (0 == key.indexOf('data') && 'string' != typeof val) {
+    return ' ' + key + "='" + JSON.stringify(val).replace(/'/g, '&apos;') + "'";
+  } else if (escaped) {
+    return ' ' + key + '="' + exports.escape(val) + '"';
+  } else {
+    return ' ' + key + '="' + val + '"';
+  }
+};
+
+/**
+ * Render the given attributes object.
+ *
+ * @param {Object} obj
+ * @param {Object} escaped
+ * @return {String}
+ */
+exports.attrs = function attrs(obj, terse){
+  var buf = [];
+
+  var keys = Object.keys(obj);
+
+  if (keys.length) {
+    for (var i = 0; i < keys.length; ++i) {
+      var key = keys[i]
+        , val = obj[key];
+
+      if ('class' == key) {
+        if (val = joinClasses(val)) {
+          buf.push(' ' + key + '="' + val + '"');
+        }
+      } else {
+        buf.push(exports.attr(key, val, false, terse));
+      }
+    }
+  }
+
+  return buf.join('');
+};
+
+/**
+ * Escape the given string of `html`.
+ *
+ * @param {String} html
+ * @return {String}
+ * @api private
+ */
+
+exports.escape = function escape(html){
+  var result = String(html)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+  if (result === '' + html) return html;
+  else return result;
+};
+
+/**
+ * Re-throw the given `err` in context to the
+ * the jade in `filename` at the given `lineno`.
+ *
+ * @param {Error} err
+ * @param {String} filename
+ * @param {String} lineno
+ * @api private
+ */
+
+exports.rethrow = function rethrow(err, filename, lineno, str){
+  if (!(err instanceof Error)) throw err;
+  if ((typeof window != 'undefined' || !filename) && !str) {
+    err.message += ' on line ' + lineno;
+    throw err;
+  }
+  try {
+    str =  str || require('fs').readFileSync(filename, 'utf8')
+  } catch (ex) {
+    rethrow(err, null, lineno)
+  }
+  var context = 3
+    , lines = str.split('\n')
+    , start = Math.max(lineno - context, 0)
+    , end = Math.min(lines.length, lineno + context);
+
+  // Error context
+  var context = lines.slice(start, end).map(function(line, i){
+    var curr = i + start + 1;
+    return (curr == lineno ? '  > ' : '    ')
+      + curr
+      + '| '
+      + line;
+  }).join('\n');
+
+  // Alter exception message
+  err.path = filename;
+  err.message = (filename || 'Jade') + ':' + lineno
+    + '\n' + context + '\n\n' + err.message;
+  throw err;
+};
+
+});
+require.register("juliangruber-intersect/index.js", function(exports, require, module){
+module.exports = intersect;
+
+function intersect (a, b) {
+  var res = [];
+  for (var i = 0; i < a.length; i++) {
+    if (indexOf(b, a[i]) > -1) res.push(a[i]);
+  }
+  return res;
+}
+
+intersect.big = function(a, b) {
+  var ret = [];
+  var temp = {};
+  
+  for (var i = 0; i < b.length; i++) {
+    temp[b[i]] = true;
+  }
+  for (var i = 0; i < a.length; i++) {
+    if (temp[a[i]]) ret.push(a[i]);
+  }
+  
+  return ret;
+}
+
+function indexOf(arr, el) {
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i] === el) return i;
+  }
+  return -1;
+}
+
+});
+require.register("jkroso-unique/index.js", function(exports, require, module){
+/**
+ * Returns a new array without duplicate elements
+ * 
+ * @param {Array} arr
+ * @return {Array}
+ */
+
+module.exports = function (arr) {
+  var len = arr.length
+  if (!len) return []
+
+  var result = [arr[0]]
+    , rc = 1
+    , i = 1
+
+  each: while (i < len) {
+    var el = arr[i++]
+      , c = 0
+
+    while (c < rc) {
+      if (result[c++] === el) continue each
+    }
+
+    result[rc++] = el
+  }
+
+  return result
+}
+
+});
+require.register("matthewmueller-grid/index.js", function(exports, require, module){
+/**
+ * Expose grid
+ */
+
+module.exports = require('./lib/grid');
+
+});
+require.register("matthewmueller-grid/lib/grid.js", function(exports, require, module){
+/**
+ * Module dependencies
+ */
+
+var isArray = Array.isArray;
+var Selection = require('./selection');
+var utils = require('./utils');
+var ntol = utils.ntol;
+
+/**
+ * Export `Grid`
+ */
+
+module.exports = Grid;
+
+/**
+ * Initialize `Grid`
+ */
+
+function Grid(col, row) {
+  if (!(this instanceof Grid)) return new Grid(col, row);
+  col = col || 5;
+  this.maxcol = ntol(col - 1);
+  this.maxrow = row || 5;
+  this.grid = {};
+}
+
+/**
+ * Select
+ *
+ * @param {String} expr
+ * @return {Grid}
+ * @api public
+ */
+
+Grid.prototype.select = function(expr) {
+  return new Selection(expr, this);
+};
+
+/**
+ * all
+ */
+
+Grid.prototype.all = function() {
+  var largest = this.maxcol + this.maxrow;
+  return new Selection('A1:' + largest, this);
+};
+
+/**
+ * at
+ */
+
+Grid.prototype.at = function(at) {
+  return this.grid[at];
+};
+
+/**
+ * Delegate functions to Selection
+ */
+
+['forEach', 'max', 'toString', 'cols', 'rows', 'fill', 'json', 'value', 'insert', 'map']
+.forEach(function(fn) {
+  Grid.prototype[fn] = function() {
+    var sel = this.all();
+    return sel[fn].apply(sel, arguments);
+  }
+});
+
+});
+require.register("matthewmueller-grid/lib/type.js", function(exports, require, module){
+/**
+ * Module Dependencies
+ */
+
+var tokens = require('./tokens');
+var regex = require('./regexp');
+var unique = require('unique');
+
+/**
+ * Export `type`
+ */
+
+module.exports = type;
+
+/**
+ * Initialize `type`
+ */
+
+function type(str) {
+  return parse(str);
+}
+
+/**
+ * Parse the type
+ *
+ * TODO: consider type('A, C') => cols instead of col
+ */
+
+function parse(str) {
+  var types = [];
+  var toks = tokens(str);
+
+  for (var i = 0, tok; tok = toks[i]; i++) {
+    if (regex.block.test(tok)) types.push('block');
+    else if (regex.cell.test(tok)) types.push('cell');
+    else if (regex.rows.test(tok)) types.push('rows');
+    else if (regex.cols.test(tok)) types.push('cols');
+    else if (regex.row.test(tok)) types.push('row');
+    else if (regex.col.test(tok)) types.push('col');
+  }
+
+  switch(unique(types).length) {
+    case 0: return null;
+    case 1: return types[0];
+  }
+
+  // pluralize and test again
+  for (var i = 0, type; type = types[i]; i++) {
+    if ('col' == type) types[i] = 'cols';
+    if ('row' == type) types[i] = 'rows';
+  }
+
+  switch(unique(types).length) {
+    case 1: return types[0];
+    default: return 'mixed';
+  }
+};
+
+});
+require.register("matthewmueller-grid/lib/utils.js", function(exports, require, module){
+/**
+ * Module Dependencies
+ */
+
+var letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+/**
+ * Letter to number
+ *
+ * @param {String} l
+ * @return {Number}
+ */
+
+exports.lton = lton = function(l) {
+  return letters.indexOf(l);
+}
+
+/**
+ * Number to letter
+ *
+ * TODO: support Y, Z, AA, AB, AC, ...
+ *
+ * @param {String} l
+ * @return {Number}
+ */
+
+exports.ntol = ntol = function(n) {
+  return letters[n];
+}
+
+});
+require.register("matthewmueller-grid/lib/match.js", function(exports, require, module){
+/**
+ * Module Dependencies
+ */
+
+var regexp = require('./regexp');
+
+/**
+ * Export `match`
+ */
+
+module.exports = match;
+
+/**
+ * Find a match
+ *
+ * @param {String} str
+ * @return {Array} match
+ */
+
+function match(str) {
+  return str.match(regexp.block)
+  || str.match(regexp.rows)
+  || str.match(regexp.cols)
+  || str.match(regexp.cell)
+  || str.match(regexp.row)
+  || str.match(regexp.col)
+}
+
+});
+require.register("matthewmueller-grid/lib/regexp.js", function(exports, require, module){
+/**
+ * Regexs
+ */
+
+var block = exports.block = /([A-Za-z]+[0-9]+)\:([A-Za-z]+[0-9]+)/;
+var cell = exports.cell = /([A-Za-z]+)([0-9]+)/;
+var cols = exports.cols = /([A-Za-z]+)\:([A-Za-z]+)/;
+var rows = exports.rows = /([0-9]+)\:([0-9]+)/;
+var col = exports.col = /([A-Za-z]+)/;
+var row = exports.row = /([0-9]+)/;
+var any = exports.any = new RegExp([block, cell, cols, rows, col, row].map(source).join('|'), 'g');
+
+/**
+ * Get the source of a regex
+ *
+ * @param {Regex} regex
+ * @return {String} source
+ * @api private
+ */
+
+function source(regex) {
+  return regex.source;
+}
+
+});
+require.register("matthewmueller-grid/lib/tokens.js", function(exports, require, module){
+/**
+ * Module Dependencies
+ */
+
+var tokens = require('mini-tokenizer');
+var regex = require('./regexp');
+
+/**
+ * Export `tokens`
+ */
+
+module.exports = tokens(regex.any);
+
+});
+require.register("matthewmueller-grid/lib/expand.js", function(exports, require, module){
+/**
+ * Module Dependencies
+ */
+
+var unique = require('unique');
+var regexp = require('./regexp');
+var tokens = require('./tokens');
+var type = require('./type');
+var utils = require('./utils');
+var lton = utils.lton;
+var ntol = utils.ntol;
+
+/**
+ * Export `expand`
+ */
+
+module.exports = expand;
+
+/**
+ * Expand the selection
+ *
+ * @param {String|Array} selection
+ * @param {Number} maxcol
+ * @param {Number} maxrow
+ * @return {Array}
+ */
+
+function expand(selection, maxcol, maxrow) {
+  maxcol = lton(maxcol) + 1;
+  var toks = tokens(selection);
+  var out = [];
+
+  for (var i = 0, tok; tok = toks[i]; i++) {
+    switch (type(tok)) {
+      case 'block':
+        m = regexp.block.exec(tok);
+        out = out.concat(range(m[1], m[2], maxcol, maxrow));
+        break;
+      case 'row':
+        m = regexp.row.exec(tok);
+        var n = +m[1];
+        var start = 'A' + n;
+        var end = ntol(maxcol - 1) + n;
+        out = out.concat(range(start, end, maxcol, maxrow));
+        break;
+      case 'rows':
+        m = regexp.rows.exec(tok);
+        var start = 'A' + m[1];
+        var end = ntol(maxcol - 1) + m[2];
+        out = out.concat(range(start, end, maxcol, maxrow));
+        break;
+      case 'col':
+        m = regexp.col.exec(tok);
+        var l = m[1];
+        var start = l + 1;
+        var end = l + maxrow;
+        out = out.concat(range(start, end, maxcol, maxrow));
+        break;
+      case 'cols':
+        m = regexp.cols.exec(tok);
+        var start = m[1] + '1';
+        var end = m[2] + maxrow;
+        out = out.concat(range(start, end, maxcol, maxrow));
+        break;
+      case 'cell':
+        out = out.concat(range(tok, tok, maxcol, maxrow));
+    }
+  }
+
+  return unique(out);
+};
+
+/**
+ * Expand a selection into it's range
+ *
+ * @param {String} from
+ * @param {String} to
+ * @return {Array}
+ */
+
+function range(from, to, maxcol, maxrow) {
+  var out = [];
+
+  var start = regexp.cell.exec(from);
+  if (!start) throw new Error('invalid expansion: ' + from);
+  var sc = Math.min(lton(start[1]), maxcol);
+  var sr = Math.min(+start[2], maxrow);
+
+  var end = regexp.cell.exec(to);
+  if (!end) throw new Error('invalid expansion: ' + to);
+  var ec = Math.min(lton(end[1]), maxcol);
+  var er = Math.min(+end[2], maxrow);
+
+  for (var i = sr; i <= er; i++) {
+    for (var j = sc; j <= ec; j++) {
+      out[out.length] = ntol(j) + i;
+    }
+  }
+
+  return out;
+}
+
+});
+require.register("matthewmueller-grid/lib/selection.js", function(exports, require, module){
+/**
+ * Module dependencies
+ */
+
+var isArray = Array.isArray;
+var type = require('./type');
+var match = require('./match');
+var expand = require('./expand');
+var intersect = require('intersect');
+
+/**
+ * Export `Selection`
+ */
+
+module.exports = Selection;
+
+/**
+ * Initialize `Selection`
+ */
+
+function Selection(expr, grid) {
+  if (!(this instanceof Selection)) return new Selection(expr, grid);
+  this.selection = expand(expr, grid.maxcol, grid.maxrow);
+  this.expr = expr;
+  this.type = type(expr);
+  this.grid = grid;
+  this.maxrow = grid.maxrow;
+  this.maxcol = grid.maxcol;
+}
+
+/**
+ * each
+ */
+
+Selection.prototype.forEach = function(fn) {
+  var grid = this.grid.grid;
+  var sel = this.selection;
+
+  for (var i = 0, at; at = sel[i]; i++) {
+    var ret = fn(grid[at], at, i);
+    if (undefined !== ret) grid[at] = ret;
+    if (false === ret) break;
+  }
+
+  return this;
+};
+
+/**
+ * map
+ */
+
+Selection.prototype.map = function(fn) {
+  var out = [];
+  this.forEach(function(v, at, i) {
+    out.push(fn(v, at, i));
+  })
+  return out;
+};
+
+
+/**
+ * value
+ */
+
+Selection.prototype.value = function(k, v) {
+  var grid = this.grid.grid;
+  var sel = this.selection;
+  var number = 'number' == typeof k;
+  var fn = 'function' == typeof v;
+  if (number && k < 0) k = sel.length + k;
+
+  if (!arguments.length) {
+    return this.map(function(v) { return v; });
+  } else if (1 == arguments.length) {
+    return number
+      ? grid[sel[k]]
+      : grid[k]
+  } else {
+    var at = number ? sel[k] : k;
+    var v = fn ? v(grid[at], at, 0) : v;
+    grid[at] = v;
+  }
+
+  return this;
+};
+
+
+/**
+ * Insert
+ *
+ * @param {Array|String} arr
+ * @return {Selection}
+ * @api public
+ */
+
+Selection.prototype.insert = function(arr) {
+  arr = isArray(arr) ? arr : [arr];
+
+  this.forEach(function(v, at, i) {
+    return arr[i];
+  });
+
+  return this;
+};
+
+/**
+ * max
+ */
+
+Selection.prototype.max = function() {
+  var max = 0;
+  
+  this.forEach(function(v, at) {
+    max = !v || max > v ? max : v;
+  });
+
+  return max;
+};
+
+/**
+ * shift
+ */
+
+Selection.prototype.shift = function(s) {
+  var type = this.type;
+
+  if (/^cols?/.test(type)) {
+    return this.shiftcols(s);
+  } else if (/^rows?/.test(type)) {
+    return this.shiftrows(s);
+  }
+
+  return this;
+};
+
+/**
+ * Shift columns
+ */
+
+Selection.prototype.shiftcols = function(s) {
+  var expanded = this.expandRight().selection.reverse();
+  var grid = this.grid.grid;
+  var maxcol = this.maxcol;
+
+  // shift the cells
+  for (var i = 0, at; at = expanded[i]; i++) {
+    var m = match(at);
+    var l = ntol(lton(m[1]) + s);
+    if (l > maxcol) continue;
+    var shifted = l + m[2];
+    grid[shifted] = grid[at];
+    delete grid[at];
+  }
+
+  return this;
+};
+
+
+/**
+ * Shift rows
+ */
+
+Selection.prototype.shiftrows = function(s) {
+  var expanded = this.expandDown().selection.reverse();
+  var grid = this.grid.grid;
+  var maxrow = this.maxrow;
+
+  // shift the cells
+  for (var i = 0, at; at = expanded[i]; i++) {
+    var m = match(at);
+    var n = +m[2] + s;
+    if (n > maxrow) {
+      delete grid[at];
+      continue;
+    }
+    var shifted = m[1] + n;
+    grid[shifted] = grid[at];
+    delete grid[at];
+  }
+
+  return this;
+};
+
+/**
+ * is
+ */
+
+Selection.prototype.is = function() {
+  var types = slice.call(arguments);
+  var re = new RegExp('^(' + types.join('|') + ')$');
+  return re.test(type(this.expr));
+};
+
+
+/**
+ * fill
+ */
+
+Selection.prototype.fill = function(v) {
+  var fn = 'function' == typeof v;
+
+  this.forEach(function(val, at, i) {
+    return fn ? v(val, at, i) : v;
+  });
+
+  return this;
+};
+
+/**
+ * rows
+ */
+
+Selection.prototype.rows = function() {
+  var sel = this.selection;
+  var buckets = {};
+  var rows = [];
+  var number;
+
+  this.forEach(function(v, at) {
+    number = match(at)[2];
+    if (!buckets[number]) buckets[number] = [];
+    buckets[number].push(at);
+  });
+
+  return buckets;
+};
+
+/**
+ * cols
+ */
+
+Selection.prototype.cols = function() {
+  var sel = this.selection;
+  var buckets = {};
+  var cols = [];
+  var letter;
+
+  this.forEach(function(v, at) {
+    letter = match(at)[1];
+    if (!buckets[letter]) buckets[letter] = [];
+    buckets[letter].push(at);
+  })
+
+  return buckets;
+};
+
+/**
+ * empty
+ */
+
+Selection.prototype.empty = function() {
+  var grid = this.grid.grid;
+  var sel = this.selection;
+
+  for (var i = 0, at; at = sel[i]; i++) {
+    if (grid[at]) return false;
+  }
+
+  return true;
+};
+
+
+/**
+ * toString
+ */
+
+Selection.prototype.toString = function() {
+  var grid = this.grid.grid;
+  var rows = this.rows();
+  var cols = this.cols();
+  var maxrow = 0;
+  var maxlen = 0;
+  var out = [];
+  var row;
+  var obj;
+  var r;
+
+  // get the max length
+  this.forEach(function(v) {
+    if (!v) return;
+    v = v.nodeName ? v.nodeName + '.' + v.className : v;
+    v = 'object' == typeof v ? JSON.stringify(v) : v.toString();
+    maxlen = maxlen > v.length ? maxlen : v.length;
+  });
+
+  // get the maxrow length
+  for (var k in rows) maxrow = maxrow > +k ? maxrow : +k
+  maxrow = (''+maxrow).length;
+
+  // add the column headers
+  row = pad('', maxrow) + ' ';
+  for (var l in cols) row += pad(l, maxlen);
+  row += ' ';
+  out.push(row);
+
+  // iterate over the rows
+  for (var k in rows) {
+    r = rows[k];
+    row = pad(k, maxrow) + '|';
+    for (var i = 0, at; at = r[i]; i++) {
+      obj = grid[at];
+      obj = obj.nodeName ? obj.nodeName + '.' + obj.className : obj;
+      obj = 'object' == typeof obj ? JSON.stringify(obj) : obj;
+      row += pad(obj || '·', maxlen);
+    }
+    row += '|';
+    out.push(row);
+  }
+
+  return out.join('\n');
+
+  // padding function
+  function pad(n, max, str) {
+    str = str || ' '
+    var len = max - (''+n).length;
+    var padding = new Array(len + 1).join(str);
+    return str + padding + n + str;
+  }
+};
+
+/**
+ * Expand Right
+ */
+
+Selection.prototype.expandRight = function() {
+  var sel = this.selection;
+  var last = this.maxcol;
+  var sels = [];
+
+  this.forEach(function(v, at) {
+    sels.push(at + ':' + last + match(at)[2]);
+  });
+
+  return new Selection(sels.join(','), this.grid);
+};
+
+
+// Selection.prototype.expandRight = function(i) {
+//   i = i || lton(this.maxcol);
+//   var sel = this.selection;
+//   var last = this.maxcol;
+//   var sels = [];
+
+//   this.forEach(function(v, at) {
+//     var m = match(at);
+//     var l = ntol(i + lton(m[1]));
+//     sels.push(at + ':' + l + m[2]);
+//   });
+
+//   return new Selection(sels.join(','), this.grid);
+// };
+
+
+/**
+ * Expand Down
+ */
+
+Selection.prototype.expandDown = function() {
+  var sel = this.selection;
+  var last = this.maxrow;
+  var sels = [];
+
+  this.forEach(function(v, at) {
+    sels.push(at + ':' + match(at)[1] + last);
+  });
+
+  return new Selection(sels.join(','), this.grid);
+};
+
+/**
+ * json
+ */
+
+Selection.prototype.json = function() {
+  var obj = {};
+  
+  this.forEach(function(v, at) {
+    obj[at] = v;
+  });
+
+  return obj;
+};
+
+/**
+ * find
+ */
+
+Selection.prototype.find = function(expr) {
+  var filtered = Selection(expr, this).selection;
+  var sel = intersect(this.selection, filtered);
+  var selection = new Selection(sel.join(','), this.grid);
+  selection.type = type(expr);
+  selection.expr = expr;
+  return selection;
+};
+
+
+
+/**
+ * Delegate back to grid
+ */
+
+['select', 'all', 'at'].forEach(function(fn) {
+  Selection.prototype[fn] = function() {
+    return this.grid[fn].apply(this.grid, arguments);
+  }
+});
+
+
+});
 require.register("spreadsheet/index.js", function(exports, require, module){
 /**
  * Module Dependencies
@@ -2688,10 +3738,113 @@ var workbook = new Workbook;
 
 /**
  * Initialize `spreadsheet`
+ *
+ * @param {Number} cols
+ * @param {Number} rows
+ * @return {Spreadsheet}
+ * @api public
  */
 
-function spreadsheet() {
-  return workbook.spreadsheet();
+function spreadsheet(cols, rows) {
+  return workbook.spreadsheet(cols, rows);
+}
+
+});
+require.register("spreadsheet/template.js", function(exports, require, module){
+/**
+ * Module Dependencies
+ */
+
+var jade = require('jade');
+
+/**
+ * Expose template
+ */
+
+module.exports = template;
+
+/**
+ * Create the template
+ *
+ * @param {Object} locals
+ * @return {Function}
+ * @api public
+ */
+
+function template(locals) {
+    var buf = [];
+    var jade_mixins = {};
+    var locals_ = locals || {}, headers = locals_.headers, undefined = locals_.undefined, layers = locals_.layers, rows = locals_.rows, cols = locals_.cols;
+    var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var heads = headers == undefined ? true : headers;
+    var l = layers || 3;
+    var r = rows || 10;
+    var c = cols || 10;
+    jade_mixins["filler"] = function(n) {
+        var block = this && this.block, attributes = this && this.attributes || {};
+        for (var i = 0; i < n; i++) {
+            buf.push('<th class="filler"></th>');
+        }
+    };
+    jade_mixins["rowhead"] = function(value) {
+        var block = this && this.block, attributes = this && this.attributes || {};
+        buf.push("<th>" + jade.escape(null == (jade.interp = value) ? "" : jade.interp) + "</th>");
+    };
+    jade_mixins["th"] = function(n) {
+        var block = this && this.block, attributes = this && this.attributes || {};
+        for (var i = 0; i < n; i++) {
+            buf.push("<th" + jade.attr("name", letters[i], true, false) + "><div>" + jade.escape(null == (jade.interp = letters[i]) ? "" : jade.interp) + "</div></th>");
+        }
+    };
+    jade_mixins["layerhead"] = function(n) {
+        var block = this && this.block, attributes = this && this.attributes || {};
+        for (var i = 0; i < n; i++) {
+            buf.push('<th class="layerhead"></th>');
+        }
+    };
+    jade_mixins["collayer"] = function(n) {
+        var block = this && this.block, attributes = this && this.attributes || {};
+        for (var i = 0; i < n; i++) {
+            buf.push("<th" + jade.attr("name", letters[i], true, false) + ' class="layer"><div></div></th>');
+        }
+    };
+    jade_mixins["rowlayer"] = function(n) {
+        var block = this && this.block, attributes = this && this.attributes || {};
+        for (var i = 0; i < n; i++) {
+            buf.push('<th class="layer"><div></div></th>');
+        }
+    };
+    jade_mixins["td"] = function(n) {
+        var block = this && this.block, attributes = this && this.attributes || {};
+        for (var i = 0; i < n; i++) {
+            buf.push('<td><input type="text" disabled="disabled"/></td>');
+        }
+    };
+    buf.push('<div class="spreadsheet"><table><thead>');
+    if (heads) {
+        buf.push('<tr class="colhead"><th class="rowhead"></th>');
+        jade_mixins["layerhead"](l);
+        jade_mixins["th"](c);
+        buf.push("</tr>");
+    }
+    for (var i = 0; i < l; i++) {
+        buf.push('<tr class="layer">');
+        jade_mixins["filler"](l + (heads ? 1 : 0));
+        jade_mixins["collayer"](c);
+        buf.push("</tr>");
+    }
+    buf.push("</thead><tbody>");
+    for (var i = 1; i <= r; i++) {
+        buf.push("<tr" + jade.attr("name", i, true, false) + ">");
+        if (heads) {
+            buf.push('<th class="rowhead"><div>' + jade.escape(null == (jade.interp = i) ? "" : jade.interp) + "</div></th>");
+        }
+        jade_mixins["rowlayer"](l);
+        jade_mixins["td"](c);
+        buf.push("</tr>");
+    }
+    buf.push("</tbody></table></div>");
+    return buf.join("");
 }
 
 });
@@ -2735,6 +3888,7 @@ function Workbook() {
   this.shortcuts.bind('up', 'onup');
   this.shortcuts.bind('esc', 'onesc');
   this.shortcuts.bind('f2', 'onf2');
+  this.shortcuts.bind('`', 'onbacktick');
 }
 
 /**
@@ -2749,6 +3903,7 @@ delegate(Workbook.prototype, 'active')
   .method('onup')
   .method('onesc')
   .method('onf2')
+  .method('onbacktick');
 
 /**
  * Activate a spreadsheet on click
@@ -2774,8 +3929,8 @@ Workbook.prototype.onclick = function(e) {
  * add a spreadsheet to the workbook
  */
 
-Workbook.prototype.spreadsheet = function() {
-  var spreadsheet = new Spreadsheet();
+Workbook.prototype.spreadsheet = function(cols, rows) {
+  var spreadsheet = new Spreadsheet(cols, rows);
   this.spreadsheets.push(spreadsheet);
   return spreadsheet;
 };
@@ -2793,7 +3948,6 @@ var closest = require('closest');
 var delegate = require('delegates');
 var isArray = require('isArray');
 var Emitter = require('emitter');
-var extend = require('extend');
 var domify = require('domify');
 var shortcuts = require('shortcuts');
 var Selection = require('./selection');
@@ -2806,12 +3960,15 @@ var smallest = utils.smallest;
 var largest = utils.largest;
 var subtract = utils.subtract;
 var k = require('k')(document);
+var collapsible = require('./collapsible');
+var Outline = require('./outline');
+
 
 /**
  * Spreadsheet element
  */
 
-var spreadsheet = domify('<div class="spreadsheet"><div class="row-heading"></div><table><thead></thead><tbody></tbody></table></div>');
+var tpl = require('../template');
 
 /**
  * Export `Spreadsheet`
@@ -2821,21 +3978,34 @@ module.exports = Spreadsheet;
 
 /**
  * Initialize `Spreadsheet`
+ *
+ * @param {Number} numcols
+ * @param {Number} numrows (optional)
  */
 
-function Spreadsheet() {
-  if (!(this instanceof Spreadsheet)) return new Spreadsheet();
-  this.el = spreadsheet.cloneNode(true);
+function Spreadsheet(numcols, numrows) {
+  if (!(this instanceof Spreadsheet)) return new Spreadsheet(numcols, numrows);
+
+  // parse string
+  if (!numrows && 'string' == typeof numcols) {
+    var m = match(numcols);
+    this.numcols = numcols = lton(m[1]) + 1;
+    this.numrows = numrows = +m[2]
+  } else {
+    this.numcols = numcols = numcols || 10;
+    this.numrows = numrows = numrows || 10;
+  }
+
+  this.el = domify(tpl({ cols: numcols, rows: numrows }));
+  this.thead = this.el.getElementsByTagName('thead')[0];
+  this.tbody = this.el.getElementsByTagName('tbody')[0];
   this.classes = classes(this.el);
 
-  // element refs
-  this.table = this.el.lastChild;
-  this.rowhead = this.el.firstChild;
-  this.thead = this.table.firstChild;
-  this.tbody = this.table.lastChild;
+  this.largest = ntol(numcols) + numrows;
 
   this.spreadsheet = {};
   this.merged = {};
+  this.cells = [];
 
   // active cell
   this.active = false;
@@ -2844,6 +4014,14 @@ function Spreadsheet() {
   this.events = events(this.el, this);
   this.events.bind('click', 'onclick');
   this.events.bind('click td', 'onselect');
+
+  // initialize the outline
+  this.outline = Outline(this.el);
+
+  // initialize collapsible
+  this.collapsible = collapsible(this);
+
+  this.draw();
 }
 
 /**
@@ -2874,135 +4052,24 @@ Spreadsheet.prototype.select = function(selection) {
 };
 
 /**
- * Add debugging support
+ * Render the spreadsheet
  */
 
-Spreadsheet.prototype.debug = function() {
-  console.log('todo: support debugging, like showing cells');
-};
-
-/**
- * Insert cell into the spreadsheet
- *
- * @param {Array} cells
- * @return {Spreadsheet}
- * @api private
- */
-
-Spreadsheet.prototype.insert = function(cells) {
-  cells = isArray(cells) ? cells : [cells];
-
-  if (!cells.length) return this;
-
+Spreadsheet.prototype.draw = function() {
   var spreadsheet = this.spreadsheet;
-  var at;
-  var td;
+  var tds = this.el.querySelectorAll('td');
+  var rows = this.numrows;
+  var cols = this.numcols;
+  var at = 'A1';
+  var x = 0;
 
-  // fill in from the biggest cell
-  var biggest = largest(cells);
-  this.fill(biggest);
-
-  for (var i = 0, cell; cell = cells[i]; i++) {
-    at = cell.at;
-    td = this.at(at);
-
-    // replace the cell
-    td.replace(cell);
-
-    // add a reference to the cell
-    spreadsheet[at] = cell;
-  }
-
-  return this;
-};
-
-/**
- * Fill in the spreadsheet
- */
-
-Spreadsheet.prototype.fill = function(cell) {
-  var spreadsheet = this.spreadsheet;
-  var rowhead = this.rowhead;
-  var thead = this.thead;
-  var tbody = this.tbody;
-  var m = match(cell.at);
-  var ac = lton(m[1]);
-  var ar = +m[2];
-  var letter;
-  var rh;
-  var tr;
-  var th;
-  var at;
-  var c;
-
-  var largest = this.largest();
-  m = match(largest);
-  var lc = lton(m[1]);
-  var lr = +m[2];
-  var rows = lr > ar ? lr : ar;
-  var cols = lc > ac ? lc : ac;
-
-  // fill in column headers
-  var colhead = thead.getElementsByTagName('tr')[0];
-  colhead = colhead ? colhead : domify('<tr></tr>');
-  var ths = colhead.getElementsByTagName('th');
-
-  for (var i = 0; i <= cols; i++) {
-    th = ths[i];
-
-    if (!th) {
-      th = document.createElement('th');
-      th.innerHTML = '<div>' + ntol(i) + '</div>';
-      colhead.appendChild(th);
-    }
-  }
-
-  // add colhead in if it isn't there already
-  if (!colhead.parentNode) thead.appendChild(colhead);  
-
-  // fill in the rows
-  var trs = tbody.getElementsByTagName('tr');
-  var rhs = rowhead.getElementsByTagName('div');
-
-  for (var i = 1; i <= rows; i++) {
-    tr = trs[i - 1];
-
-    if (!tr) {
-      tr = document.createElement('tr');
-      tr.setAttribute('name', i);
-      tbody.appendChild(tr);
-    }
-
-    if (!rhs[i - 1]) {
-      rh = document.createElement('div');
-      rh.textContent = i;
-      rowhead.appendChild(rh);
-    }
-
-    // fill in rows
-    for (var j = 0; j <= cols; j++) {
-      letter = ntol(j);
-      at = letter + i;
-
-      if (!spreadsheet[at]) {
-        c = new Cell(null, at, this);
-        spreadsheet[at] = c;
-        tr.appendChild(c.render());
-      }
+  for (var i = 0; i < rows; i++) {
+    for (var j = 0; j < cols; j++, x++) {
+      at = ntol(j) + (i+1);
+      spreadsheet[at] = spreadsheet[at] || new Cell(tds[x], at, this);
     }
   }
 }
-
-/**
- * Add border to cell
- *
- * @api private
- */
-
-Spreadsheet.prototype.border = function(cell, l, n) {
-  // console.log(cell, l, n);
-  return this;
-};
 
 /**
  * Blur
@@ -3028,27 +4095,6 @@ Spreadsheet.prototype.at = function(at) {
 };
 
 /**
- * Get the largest cell also known
- * as the lowest, rightmost cell.
- *
- * @return {String} at
- * @api private
- */
-
-Spreadsheet.prototype.largest = function() {
-  var at = 'A1';
-
-  var tr = this.tbody.querySelector('tr:last-child');
-  if (!tr) return at;
-  var td = tr.querySelector('td:last-child');
-
-  // FIXME: i don't think this is right
-  if (!td) return at;
-
-  return td.getAttribute('name');
-};
-
-/**
  * Merge cells
  *
  * @param {Array} cells
@@ -3062,7 +4108,6 @@ Spreadsheet.prototype.merge = function(cells) {
   var captain = smallest(cells);
   var at = captain.at;
   var el, tr;
-
   merged[at] = [];
 
   // remove the remaining cells
@@ -3081,24 +4126,7 @@ Spreadsheet.prototype.merge = function(cells) {
   captain.attr('rowspan', diff.row + 1);
   captain.attr('colspan', diff.col + 1);
 
-  // insert and fill, even if null
-  this.insert(captain);
-
-  // TODO: this needs to smarter. it's breaking for merge rows
-  this.fill(biggest);
-
   return this;
-}
-
-/**
- * Find a spreadsheet cell
- *
- * @param {String} at
- * @return {Element|null}
- */
-
-Spreadsheet.prototype.find = function(at) {
-  return this.tbody.querySelector('td[name="' + at + '"]');
 }
 
 /**
@@ -3107,7 +4135,7 @@ Spreadsheet.prototype.find = function(at) {
 
 Spreadsheet.prototype.onclick = function() {
   this.active && this.active.reset();
-  this.classes.remove('headings');
+  return this;
 };
 
 
@@ -3191,6 +4219,27 @@ Spreadsheet.prototype.move = function(dir) {
 });
 
 /**
+ * onbacktick
+ */
+
+Spreadsheet.prototype.onbacktick = function(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  this.classes.toggle('headings');
+  return this;
+};
+
+/**
+ * addClass
+ */
+
+Spreadsheet.prototype.addClass = function(cls) {
+  this.classes.add(cls);
+  return this;
+};
+
+
+/**
  * Traverse
  *
  * @param {String} dir
@@ -3256,16 +4305,27 @@ var slice = [].slice;
 var isArray = require('isArray');
 var Cell = require('./cell');
 var type = require('./type');
-var tokens = require('./tokens');
 var expand = require('./expand');
 var utils = require('./utils');
 var match = require('./match');
+var regex = require('./regex');
 var shift = utils.shift;
 var lton = utils.lton;
 var ntol = utils.ntol;
 var largest = utils.largest;
 var rows = utils.rows;
 var cols = utils.cols;
+var rowrange = utils.rowrange;
+var colrange = utils.colrange;
+var classes = require('classes');
+var tokenizer = require('mini-tokenizer');
+
+/**
+ * Token compiler
+ */
+
+var rtokens = /\{([A-Za-z0-9]+)\}/g
+var tokens = tokenizer(rtokens, '$1');
 
 /**
  * Export `Selection`
@@ -3276,18 +4336,19 @@ module.exports = Selection;
 /**
  * Initialize `Selection`
  *
- * @param {String} selection
+ * @param {String} expr
  * @param {Table} spreadsheet
  * @return {Selection}
  * @api private
  */
 
-function Selection(selection, spreadsheet) {
+function Selection(expr, spreadsheet) {
   if (!(this instanceof Selection)) return new Selection(selection, spreadsheet);
+  this.selection = expand(expr, spreadsheet.largest);
   this.spreadsheet = spreadsheet;
-  this.expr = selection;
-  this.selection = expand(selection, spreadsheet.largest());
-  this.cache = {};
+  // type() is not reliable for different types (ex. "A, 1")
+  this.type = type(expr);
+  this.expr = expr;
 }
 
 /**
@@ -3304,6 +4365,53 @@ Selection.prototype.cells = function() {
 };
 
 /**
+ * Add width to a column
+ *
+ * @param {Number|String} w
+ * @return {Selection}
+ * @api public
+ */
+
+Selection.prototype.width = function(w) {
+  if (!/cols?/.test(this.type)) return this;
+  w += 'number' == typeof w ? 'px' : '';
+  var thead = this.spreadsheet.thead;
+  var colhead = thead.querySelector('.colhead');
+  var columns = cols(this.selection);
+  var el;
+
+  for (var col in columns) {
+    el = colhead.querySelector('th[name=' + col + ']');
+    if (el) el.style.width = w;
+  }
+
+  return this;
+};
+
+/**
+ * Add height to a row
+ *
+ * @param {Number|String} h
+ * @return {Selection}
+ * @api public
+ */
+
+Selection.prototype.height = function(h) {
+  if (!/rows?/.test(this.type)) return this;
+  h += 'number' == typeof h ? 'px' : '';
+  var tbody = this.spreadsheet.tbody;
+  var rs = rows(this.selection);
+  var el;
+
+  for (var row in rs) {
+    var el = tbody.querySelector('tr[name="' + row + '"]');
+    if (el) el.style.height = h;
+  }
+
+  return this;
+};
+
+/**
  * Insert some data into the spreadsheets
  *
  * @param {Mixed} val
@@ -3313,17 +4421,14 @@ Selection.prototype.cells = function() {
 
 Selection.prototype.insert = function(val) {
   val = isArray(val) ? val : [val];
-  var cells = [];
+  var spreadsheet = this.spreadsheet;
+  var sel = this.selection;
 
   this.each(function(cell, i) {
     // end the loop early if we're done
     if (undefined == val[i]) return false;
-    cell.val(val[i]);
-    cells.push(cell);
+    cell.update(val[i]);
   })
-
-  // insert into the spreadsheet
-  this.spreadsheet.insert(cells);
 
   return this;
 };
@@ -3346,7 +4451,7 @@ Selection.prototype.calc = function(expr) {
       e = e.replace(tok, shifted);
     }
 
-    cell.val('= ' + e);
+    cell.update('= ' + e);
   });
 
   return this;
@@ -3370,12 +4475,10 @@ Selection.prototype.each = function(action) {
   var ret;
 
   for (var i = 0, j = 0, at; at = sel[i]; i++) {
-    cell = spreadsheet.at(at) || this.cache[at] || (this.cache[at] = new Cell(null, at, spreadsheet));
+    cell = spreadsheet.at(at);
 
     // ignore merged cells
-    if (cell.at != at) {
-      continue;
-    }
+    if (!cell || cell.at != at) continue;
 
     // use fn or delegate to cell
     ret = isfn ? action(cell, j++) : cell[action].apply(cell, args);
@@ -3400,21 +4503,20 @@ Selection.prototype.merge = function() {
 /**
  * Merge the rows together
  *
- * TODO: Add support after we resolve
- * merge bug. *update* which bug? haha...
- *
  * @return {Selection}
  * @api public
  */
 
-// Selection.prototype.mergeRows = function() {
-//   var cells = this.cells();
-//   var cs = cols(cells);
-//   for (var i = 0, col; col = cs[i]; i++) {
-//     this.spreadsheet.merge(col);
-//   }
-//   return this;
-// };
+Selection.prototype.mergeRows = function() {
+  var cells = this.cells();
+  var cs = cols(cells);
+
+  for (var col in cs) {
+    this.spreadsheet.merge(cs[col]);
+  }
+
+  return this;
+};
 
 /**
  * Merge the cols together
@@ -3426,9 +4528,11 @@ Selection.prototype.merge = function() {
 Selection.prototype.mergeCols = function() {
   var cells = this.cells();
   var rs = rows(cells);
-  for (var i = 0, row; row = rs[i]; i++) {
-    this.spreadsheet.merge(row);
+
+  for (var row in rs) {
+    this.spreadsheet.merge(rs[row]);
   }
+
   return this;
 };
 
@@ -3444,6 +4548,108 @@ Selection.prototype.select = function(sel) {
 };
 
 /**
+ * show
+ */
+
+Selection.prototype.show = function() {
+  var thead = this.spreadsheet.thead;
+  var tbody = this.spreadsheet.tbody;
+  var type = this.type;
+  var m = match(this.expr);
+  var els = [];
+
+  if (/rows?/.test(type)) {
+    var range = rowrange(m[1], m[2]);
+    var els = selectrows(range);
+  } else if (/cols?/.test(type)) {
+    var range = colrange(m[1], m[2]);
+    var els = selectcols(range);
+  } else {
+    return this;
+  }
+
+  for (var i = 0, el; el = els.item(i); i++) {
+    classes(el).remove('hidden');
+  }
+
+  return this.each('show');
+
+  function selectrows(range) {
+    var q = range.map(function(n) {
+      return 'tr[name="' + n + '"]';
+    }).join(', ');
+
+    return tbody.querySelectorAll(q);
+  }
+
+  function selectcols(range) {
+    var q = range.map(function(n) {
+      return 'th[name="' + n + '"]';
+    }).join(', ');
+    return thead.querySelectorAll(q);
+  }  
+};
+
+/**
+ * Hide the selection
+ */
+
+Selection.prototype.hide = function(cls) {
+  cls = cls || 'hidden';
+
+  var thead = this.spreadsheet.thead;
+  var tbody = this.spreadsheet.tbody;
+  var type = this.type;
+  var m = match(this.expr);
+  var els = [];
+
+
+  if (/rows?/.test(type)) {
+    var range = rowrange(m[1], m[2]);
+    var els = selectrows(range);
+  } else if (/cols?/.test(type)) {
+    var range = colrange(m[1], m[2]);
+    var els = selectcols(range);
+  } else {
+    return this;
+  }
+
+  for (var i = 0, el; el = els.item(i); i++) {
+    classes(el).add(cls);
+  }
+
+  return this.each('hide');
+
+  function selectrows(range) {
+    var q = range.map(function(n) {
+      return 'tr[name="' + n + '"]';
+    }).join(', ');
+
+    return tbody.querySelectorAll(q);
+  }
+
+  function selectcols(range) {
+    var q = range.map(function(n) {
+      return 'th[name="' + n + '"]';
+    }).join(', ');
+    return thead.querySelectorAll(q);
+  }
+};
+
+
+
+/**
+ * collapsible
+ */
+
+Selection.prototype.collapsible = function(collapsed) {
+  collapsed = undefined == collapsed ? true : false;
+  this.spreadsheet.collapsible.range(this.expr, collapsed);
+  return this;
+};
+
+
+/**
  * Delegate each cell in the selection to Cell
  */
 
@@ -3451,9 +4657,7 @@ Selection.prototype.select = function(sel) {
   'editable',
   'format',
   'addClass',
-  'attr',
-  'show',
-  'hide'
+  'attr'
 ].forEach(function(m) {
   Selection.prototype[m] = function() {
     var args = slice.call(arguments);
@@ -3476,9 +4680,9 @@ var classes = require('classes');
 var modifier = require('modifier');
 var props = require('props');
 var type = require('./type');
-var tokens = require('./tokens');
 var shortcuts = require('shortcuts');
-var outline = require('./outline');
+var tokenizer = require('mini-tokenizer');
+var throttle = require('per-frame');
 
 /**
  * Regexs
@@ -3493,6 +4697,19 @@ var rexpr = /\s*=/;
 var el = domify('<td><input type="text" disabled></td>');
 
 /**
+ * Token compiler
+ */
+
+var rtokens = /\{([A-Za-z0-9]+)\}/g
+var tokens = tokenizer(rtokens, '$1');
+
+/**
+ * Recomputing cache
+ */
+
+var recomputing = {};
+
+/**
  * Export `Cell`
  */
 
@@ -3501,28 +4718,25 @@ module.exports = Cell;
 /**
  * Initialize `Cell`
  *
- * TODO: either don't need value or call .val(value)
- * if a value is supplied
- *
- * @param {Mixed} value
+ * @param {Element} el
  * @param {Number} at
  * @param {Table} spreadsheet
  */
 
-function Cell(value, at, spreadsheet) {
-  if (!(this instanceof Cell)) return new Cell(value, at, spreadsheet);
-  this.at = at;
-  this.value = value || '';
+function Cell(el, at, spreadsheet) {
+  if (!(this instanceof Cell)) return new Cell(el, at, spreadsheet);
   this.spreadsheet = spreadsheet;
+  this.outline = spreadsheet.outline;
+  this.el = el;
+  this.at = at;
 
   // create the element
-  this.el = el.cloneNode(true);
   this.classes = classes(this.el);
   this.attr('name', at);
 
   // get the input
   this.input = this.el.firstChild;
-  this.input.value = value;
+  this.value = this.input.value || '';
 
   this.expr = false;
   this.formatting = false;
@@ -3538,27 +4752,51 @@ function Cell(value, at, spreadsheet) {
  */
 
 Cell.prototype.val = function(val, opts) {
+  recomputing = {};
+  this.update(val);
+};
+
+/**
+ * update the cell
+ */
+
+Cell.prototype.update = function(val, opts) {
   if (undefined == val) return this.compute(this.value, opts);
+
   opts = opts || {};
   opts.compute = undefined == opts.compute ? true : opts.compute;
 
   var spreadsheet = this.spreadsheet;
+  var input = this.input;
   var prev = this.value;
   var at = this.at;
+  var computed;
+
+  // when formatting is percentage and value is
+  // greater than 1, update 5 to .05
+  if ('(0.0)%' == this.formatting && val > 1) {
+    val = val / 100;
+  }
+
+
+  // update the internal value  
+  this.value = val;
 
   // update the value
   if (opts.compute) {
-    this.input.value = this.compute(val);
+    computed = input.value = this.compute(val);
+    if (!opts.silent) {
+      spreadsheet.emit('change ' + at, computed)
+    }
   }
-  
-  this.value = val;
 
   if (!opts.silent) {
-    spreadsheet.emit('change ' + at, val, prev ? prev : prev, this);
+    spreadsheet.emit('changing ' + at, val, prev ? prev : prev, this);
   }
 
   return this;
 };
+
 
 /**
  * Compute the value and apply formatting
@@ -3567,6 +4805,7 @@ Cell.prototype.val = function(val, opts) {
 Cell.prototype.compute = function(value, opts) {
   value = value || this.value;
   opts = opts || {};
+
   var format = undefined == opts.format ? true : opts.format;
 
   if (rexpr.test(value)) {
@@ -3590,27 +4829,33 @@ Cell.prototype.compute = function(value, opts) {
  */
 
 Cell.prototype.compile = function(expr, opts) {
+  var spreadsheet = this.spreadsheet;
   var toks = tokens(expr);
-  var regex = new RegExp(toks.join('|'), 'g');
 
-  expr = expr.replace(rexpr, '');
-  if (!expr) return expr;
-  expr = expr.replace(regex, '_.$&');
+  if (!toks.length) return expr;
+  
+  expr = expr
+    .replace(/^\s*=/, '')
+    .replace(rtokens, '_.$1');
+
   expr = new Function('_', 'return ' + expr);
   this.observe(toks);
 
   return function() {
     var _ = {};
     var val;
-
+    
     for (var i = 0, len = toks.length; i < len; i++) {
-      val = +spreadsheet.at(toks[i]).val(null, { format: false });
-      val = isNaN(val) ? 0 : val;
-      _[toks[i]] = val;
+      val = spreadsheet.at(toks[i]).update(null, { format: false });
+      _[toks[i]] = +val;
     }
 
-    return expr(_);
-  }
+    val = expr(_);
+
+    return 'number' != typeof val || !isNaN(val)
+      ? val
+      : 0
+  };
 };
 
 /**
@@ -3618,10 +4863,13 @@ Cell.prototype.compile = function(expr, opts) {
  */
 
 Cell.prototype.format = function(format) {
-  if('%' == format) this.formatting = '0 %';
-  else if ('$' == format) this.formatting = '($ 0,0.00)';
+  if('%' == format) this.formatting = '(0.0)%';
+  else if ('$' == format) this.formatting = '($0,0)';
+  else if ('$$' == format) this.formatting = '($0,0.00)';
+  else if ('#' == format) this.formatting = '(0,0)';
+  else if ('##' == format) this.formatting = '(0,0.00)';
   else this.formatting = format;
-  this.val(this.value);
+  this.update(this.value);
   return this;
 };
 
@@ -3649,7 +4897,8 @@ Cell.prototype.editable = function() {
 
   event.bind(input, 'input', function(e) {
     if (rexpr.test(input.value)) return;
-    self.val(input.value, { compute: false });
+    recomputing = {};
+    self.update(input.value, { compute: false });
   });
 
   event.bind(input, 'focus', function(e) {
@@ -3659,9 +4908,8 @@ Cell.prototype.editable = function() {
   event.bind(input, 'blur', function(e) {
     // TODO: temporary fix for blur firing twice, i think...
     e.stopImmediatePropagation();
-
     if ('' == input.value) return;
-    self.val(input.value);
+    self.update(input.value);
   });
 
   return this;
@@ -3681,18 +4929,37 @@ Cell.prototype.onf2 = function(e) {
   // focus editable
   if (this.classes.has('editable')) {
     this.focus();
-  } else if ('=' == this.value[0]) {
-    if (this.spreadsheet.classes.has('headings')) {
-      this.reset();
-      this.spreadsheet.classes.remove('headings');
-    } else {
-      this.input.value = this.value;
-      this.spreadsheet.classes.add('headings');
-    }
+  } else {
+    this.reveal();
   }
 
   return this;
 };
+
+/**
+ * Reveal formula
+ */
+
+Cell.prototype.reveal = function() {
+  if ('=' != this.value[0]) return this;
+  var classes = this.spreadsheet.classes;
+  var input = this.input;
+  var value = this.value;
+
+  if (classes.has('headings')) {
+    this.reset();
+    classes.remove('headings');
+  } else {
+    setTimeout(swap, 0)
+    classes.add('headings');
+  }
+
+  function swap() {
+    input.value = value.replace(/[\{\}]/g, '');
+  }
+
+  return this;
+}
 
 /**
  * Blur when you escape
@@ -3751,7 +5018,7 @@ Cell.prototype.focus = function() {
 
 Cell.prototype.reset = function() {
   var editable = this.classes.has('editable');
-  this.val(this.value, { silent: true, compute: !editable });
+  this.update(this.value, { silent: true, compute: !editable });
   return this;
 };
 
@@ -3762,22 +5029,30 @@ Cell.prototype.reset = function() {
  */
 
 Cell.prototype.activate = function() {
+  var highlighted = this.classes.has('highlighted');
+  var editable = this.classes.has('editable');
+  var outline = this.outline;
   var input = this.input;
 
   // add the outline
-  var lining = outline(this.el);
+  var lining = outline.show(this.el);
 
-  if (this.classes.has('editable')) {
+  if (editable) {
     classes(lining).add('editable');
     input.removeAttribute('disabled');
   } else {
     classes(lining).remove('editable');
+    this.classes.remove('headings');
   }
 
   // if we're already highlighted, focus
-  if (this.classes.has('highlighted')) {
-    this.classes.add('focused');
-    input.focus();
+  if (highlighted) {
+    if (editable) {
+      this.classes.add('focused');
+      input.focus();
+    } else {
+      this.reveal();
+    }
   }
 
   // add highlighted
@@ -3802,7 +5077,8 @@ Cell.prototype.deactivate = function() {
  */
 
 Cell.prototype.blur = function() {
-  this.classes.remove('focused').remove('editing');
+  this.classes.remove('focused').remove('editing')
+  this.spreadsheet.classes.remove('headings');
   this.input.blur();
   return this;
 }
@@ -3843,12 +5119,15 @@ Cell.prototype.observe = function(cells) {
   }
 
   for (var i = 0, cell; cell = cells[i]; i++) {
-    spreadsheet.on('change ' + cell, recompute);
+    spreadsheet.on('changing ' + cell, throttle(recompute));
     this.observing.push([cell, recompute]);
   }
 
   function recompute(val, prev, cell) {
-    self.val(self.value);
+    if (!recomputing[self.at]) {
+      recomputing[self.at] = self.value;
+      self.update(self.value);
+    }
   }
 }
 
@@ -3861,7 +5140,7 @@ Cell.prototype.observe = function(cells) {
  */
 
 Cell.prototype.replace = function(cell) {
-  if (!cell instanceof Cell) return this.val(cell);
+  if (!cell instanceof Cell) return this.update(cell);
   var tr = this.el.parentNode;
   if (!tr) return this;
   tr.replaceChild(cell.el, this.el);
@@ -3986,7 +5265,7 @@ exports.largest = largest = function(cells) {
   var sum = 1;
 
   for (var i = 0, cell; cell = cells[i]; i++) {
-    var m = match(cell.at);
+    var m = match(cell.at || cell);
     var l = lton(m[1]);
     var n = +m[2];
 
@@ -4064,16 +5343,12 @@ exports.rows = rows = function(cells) {
   var number;
 
   for (var i = 0, cell; cell = cells[i]; i++) {
-    number = match(cell.at)[2];
+    number = match(cell.at || cell)[2];
     if (!buckets[number]) buckets[number] = [];
     buckets[number].push(cell);
   }
 
-  for (i in buckets) {
-    rows.push(buckets[i]);
-  }
-
-  return rows;
+  return buckets;
 };
 
 /**
@@ -4089,17 +5364,63 @@ exports.cols = cols = function(cells) {
   var letter;
 
   for (var i = 0, cell; cell = cells[i]; i++) {
-    letter = match(cell.at)[1];
+    letter = match(cell.at || cell)[1];
     if (!buckets[letter]) buckets[letter] = [];
     buckets[letter].push(cell);
   }
 
-  for (i in buckets) {
-    cols.push(buckets[i]);
+  return buckets;
+};
+
+/**
+ * Column range
+ */
+
+exports.colrange = colrange = function(from, to) {
+  if (!to) return [from];
+
+  var out = [];
+  from = lton(from);
+  to = lton(to);
+
+  for (var i = from; i <= to; i++) {
+    out.push(letters[i]);
   }
 
-  return cols;
-};
+  return out;
+}
+
+/**
+ * Row range
+ */
+
+exports.rowrange = rowrange = function(from, to) {
+  var out = [];
+  from = +from;
+  to = +to;
+
+  if (!to) return [from];
+
+  for (var i = from; i <= to; i++) {
+    out.push(i);
+  }
+
+  return out;
+}
+
+/**
+ * element range
+ */
+
+exports.range = range = function(expr) {
+  var t = type(expr);
+  if (/rows?/.test(t)) {
+
+  } else {
+
+  }
+
+}
 
 });
 require.register("spreadsheet/lib/type.js", function(exports, require, module){
@@ -4130,6 +5451,8 @@ function type(str) {
 function parse(str) {
   if (regex.block.test(str)) return 'block';
   if (regex.cell.test(str)) return 'cell';
+  if (regex.rows.test(str)) return 'rows';
+  if (regex.cols.test(str)) return 'cols';
   if (regex.row.test(str)) return 'row';
   if (regex.col.test(str)) return 'col';
 };
@@ -4168,9 +5491,11 @@ require.register("spreadsheet/lib/regex.js", function(exports, require, module){
 
 var block = exports.block = /([A-Za-z]+[0-9]+)\:([A-Za-z]+[0-9]+)/;
 var cell = exports.cell = /([A-Za-z]+)([0-9]+)/;
-var col = exports.col = /\:([A-Za-z]+)/;
-var row = exports.row = /\:([0-9]+)/;
-var any = exports.any = new RegExp([block, cell, col, row].map(source).join('|'), 'g');
+var cols = exports.cols = /([A-Za-z]+)\:([A-Za-z]+)/;
+var rows = exports.rows = /([0-9]+)\:([0-9]+)/;
+var col = exports.col = /([A-Za-z]+)/;
+var row = exports.row = /([0-9]+)/;
+var any = exports.any = new RegExp([block, cell, cols, rows, col, row].map(source).join('|'), 'g');
 
 /**
  * Get the source of a regex
@@ -4203,6 +5528,8 @@ var ntol = utils.ntol;
 var regex = require('./regex');
 var rblock = regex.block;
 var rcell = regex.cell;
+var rrows = regex.rows;
+var rcols = regex.cols;
 var rrow = regex.row;
 var rcol = regex.col;
 
@@ -4222,32 +5549,46 @@ module.exports = expand;
 function expand(selection, largest) {
   var toks = tokens(selection);
   var m = rcell.exec(largest);
-  var maxcol = m[1];
-  var maxrow = m[2];
+  var lc = m[1];
+  var lr = m[2];
+  var maxcol = lton(m[1]);
+  var maxrow = +m[2]
   var out = [];
 
   for (var i = 0, tok; tok = toks[i]; i++) {
     switch (type(tok)) {
       case 'block':
         m = rblock.exec(tok);
-        out = out.concat(range(m[1], m[2]));
+        out = out.concat(range(m[1], m[2], maxcol, maxrow));
         break;
       case 'row':
         m = rrow.exec(tok);
         var n = +m[1];
         var start = 'A' + n;
-        var end = maxcol + n;
-        out = out.concat(range(start, end));
+        var end = lc + n;
+        out = out.concat(range(start, end, maxcol, maxrow));
+        break;
+      case 'rows':
+        m = rrows.exec(tok);
+        var start = 'A' + m[1];
+        var end = lc + m[2];
+        out = out.concat(range(start, end, maxcol, maxrow));
         break;
       case 'col':
         m = rcol.exec(tok);
         var l = m[1];
         var start = l + 1;
-        var end = l + maxrow;
-        out = out.concat(range(start, end));
+        var end = l + lr;
+        out = out.concat(range(start, end, maxcol, maxrow));
+        break;
+      case 'cols':
+        m = rcols.exec(tok);
+        var start = m[1] + '1';
+        var end = m[2] + lr;
+        out = out.concat(range(start, end, maxcol, maxrow));
         break;
       case 'cell':
-        out = out.concat(tok);
+        out = out.concat(range(tok, tok, maxcol, maxrow));
     }
   }
 
@@ -4262,22 +5603,21 @@ function expand(selection, largest) {
  * @return {Array}
  */
 
-function range(from, to) {
+function range(from, to, maxcol, maxrow) {
+  var out = [];
 
   var start = rcell.exec(from);
   if (!start) return this.error('invalid expansion: ' + from);
-  var sx = lton(start[1]);
-  var sy = +start[2];
+  var sc = Math.min(lton(start[1]), maxcol);
+  var sr = Math.min(+start[2], maxrow);
 
   var end = rcell.exec(to);
   if (!end) return this.error('invalid expansion: ' + to);
-  var ex = lton(end[1]);
-  var ey = +end[2];
+  var ec = Math.min(lton(end[1]), maxcol);
+  var er = Math.min(+end[2], maxrow);
 
-  var out = [];
-
-  for (var i = sy; i <= ey; i++) {
-    for (var j = sx; j <= ex; j++) {
+  for (var i = sr; i <= er; i++) {
+    for (var j = sc; j <= ec; j++) {
       out[out.length] = ntol(j) + i;
     }
   }
@@ -4308,9 +5648,11 @@ module.exports = match;
 
 function match(str) {
   return str.match(regex.block)
+  || str.match(regex.rows)
+  || str.match(regex.cols)
+  || str.match(regex.cell)
   || str.match(regex.row)
   || str.match(regex.col)
-  || str.match(regex.cell)
 }
 
 });
@@ -4322,6 +5664,7 @@ require.register("spreadsheet/lib/outline.js", function(exports, require, module
 var round = Math.round;
 var body = document.body;
 var event = require('event');
+var events = require('events');
 var raf = require('per-frame');
 var domify = require('domify');
 var closest = require('closest');
@@ -4335,48 +5678,106 @@ var host;
 var el = domify('<div class="outline"></div>');
 
 /**
- * Export `active`
+ * Export `Outline`
  */
 
-module.exports = active;
+module.exports = Outline;
 
 /**
- * Initialize `active`
+ * Initialize `Outline`
  */
 
-function active(elem) {
-  host = elem;
+function Outline(parent) {
+  if (!(this instanceof Outline)) return new Outline(parent);
+  this.parent = parent;
+  this.el = el.cloneNode(true);
+  this.host = null;
+  
+  this.document = events(document, this);
+  this.document.bind('click', 'maybehide');
 
-  var pos = position(elem);
-  var cls = classes(el);
-
-  el.style.top = round(pos.top) - 1 + 'px';
-  el.style.left = round(pos.left) - 1 + 'px';
-  el.style.width = round(pos.width) - 2 + 'px';
-  el.style.height = round(pos.height) - 2 + 'px';
-
-  !el.parentNode && body.appendChild(el);
-
-  return el;
+  this.window = events(window, this);
+  this.window.bind('resize', 'resize');
 }
 
 /**
- * If we're resizing, update outline
+ * show
  */
 
-event.bind(window, 'resize', raf(function() {
-  host && active(host);
-}));
+Outline.prototype.show = function(host) {
+  var el = this.el;
+  var parent = this.parent;
+  
+  this.host = host;
+  this.resize();
+
+  !el.parentNode && parent.appendChild(el);
+
+  return el;
+};
 
 /**
- * Hide if we click outside a spreadsheet
+ * maybeHide
  */
 
-event.bind(window, 'click', function(e) {
+Outline.prototype.maybehide = function(e) {
+  var parent = this.parent;
   var target = e.target;
-  var sheet = closest(target, '.spreadsheet');
-  el.parentNode && !sheet && body.removeChild(el);
-});
+
+  // don't hide clicks within the spreadsheet
+  if (parent == target || parent.contains(target)) return this;
+
+  this.hide();
+};
+
+
+/**
+ * hide
+ */
+
+Outline.prototype.hide = function() {
+  var parent = this.parent;
+  var el = this.el;
+
+  // remove the outline
+  el.parentNode && parent.removeChild(el);
+
+  // unset the host
+  this.host = null;
+};
+
+/**
+ * destroy
+ */
+
+Outline.prototype.destroy = function() {
+  el.parentNode && parent.removeChild(el);
+  this.document.unbind();
+  this.window.unbind();
+  return this;
+};
+
+/**
+ * resize
+ */
+
+Outline.prototype.resize = function() {
+  if (!this.host) return this;
+  
+  var el = this.el;  
+  var parent = this.parent;
+  var pos = position(this.host);
+  var off = position(parent);
+
+  el.style.top = round(pos.top - off.top - 1) + 'px';
+  el.style.left = round(pos.left - off.left - 1) + 'px';
+  el.style.width = round(pos.width + 1) + 'px';
+  el.style.height = round(pos.height + 1) + 'px';
+
+  return this;
+};
+
+
 
 /**
  * Get the position
@@ -4398,6 +5799,234 @@ function position(el) {
 };
 
 });
+require.register("spreadsheet/lib/collapsible.js", function(exports, require, module){
+/**
+ * Module dependencies
+ */
+
+var slice = [].slice;
+var domify = require('domify');
+var closest = require('closest');
+var type = require('./type');
+var utils = require('./utils');
+var events = require('events');
+var event = require('event');
+var match = require('./match');
+var classes = require('classes');
+var tokens = require('./tokens');
+var utils = require('./utils');
+var Emitter = require('emitter');
+var lton = utils.lton;
+var ntol = utils.ntol;
+var rowrange = utils.rowrange;
+var colrange = utils.colrange;
+var Grid = require('grid');
+
+/**
+ * Export `Collapsible`
+ */
+
+module.exports = Collapsible;
+
+/**
+ * Initialize `Collapsible`
+ */
+
+function Collapsible(spreadsheet) {
+  if (!(this instanceof Collapsible)) return new Collapsible(spreadsheet);
+
+  this.spreadsheet = spreadsheet;
+  this.thead = spreadsheet.thead;
+  this.tbody = spreadsheet.tbody;
+
+  this.rg = this.rowgrid();
+  this.cg = this.colgrid();
+}
+
+/**
+ * rowgrid
+ */
+
+Collapsible.prototype.rowgrid = function() {
+  var width = this.thead.querySelectorAll('th.layerhead').length;
+  var height = this.tbody.querySelectorAll('th.layer').length / width;
+  var ths = slice.call(this.tbody.querySelectorAll('th.layer'));
+  var grid = new Grid(width, height);
+  grid.insert(ths);
+  return grid;
+
+};
+
+/**
+ * colgrid
+ */
+
+Collapsible.prototype.colgrid = function() {
+  var height = this.thead.querySelectorAll('tr.layer').length;
+  var width = this.thead.querySelectorAll('th.layer').length / height;
+  var ths = slice.call(this.thead.querySelectorAll('th.layer'));
+  var grid = new Grid(width, height);
+  grid.insert(ths);
+  return grid;
+};
+
+/**
+ * Add a range
+ */
+
+Collapsible.prototype.range = function(expr, collapsed) {
+  var t = type(expr);
+  if ('rows' == t) return this.rowrange(expr, collapsed);
+  if ('cols' == t) return this.colrange(expr, collapsed);
+  return this;
+};
+
+/**
+ * rowrange
+ *
+ * @param {String} expr
+ */
+
+Collapsible.prototype.rowrange = function(expr, collapsed) {
+  var grid = this.rg.select(expr);
+  var cols = grid.cols();
+
+  for (var l in cols) {
+    var col = grid.find(l);
+    if (empty(col)) {
+      var m = match(expr);
+      var e = l + m[1] + ':' + l + m[2];
+      var connector = Connector(grid.find(e), 'row', this.spreadsheet);
+      if (collapsed) connector.hide();
+      break;
+    }
+  }
+
+  function empty(col) {
+    var empty = true;
+    col.forEach(function(th) {
+      if (classes(th).has('collapsible')) empty = false;
+    })
+    return empty;
+  }
+};
+
+/**
+ * colrange
+ *
+ * @param {String} expr
+ */
+
+Collapsible.prototype.colrange = function(expr, collapsed) {
+  var grid = this.cg.select(expr);
+  var rows = grid.rows();
+
+  for (var n in rows) {
+    var row = grid.find(n);
+    if (empty(row)) {
+      var m = match(expr);
+      var e = m[1] + n  + ':' + m[2] + n;
+      var connector = Connector(grid.find(e), 'col', this.spreadsheet);
+      if (collapsed) connector.hide();
+      break;
+    }
+  }
+
+  function empty(row) {
+    var empty = true;
+    row.forEach(function(th) {
+      if (classes(th).has('collapsible')) empty = false;
+    })
+    return empty;
+  }
+};
+
+
+/**
+ * Initialize `Connector`
+ */
+
+function Connector(grid, type, spreadsheet, hidden) {
+  if (!(this instanceof Connector)) return new Connector(grid, type, spreadsheet, hidden);
+  this.hidden = undefined == hidden ? false : true;
+  this.spreadsheet = spreadsheet;
+  this.thead = spreadsheet.thead;
+
+  var first = this.first = grid.value(0);
+  var last = this.last = grid.value(-1);
+  var toggle = this.ontoggle = this.toggle.bind(this);
+
+  this.grid = grid;
+  this.len = grid.selection.length;
+
+  grid.forEach(function(v) {
+    event.bind(v, 'click', toggle);
+
+    if (v == first) cls = 'dot';
+    else if (v == last) cls = 'dash';
+    else cls = 'line';
+
+    classes(v).add(cls).add('collapsible');
+  });
+
+  if (type == 'col') {
+    this.layer = first.parentNode;
+    var expr = grid.expr.replace(/\d+/g, '');
+    var m = match(expr);
+    this.hideExpr = ntol(lton(m[1]) + 1) + ':' + m[2];
+  } else if ('row') {
+    var layerheads = this.thead.querySelectorAll('.layerhead');
+    var n = lton(grid.expr.match(/[A-Z]/)[0]);
+    this.layer = layerheads.item(n);
+    var expr = grid.expr.replace(/[A-Z]/gi, '');
+    var m = match(expr);
+    this.hideExpr = (+m[1] + 1) + ':' + m[2];
+  }
+
+  if (!this.hidden) classes(this.layer).add('shown');
+}
+
+/**
+ * Mixin `Emitter`
+ */
+
+Emitter(Connector.prototype);
+
+/**
+ * toggle
+ */
+
+Connector.prototype.toggle = function() {
+  return this.hidden ? this.show() : this.hide();
+};
+
+
+/**
+ * show
+ */
+
+Connector.prototype.show = function() {
+  this.spreadsheet.select(this.hideExpr).show();
+  classes(this.first).remove('hiding');
+  this.hidden = false;
+};
+
+/**
+ * hide
+ */
+
+Connector.prototype.hide = function() {
+  this.spreadsheet.select(this.hideExpr).hide();
+  classes(this.first).add('hiding');
+  this.hidden = true;
+};
+
+
+});
+
+
+
+
 
 
 
@@ -4445,10 +6074,6 @@ require.alias("component-emitter/index.js", "emitter/index.js");
 require.alias("yields-isarray/index.js", "spreadsheet/deps/isArray/index.js");
 require.alias("yields-isarray/index.js", "isArray/index.js");
 
-require.alias("matthewmueller-extend/index.js", "spreadsheet/deps/extend/index.js");
-require.alias("matthewmueller-extend/index.js", "spreadsheet/deps/extend/index.js");
-require.alias("matthewmueller-extend/index.js", "extend/index.js");
-require.alias("matthewmueller-extend/index.js", "matthewmueller-extend/index.js");
 require.alias("component-classes/index.js", "spreadsheet/deps/classes/index.js");
 require.alias("component-classes/index.js", "classes/index.js");
 require.alias("component-indexof/index.js", "component-classes/deps/indexof/index.js");
@@ -4471,10 +6096,6 @@ require.alias("component-event/index.js", "event/index.js");
 
 require.alias("component-props/index.js", "spreadsheet/deps/props/index.js");
 require.alias("component-props/index.js", "props/index.js");
-
-require.alias("yields-uniq/index.js", "spreadsheet/deps/uniq/index.js");
-require.alias("yields-uniq/index.js", "uniq/index.js");
-require.alias("component-indexof/index.js", "yields-uniq/deps/indexof/index.js");
 
 require.alias("adamwdraper-numeral-js/numeral.js", "spreadsheet/deps/numeral/numeral.js");
 require.alias("adamwdraper-numeral-js/numeral.js", "spreadsheet/deps/numeral/index.js");
@@ -4522,13 +6143,13 @@ require.alias("yields-k/lib/index.js", "yields-k/index.js");
 require.alias("matthewmueller-delegates/index.js", "spreadsheet/deps/delegates/index.js");
 require.alias("matthewmueller-delegates/index.js", "delegates/index.js");
 
-require.alias("discore-closest/index.js", "spreadsheet/deps/closest/index.js");
-require.alias("discore-closest/index.js", "spreadsheet/deps/closest/index.js");
-require.alias("discore-closest/index.js", "closest/index.js");
-require.alias("component-matches-selector/index.js", "discore-closest/deps/matches-selector/index.js");
+require.alias("component-closest/index.js", "spreadsheet/deps/closest/index.js");
+require.alias("component-closest/index.js", "spreadsheet/deps/closest/index.js");
+require.alias("component-closest/index.js", "closest/index.js");
+require.alias("component-matches-selector/index.js", "component-closest/deps/matches-selector/index.js");
 require.alias("component-query/index.js", "component-matches-selector/deps/query/index.js");
 
-require.alias("discore-closest/index.js", "discore-closest/index.js");
+require.alias("component-closest/index.js", "component-closest/index.js");
 require.alias("bmcmahen-modifier/index.js", "spreadsheet/deps/modifier/index.js");
 require.alias("bmcmahen-modifier/index.js", "spreadsheet/deps/modifier/index.js");
 require.alias("bmcmahen-modifier/index.js", "modifier/index.js");
@@ -4537,6 +6158,33 @@ require.alias("matthewmueller-per-frame/index.js", "spreadsheet/deps/per-frame/i
 require.alias("matthewmueller-per-frame/index.js", "per-frame/index.js");
 require.alias("component-raf/index.js", "matthewmueller-per-frame/deps/raf/index.js");
 
+require.alias("matthewmueller-mini-tokenizer/index.js", "spreadsheet/deps/mini-tokenizer/index.js");
+require.alias("matthewmueller-mini-tokenizer/index.js", "spreadsheet/deps/mini-tokenizer/index.js");
+require.alias("matthewmueller-mini-tokenizer/index.js", "mini-tokenizer/index.js");
+require.alias("matthewmueller-mini-tokenizer/index.js", "matthewmueller-mini-tokenizer/index.js");
+require.alias("visionmedia-jade/lib/runtime.js", "spreadsheet/deps/jade/lib/runtime.js");
+require.alias("visionmedia-jade/lib/runtime.js", "spreadsheet/deps/jade/index.js");
+require.alias("visionmedia-jade/lib/runtime.js", "jade/index.js");
+require.alias("visionmedia-jade/lib/runtime.js", "visionmedia-jade/index.js");
+require.alias("matthewmueller-grid/index.js", "spreadsheet/deps/grid/index.js");
+require.alias("matthewmueller-grid/lib/grid.js", "spreadsheet/deps/grid/lib/grid.js");
+require.alias("matthewmueller-grid/lib/type.js", "spreadsheet/deps/grid/lib/type.js");
+require.alias("matthewmueller-grid/lib/utils.js", "spreadsheet/deps/grid/lib/utils.js");
+require.alias("matthewmueller-grid/lib/match.js", "spreadsheet/deps/grid/lib/match.js");
+require.alias("matthewmueller-grid/lib/regexp.js", "spreadsheet/deps/grid/lib/regexp.js");
+require.alias("matthewmueller-grid/lib/tokens.js", "spreadsheet/deps/grid/lib/tokens.js");
+require.alias("matthewmueller-grid/lib/expand.js", "spreadsheet/deps/grid/lib/expand.js");
+require.alias("matthewmueller-grid/lib/selection.js", "spreadsheet/deps/grid/lib/selection.js");
+require.alias("matthewmueller-grid/index.js", "spreadsheet/deps/grid/index.js");
+require.alias("matthewmueller-grid/index.js", "grid/index.js");
+require.alias("matthewmueller-mini-tokenizer/index.js", "matthewmueller-grid/deps/mini-tokenizer/index.js");
+require.alias("matthewmueller-mini-tokenizer/index.js", "matthewmueller-grid/deps/mini-tokenizer/index.js");
+require.alias("matthewmueller-mini-tokenizer/index.js", "matthewmueller-mini-tokenizer/index.js");
+require.alias("juliangruber-intersect/index.js", "matthewmueller-grid/deps/intersect/index.js");
+
+require.alias("jkroso-unique/index.js", "matthewmueller-grid/deps/unique/index.js");
+
+require.alias("matthewmueller-grid/index.js", "matthewmueller-grid/index.js");
 require.alias("spreadsheet/index.js", "spreadsheet/index.js");if (typeof exports == "object") {
   module.exports = require("spreadsheet");
 } else if (typeof define == "function" && define.amd) {

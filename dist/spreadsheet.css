@@ -1,9 +1,16 @@
+/**
+ * General
+ */
+
 .spreadsheet {
   position: relative;
-  padding-left: 32px;
   font-family: helvetica;
   font-weight: 300;
   color: #222;
+}
+
+.spreadsheet + .spreadsheet {
+  margin-top: 10px;
 }
 
 .spreadsheet * {
@@ -21,60 +28,39 @@
   -webkit-backface-visibility: hidden;
 }
 
+.spreadsheet .editable {
+  color: #4285F4;
+  font-style: italic;
+}
+
+.spreadsheet th,
+.spreadsheet td {
+  padding: 0;
+}
+
+.spreadsheet th div {
+  height: 100%;
+  width: 100%;
+}
+
 /**
- * Row headings
+ * Input styling
  */
 
-.spreadsheet .row-heading {
-  position: absolute;
-  padding-top: 32px;
-  left: 0;
-  width: 32px;
-  height: 100%;
-  text-align: center;
-  overflow: hidden;
-}
-
-.spreadsheet .row-heading div {
-  height: 2em;
-  line-height: 2em;
-  width: 100%;
-  background: #f2f2f2;
-  border-bottom: 1px solid #cdcdcd;
-  border-left: 1px solid #cdcdcd;
-  -webkit-transform: translateX(100%);
-  -moz-transform: translateX(100%);
-  -ms-transform: translateX(100%);
-  -o-transform: translateX(100%);
-  transform: translateX(100%);
-  -webkit-transition: -webkit-transform ease-out .2s;
-  -moz-transition: -moz-transform ease-out .2s;
-  -ms-transition: -ms-transform ease-out .2s;
-  -o-transition: -o-transform ease-out .2s;
-  transition: transform ease-out .2s;
-
-}
-
-.spreadsheet.headings .row-heading div {
-  -webkit-transform: translateX(0);
-  -moz-transform: translateX(0);
-  -ms-transform: translateX(0);
-  -o-transform: translateX(0);
-  transform: translateX(0);
-}
-
-.spreadsheet .row-heading div:first-of-type {
-  border-top: 1px solid #cdcdcd;
-}
-
 .spreadsheet input {
-  font: inherit;
-  width: 100%;
-  height: inherit;
   border: 0;
   margin: 0;
-  padding: 0;
-  display: block;
+  height: inherit;
+  width: 100%;
+  
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  line-height: inherit;
+  
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .spreadsheet input[disabled] {
@@ -86,89 +72,28 @@
   outline: none;
 }
 
-.spreadsheet + .spreadsheet {
-  margin-top: 10px;
+/**
+ * Dimensions
+ */
+
+.spreadsheet .rowhead {
+  width: 32px;
 }
 
-.spreadsheet th {
-  padding: 0;
-  font: inherit;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.spreadsheet tr {
-  height: 2em;
-}
-
-.spreadsheet th div {
-  height: 32px;
-  line-height: 32px;
-  background: #f2f2f2;
-  -webkit-transition: -webkit-transform ease-out .2s;
-  -moz-transition: -moz-transform ease-out .2s;
-  -ms-transition: -ms-transform ease-out .2s;
-  -o-transition: -o-transform ease-out .2s;
-  transition: transform ease-out .2s;
-}
-
-.spreadsheet thead th:first-of-type div {
-  border-left: 1px solid #cdcdcd;
-}
-
-.spreadsheet thead th div {
-  -webkit-transform: translateY(100%);
-  -moz-transform: translateY(100%);
-  -ms-transform: translateY(100%);
-  -o-transform: translateY(100%);
-  transform: translateY(100%);
-  border-right: 1px solid #cdcdcd;
-  border-top: 1px solid #cdcdcd;
-}
-
-.spreadsheet thead th:last-child div {
-  border-right: 1px solid #cdcdcd;
-}
-
-.spreadsheet tbody th div {
-  /*border-left: 1px solid #cdcdcd;*/
-  border-top: 1px solid #cdcdcd;
-  border-left: 1px solid #cdcdcd;
-  -webkit-transform: translateX(100%);
-  -moz-transform: translateX(100%);
-  -ms-transform: translateX(100%);
-  -o-transform: translateX(100%);
-  transform: translateX(100%);
-}
-
-.spreadsheet tbody tr:last-child th div {
-  border-bottom: 1px solid #cdcdcd;
-}
-
-.spreadsheet.headings th div {
-  -webkit-transform: translate(0);
-  -moz-transform: translate(0);
-  -ms-transform: translate(0);
-  -o-transform: translate(0);
-  transform: translate(0);
+.spreadsheet .colhead div,
+.spreadsheet .rowhead div,
+.spreadsheet td input {
+  padding: 6px;
 }
 
 /**
- * In between
+ * Cell borders
  */
 
 .spreadsheet td {
-  padding: 0px 4px;
-  position: relative;
   border-right: 1px solid #f2f2f2;
   border-bottom: 1px solid #f2f2f2;
-
 }
-
-/**
- * Outsides
- */
 
 .spreadsheet tr:first-child td {
   border-top: 1px solid #cdcdcd;
@@ -186,63 +111,222 @@
   border-bottom: 1px solid #cdcdcd;
 }
 
-.spreadsheet input {
-  text-align: inherit;
-  height: inherit;
-  line-height: inherit;
-  /*padding: 8px;*/
-  color: inherit;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.spreadsheet .colhead th:nth-child(5) div {
+  border-left: 1px solid #cdcdcd;
 }
 
-.spreadsheet td.hidden {
-  display: none;
+.spreadsheet .colhead div {
+  border-right: 1px solid #cdcdcd;
+  border-top: 1px solid #cdcdcd;
 }
 
-.spreadsheet .editable {
-  color: #4285F4;
-  font-style: italic;
+.spreadsheet tr:first-child .rowhead div {
+  border-top: 1px solid #cdcdcd;
 }
 
-.outline {
+.spreadsheet .rowhead div {
+  border-bottom: 1px solid #cdcdcd;
+  border-left: 1px solid #cdcdcd;
+}
+
+.spreadsheet.row-layers .rowhead div {
+  border-right: 1px solid #cdcdcd;
+}
+
+/**
+ * Outline styling
+ */
+
+.spreadsheet .outline {
   border: 2px solid #333;
   pointer-events: none;
   z-index: 1;
   position: absolute;
 }
 
-.outline.editable {
+.spreadsheet .outline.editable {
   border-color: #4285F4;
 }
 
-/*.editable {
- -webkit-animation: color_change 1s infinite alternate;
- -moz-animation: color_change 1s infinite alternate;
- -ms-animation: color_change 1s infinite alternate;
- -o-animation: color_change 1s infinite alternate;
- animation: color_change 1s infinite alternate;
+/**
+ * Hidden cells
+ */
+
+.spreadsheet tr.hidden,
+.spreadsheet td.hidden,
+.spreadsheet th.hidden {
+  display: none;
 }
 
-@-webkit-keyframes color_change {
- from { color: inherit; }
- to { color: #4285F4; }
+.spreadsheet thead .colhead th.no-width {
+  width: 0;
 }
-/*@-moz-keyframes color_change {
- from { color: blue; }
- to { color: green; }
+
+.spreadsheet thead tr.layer,
+.spreadsheet thead th.layerhead,
+.spreadsheet tbody th.layer {
+  width: 0;
+  height: 0;
 }
-@-ms-keyframes color_change {
- from { color: blue; }
- to { color: green; }
+
+.spreadsheet thead tr.layer.shown {
+  display: table-row;
 }
-@-o-keyframes color_change {
- from { color: blue; }
- to { color: green; }
+
+.spreadsheet thead th.layerhead.shown {
+  width: 20px;
 }
-@keyframes color_change {
- from { color: #ccc; }
- to { color: inherit; }
+
+.spreadsheet thead tr.layer.shown {
+  height: 20px;
 }
-*/
+
+.spreadsheet thead th {
+  position: relative;
+}
+
+.spreadsheet th.dot,
+.spreadsheet th.line,
+.spreadsheet th.dash {
+  cursor: pointer;
+}
+
+.spreadsheet tbody th.dot,
+.spreadsheet tbody th.line,
+.spreadsheet tbody th.dash {
+  padding-right: 2px;
+  padding-left: 2px;
+}
+
+.spreadsheet tbody th.dot {
+  padding-top: 15px;
+}
+
+.spreadsheet tbody th.line,
+.spreadsheet tbody th.dash {
+  padding: 0 8px;
+}
+
+.spreadsheet tbody th.dot div {
+  background: #4285F4;
+  border-radius: 8px;
+}
+
+.spreadsheet thead th.dot div {
+  width: 16px;
+  margin: 0 auto;
+}
+
+.spreadsheet thead th.dot div:after,
+.spreadsheet thead th.line div:after,
+.spreadsheet thead th.dash div:after {
+  content: '\0';
+}
+
+.spreadsheet thead th.dot,
+.spreadsheet thead th.line,
+.spreadsheet thead th.dash {
+  overflow: hidden;
+}
+
+.spreadsheet thead th.dot div {
+  position: absolute;
+  right: 0;
+  height: 4px;
+  margin-top: -2px;
+  width: 50%;
+  background: #4285F4;
+}
+
+.spreadsheet thead th.dot.hiding div {
+  background: none;
+}
+
+.spreadsheet thead th.line div {
+  position: absolute;
+  height: 4px;
+  margin-top: -2px;
+  background: #4285F4;
+}
+
+.spreadsheet thead th.dash div {
+  position: absolute;
+  height: 4px;
+  margin-top: -2px;
+  width: 50%;
+  background: #4285F4;
+}
+
+.spreadsheet thead th.dash div:after {
+  background: #4285F4;
+  height: 16px;
+  width: 4px;
+  position: absolute;
+  top: -6px;
+  right: -4px;
+}
+
+.spreadsheet thead th.dot div:after {
+  background: #4285F4;
+  border-radius: 8px;
+  height: 16px;
+  width: 16px;
+  position: absolute;
+  top: -6px;
+  left: -8px;
+}
+
+.spreadsheet tbody th.line div,
+.spreadsheet tbody th.dash div {
+  background: #4285F4;
+}
+
+.spreadsheet tbody th.dash {
+  border-bottom: 3px solid #4285F4;
+}
+
+/**
+ * Headings
+ */
+
+.spreadsheet .colhead th,
+.spreadsheet th.rowhead {
+  overflow: hidden;
+}
+
+.spreadsheet .colhead div,
+.spreadsheet .rowhead div {
+  height: 100%;
+  width: 100%;
+  background: #f2f2f2;
+  -webkit-transition: -webkit-transform ease-out .2s;
+  -moz-transition: -moz-transform ease-out .2s;
+  -ms-transition: -ms-transform ease-out .2s;
+  -o-transition: -o-transform ease-out .2s;
+  transition: transform ease-out .2s;
+}
+
+.spreadsheet .rowhead div {
+  -webkit-transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  -o-transform: translateX(100%);
+  transform: translateX(100%);
+}
+
+.spreadsheet .colhead div {
+  -webkit-transform: translateY(100%);
+  -moz-transform: translateY(100%);
+  -ms-transform: translateY(100%);
+  -o-transform: translateY(100%);
+  transform: translateY(100%);
+}
+
+.spreadsheet.headings .colhead div,
+.spreadsheet.headings .rowhead div {
+  -webkit-transform: translate(0);
+  -moz-transform: translate(0);
+  -ms-transform: translate(0);
+  -o-transform: translate(0);
+  transform: translate(0);
+}
