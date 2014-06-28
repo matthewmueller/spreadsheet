@@ -51,6 +51,7 @@
         var spreadsheet = Spreadsheet('G36');
         document.body.appendChild(spreadsheet.el);
 
+
          // ***********************************************************
          // Input Assumptions
          // ***********************************************************
@@ -191,6 +192,8 @@
          spreadsheet.select('E14:F14, E17:F17, E21:F21, B23:C23, B30:C30, B32:C32').addClass('bold')
          spreadsheet.select('F17, F21, C30, C32').addClass('top-border')
          spreadsheet.select('B36:F36').merge().addClass('italic')
+
+         spreadsheet.select('C7').activate()
     </script>
 </body>
 
