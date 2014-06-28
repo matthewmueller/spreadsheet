@@ -12,7 +12,7 @@
         }
         table {
             /*border-collapse: collapse;*/
-            font-size: 7.5pt;
+            font-size: 8pt;
             text-align: right;
         }
         table .headers {
@@ -28,21 +28,20 @@
             color: #1AA260;
         }
         .bold {
-          font-weight: bold;
+            font-weight: bold;
         }
         .top-border {
             border-top: solid #333333 1px !important;
         }
-
     </style>
 </head>
 
 <body>
-    <h1 style="font-family:verdana; font-size:10pt">LR Model Template</h1>
+    <h1 style="font-family:verdana; font-size:10pt">WACC</h1>
     <script src="../build/build.js" type="text/javascript"></script>
     <script type="text/javascript">
         var Spreadsheet = require('spreadsheet');
-        var spreadsheet = Spreadsheet('G29');
+        var spreadsheet = Spreadsheet('G30');
         document.body.appendChild(spreadsheet.el);
 
          // ***********************************************************
@@ -75,9 +74,9 @@
                 '',
                 'Cost of Equity',
                 '',
-                '   Panera Bread Company Levered Beta',
+                '   Company Levered Beta',
                 '      (x) Equity Market Risk Premium',
-                '   Adjusted Equity Market Risk Premium',
+                '   Adj. Equity Market Risk Premium',
                 '',
                 '      (+) Risk-free Rate',
                 '      (+) Additional Risk Adjustments',
@@ -87,7 +86,7 @@
                 'Cost of Debt',
                 '',
                 '   Cost of Long-term Debt',
-                '   Tax Rate',
+                '      (x) 1 - Tax Rate',
                 '',
                 '   After-tax Cost of Debt',
                 '',
@@ -141,8 +140,7 @@
          spreadsheet.select('19').hide()
          spreadsheet.select('26').hide()
          spreadsheet.select('D13:F13, D20:F20, D27:F27').addClass('top-border')
-top
-
+         top
     </script>
 </body>
 
