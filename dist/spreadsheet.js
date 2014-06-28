@@ -3929,7 +3929,7 @@ Workbook.prototype.onclick = function(e) {
  */
 
 Workbook.prototype.spreadsheet = function(cols, rows) {
-  var spreadsheet = new Spreadsheet(cols, rows);
+  var spreadsheet = new Spreadsheet(cols, rows, this);
   this.spreadsheets.push(spreadsheet);
   return spreadsheet;
 };
@@ -3982,8 +3982,8 @@ module.exports = Spreadsheet;
  * @param {Number} numrows (optional)
  */
 
-function Spreadsheet(numcols, numrows) {
-  if (!(this instanceof Spreadsheet)) return new Spreadsheet(numcols, numrows);
+function Spreadsheet(numcols, numrows, workbook) {
+  if (!(this instanceof Spreadsheet)) return new Spreadsheet(numcols, numrows, workbook);
 
   // parse string
   if (!numrows && 'string' == typeof numcols) {
@@ -4002,6 +4002,7 @@ function Spreadsheet(numcols, numrows) {
 
   this.largest = ntol(numcols) + numrows;
 
+  this.workbook = workbook;
   this.spreadsheet = {};
   this.merged = {};
   this.cells = [];
@@ -4656,7 +4657,9 @@ Selection.prototype.collapsible = function(collapsed) {
   'editable',
   'format',
   'addClass',
-  'attr'
+  'attr',
+  'focus',
+  'activate'
 ].forEach(function(m) {
   Selection.prototype[m] = function() {
     var args = slice.call(arguments);
@@ -5028,6 +5031,13 @@ Cell.prototype.reset = function() {
  */
 
 Cell.prototype.activate = function() {
+  var spreadsheet = this.spreadsheet;
+  var workbook = spreadsheet.workbook;
+
+  // hack to ensure spreadsheet is active
+  workbook.active = workbook.active || spreadsheet;
+  spreadsheet.active = spreadsheet.active || this;
+
   var highlighted = this.classes.has('highlighted');
   var editable = this.classes.has('editable');
   var outline = this.outline;
