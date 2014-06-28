@@ -1,4 +1,3 @@
-;(function(){
 
 /**
  * Require the given path.
@@ -6185,10 +6184,4 @@ require.alias("juliangruber-intersect/index.js", "matthewmueller-grid/deps/inter
 require.alias("jkroso-unique/index.js", "matthewmueller-grid/deps/unique/index.js");
 
 require.alias("matthewmueller-grid/index.js", "matthewmueller-grid/index.js");
-require.alias("spreadsheet/index.js", "spreadsheet/index.js");if (typeof exports == "object") {
-  module.exports = require("spreadsheet");
-} else if (typeof define == "function" && define.amd) {
-  define([], function(){ return require("spreadsheet"); });
-} else {
-  this["spreadsheet"] = require("spreadsheet");
-}})();
+require.alias("spreadsheet/index.js", "spreadsheet/index.js");
