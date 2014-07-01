@@ -2,7 +2,7 @@
   "name": "spreadsheet",
   "repo": "matthewmueller/spreadsheet",
   "description": "create spreadsheets with excel-like features",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "keywords": [],
   "remotes": [
     "https://raw.githubusercontent.com"
