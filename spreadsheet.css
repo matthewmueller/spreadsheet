@@ -7,7 +7,6 @@
   font-family: helvetica;
   font-weight: 300;
   color: #222;
-  -webkit-text-fill-color: #222;
 }
 
 .spreadsheet + .spreadsheet {
@@ -58,6 +57,7 @@
   color: inherit;
   text-align: inherit;
   line-height: inherit;
+  -webkit-text-fill-color: inherit;
   
   white-space: nowrap;
   overflow: hidden;
