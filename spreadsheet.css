@@ -7,6 +7,7 @@
   font-family: helvetica;
   font-weight: 300;
   color: #222;
+  -webkit-text-fill-color: #222;
 }
 
 .spreadsheet + .spreadsheet {
