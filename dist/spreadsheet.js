@@ -3710,6 +3710,35 @@ Selection.prototype.find = function(expr) {
 
 
 });
+require.register("component-ie/index.js", function(exports, require, module){
+/**
+ * Export `ie`.
+ */
+
+module.exports = ie();
+
+/**
+ * Initialize `ie`
+ *
+ * @return {Number|undefined}
+ * @api public
+ */
+
+function ie() {
+  for( var v = 3,
+           el = document.createElement('b'),
+           // empty array as loop breaker (and exception-avoider) for non-IE and IE10+
+           all = el.all || [];
+       // i tag not well-formed since we know that IE5-IE9 won't mind
+       el.innerHTML = '<!--[if gt IE ' + (++v) + ']><i><![endif]-->',
+       all[0];
+     );
+  // return the documentMode for IE10+ compatibility
+  // non-IE will get undefined
+  return v > 4 ? v : document.documentMode;
+}
+
+});
 require.register("spreadsheet/index.js", function(exports, require, module){
 /**
  * Module Dependencies
@@ -4685,6 +4714,7 @@ var type = require('./type');
 var shortcuts = require('shortcuts');
 var tokenizer = require('mini-tokenizer');
 var throttle = require('per-frame');
+var ie = require('ie');
 
 /**
  * Regexs
@@ -4776,7 +4806,7 @@ Cell.prototype.update = function(val, opts) {
 
   // when formatting is percentage and value is
   // greater than 1, update 5 to .05
-  if ('(0.0)%' == this.formatting && val > 1) {
+  if ('(0.0)%' == this.formatting && val >= 1) {
     val = val / 100;
   }
 
@@ -4894,6 +4924,7 @@ Cell.prototype.editable = function() {
   var self = this;
   var el = this.el;
   var input = this.input;
+  var blur = ie ? 'focusout' : 'blur';
 
   this.classes.add('editable');
 
@@ -4907,7 +4938,7 @@ Cell.prototype.editable = function() {
     input.value = self.value;
   });
 
-  event.bind(input, 'blur', function(e) {
+  event.bind(input, blur, function(e) {
     // TODO: temporary fix for blur firing twice, i think...
     e.stopImmediatePropagation();
     if ('' == input.value) return;
@@ -5091,8 +5122,6 @@ Cell.prototype.blur = function() {
   this.input.blur();
   return this;
 }
-
-
 
 /**
  * Add a class to the <td>
@@ -6074,6 +6103,8 @@ Connector.prototype.hide = function() {
 
 
 
+
+
 require.alias("component-domify/index.js", "spreadsheet/deps/domify/index.js");
 require.alias("component-domify/index.js", "domify/index.js");
 
@@ -6194,4 +6225,8 @@ require.alias("juliangruber-intersect/index.js", "matthewmueller-grid/deps/inter
 require.alias("jkroso-unique/index.js", "matthewmueller-grid/deps/unique/index.js");
 
 require.alias("matthewmueller-grid/index.js", "matthewmueller-grid/index.js");
+require.alias("component-ie/index.js", "spreadsheet/deps/ie/index.js");
+require.alias("component-ie/index.js", "spreadsheet/deps/ie/index.js");
+require.alias("component-ie/index.js", "ie/index.js");
+require.alias("component-ie/index.js", "component-ie/index.js");
 require.alias("spreadsheet/index.js", "spreadsheet/index.js");
