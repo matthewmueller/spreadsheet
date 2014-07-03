@@ -3739,6 +3739,94 @@ function ie() {
 }
 
 });
+require.register("component-tap/index.js", function(exports, require, module){
+/**
+ * Module Dependencies
+ */
+
+var event = require('event'),
+    bind = require('bind');
+
+/**
+ * Expose `Tap`
+ */
+
+module.exports = Tap;
+
+/**
+ * Touch support
+ */
+
+var support = 'ontouchstart' in window;
+
+/**
+ * Tap on `el` to trigger a `fn`
+ *
+ * Tap will not fire if you move your finger
+ * to scroll
+ *
+ * @param {Element} el
+ * @param {Function} fn
+ */
+
+function Tap(el, fn) {
+  if(!(this instanceof Tap)) return new Tap(el, fn);
+  this.el = el;
+  this.fn = fn || function() {};
+  this.tap = true;
+
+  if (support) {
+    this.ontouchmove = bind(this, this.touchmove);
+    this.ontouchend = bind(this, this.touchend);
+    event.bind(el, 'touchmove', this.ontouchmove);
+    event.bind(el, 'touchend', this.ontouchend);
+  } else {
+    event.bind(el, 'click', this.fn);
+  }
+}
+
+/**
+ * Touch end
+ *
+ * @param {Event} e
+ * @return {Tap}
+ * @api private
+ */
+
+Tap.prototype.touchend = function(e) {
+  if (this.tap) this.fn(e);
+  this.tap = true;
+  event.bind(this.el, 'touchmove', this.ontouchmove);
+  return this;
+};
+
+/**
+ * Touch move
+ *
+ * @return {Tap}
+ * @api private
+ */
+
+Tap.prototype.touchmove = function() {
+  this.tap = false;
+  event.unbind(this.el, 'touchmove', this.ontouchmove);
+  return this;
+};
+
+/**
+ * Unbind the tap
+ *
+ * @return {Tap}
+ * @api public
+ */
+
+Tap.prototype.unbind = function() {
+  event.unbind(this.el, 'touchend', this.ontouchend);
+  event.unbind(this.el, 'click', this.fn);
+  return this;
+};
+
+});
 require.register("spreadsheet/index.js", function(exports, require, module){
 /**
  * Module Dependencies
@@ -3900,12 +3988,12 @@ function Workbook() {
   if (!(this instanceof Workbook)) return new Workbook();
   this.spreadsheets = [];
   this.active = null;
-  
+
   this.events = events(window, this);
   this.events.bind('click', 'onclick');
   this.events.bind('keydown', 'onkeydown');
 
-  
+
   // set up keyboard shortcuts
   this.shortcuts = shortcuts(document, this);
   this.shortcuts.k.ignore = false;
@@ -3940,7 +4028,6 @@ delegate(Workbook.prototype, 'active')
 Workbook.prototype.onclick = function(e) {
   var target = e.target;
   var active = null;
-
   for (var i = 0, s; s = this.spreadsheets[i]; i++) {
     if (s.el.contains(target)) {
       active = s;
@@ -3948,6 +4035,7 @@ Workbook.prototype.onclick = function(e) {
     }
   }
 
+  this.active && this.active != active && this.active.deactivate();
   this.active = active;
   return this;
 };
@@ -3990,7 +4078,7 @@ var subtract = utils.subtract;
 var k = require('k')(document);
 var collapsible = require('./collapsible');
 var Outline = require('./outline');
-
+var tap = require('tap');
 
 /**
  * Spreadsheet element
@@ -4041,8 +4129,6 @@ function Spreadsheet(numcols, numrows, workbook) {
 
   // bind events
   this.events = events(this.el, this);
-  this.events.bind('click', 'onclick');
-  this.events.bind('click td', 'onselect');
 
   // initialize the outline
   this.outline = Outline(this.el);
@@ -4101,13 +4187,11 @@ Spreadsheet.prototype.draw = function() {
 }
 
 /**
- * Blur
+ * Reset
  */
 
-Spreadsheet.prototype.onblur = function(e) {
-  var target = e.target;
-  var td = target.parentNode;
-  classes(td).remove('active');
+Spreadsheet.prototype.deactivate = function(e) {
+  this.active && this.active.deactivate();
 }
 
 /**
@@ -4159,43 +4243,6 @@ Spreadsheet.prototype.merge = function(cells) {
 }
 
 /**
- * onclick
- */
-
-Spreadsheet.prototype.onclick = function() {
-  this.active && this.active.reset();
-  return this;
-};
-
-
-/**
- * Select a cell
- *
- * @param {Event} e
- * @return {Spreadsheet}
- * @api private
- */
-
-Spreadsheet.prototype.onselect = function(e) {
-  var target = 'TD' == e.target.nodeName ? e.target : closest(e.target, 'td');
-
-  if (!target) {
-    this.active && this.active.deactivate();
-    return this;
-  }
-
-  var at = target.getAttribute('name');
-  var cell = this.at(at);
-
-  // remove any old classes, if we're not
-  // clicking on the currently active cell
-  this.active && this.active != cell && this.active.deactivate();
-  this.active = cell;
-
-  return this;
-};
-
-/**
  * Move to another cell
  *
  * @param {Event} e
@@ -4211,11 +4258,11 @@ Spreadsheet.prototype.move = function(dir) {
   this.traverse(dir, function(cell) {
     if (!cell.classes.has('hidden') && !active.classes.has('focused')) {
       cell.activate();
-      
+
       // blur old active
       active.deactivate();
       self.active = cell;
-      
+
       return false;
     }
   });
@@ -4234,7 +4281,7 @@ Spreadsheet.prototype.move = function(dir) {
 
     if (active && !active.classes.has('focused')) {
       e.preventDefault();
-  
+
       // reset headings
       active.reset();
       this.classes.remove('headings');
@@ -4714,6 +4761,7 @@ var type = require('./type');
 var shortcuts = require('shortcuts');
 var tokenizer = require('mini-tokenizer');
 var throttle = require('per-frame');
+var tap = require('tap');
 var ie = require('ie');
 
 /**
@@ -4721,6 +4769,12 @@ var ie = require('ie');
  */
 
 var rexpr = /\s*=/;
+
+/**
+ * Touch
+ */
+
+var touch = 'ontouchstart' in window;
 
 /**
  * Templates
@@ -4775,8 +4829,7 @@ function Cell(el, at, spreadsheet) {
   this.observing = [];
 
   // bind the events
-  this.events = events(this.el, this);
-  this.events.bind('click', 'onclick');
+  this.tap = tap(this.el, this.onclick.bind(this));
 }
 
 /**
@@ -4811,7 +4864,7 @@ Cell.prototype.update = function(val, opts) {
   }
 
 
-  // update the internal value  
+  // update the internal value
   this.value = val;
 
   // update the value
@@ -4865,7 +4918,7 @@ Cell.prototype.compile = function(expr, opts) {
   var toks = tokens(expr);
 
   if (!toks.length) return expr;
-  
+
   expr = expr
     .replace(/^\s*=/, '')
     .replace(rtokens, '_.$1');
@@ -4876,7 +4929,7 @@ Cell.prototype.compile = function(expr, opts) {
   return function() {
     var _ = {};
     var val;
-    
+
     for (var i = 0, len = toks.length; i < len; i++) {
       val = spreadsheet.at(toks[i]).update(null, { format: false });
       _[toks[i]] = +val;
@@ -4951,8 +5004,8 @@ Cell.prototype.editable = function() {
 /**
  * F2 puts you into "editmode"
  *
- * @param {Event} e 
- * @return {Spreadsheet} 
+ * @param {Event} e
+ * @return {Spreadsheet}
  * @api private
  */
 
@@ -5017,7 +5070,7 @@ Cell.prototype.onkeydown = function(e) {
 
   var classes = this.classes;
   var input = this.input;
-  
+
   if (!classes.has('editing') && classes.has('editable') && !classes.has('focused')) {
     input.focus();
     input.value = '';
@@ -5031,11 +5084,21 @@ Cell.prototype.onkeydown = function(e) {
  */
 
 Cell.prototype.onclick = function() {
+  var spreadsheet = this.spreadsheet;
+  var active = spreadsheet.active;
+
+  // remove any old classes, if we're not
+  // clicking on the currently active cell
+  active && active != this && active.deactivate();
+  spreadsheet.active = this;
+
   this.activate();
+
+  return this;
 };
 
 /**
- * 
+ *
  */
 
 Cell.prototype.focus = function() {
@@ -5054,8 +5117,6 @@ Cell.prototype.reset = function() {
   this.update(this.value, { silent: true, compute: !editable });
   return this;
 };
-
-
 
 /**
  * highlight
@@ -5079,16 +5140,17 @@ Cell.prototype.activate = function() {
 
   if (editable) {
     classes(lining).add('editable');
-    input.removeAttribute('disabled');
+    !touch && input.removeAttribute('disabled');
   } else {
     classes(lining).remove('editable');
     this.classes.remove('headings');
   }
 
   // if we're already highlighted, focus
-  if (highlighted) {
+  if (highlighted || touch) {
     if (editable) {
       this.classes.add('focused');
+      touch && input.removeAttribute('disabled');
       input.focus();
     } else {
       this.reveal();
@@ -5106,6 +5168,7 @@ Cell.prototype.activate = function() {
  */
 
 Cell.prototype.deactivate = function() {
+  this.reset();
   this.blur();
   this.classes.remove('highlighted');
   this.input.setAttribute('disabled', true);
@@ -5188,7 +5251,7 @@ Cell.prototype.replace = function(cell) {
 /**
  * Edit the cell
  *
- * @param {Event} e 
+ * @param {Event} e
  * @api private
  */
 
@@ -6105,6 +6168,8 @@ Connector.prototype.hide = function() {
 
 
 
+
+
 require.alias("component-domify/index.js", "spreadsheet/deps/domify/index.js");
 require.alias("component-domify/index.js", "domify/index.js");
 
@@ -6229,4 +6294,10 @@ require.alias("component-ie/index.js", "spreadsheet/deps/ie/index.js");
 require.alias("component-ie/index.js", "spreadsheet/deps/ie/index.js");
 require.alias("component-ie/index.js", "ie/index.js");
 require.alias("component-ie/index.js", "component-ie/index.js");
+require.alias("component-tap/index.js", "spreadsheet/deps/tap/index.js");
+require.alias("component-tap/index.js", "tap/index.js");
+require.alias("component-event/index.js", "component-tap/deps/event/index.js");
+
+require.alias("component-bind/index.js", "component-tap/deps/bind/index.js");
+
 require.alias("spreadsheet/index.js", "spreadsheet/index.js");
