@@ -64,7 +64,7 @@ function template(locals) {
     jade_mixins["td"] = function(n) {
         var block = this && this.block, attributes = this && this.attributes || {};
         for (var i = 0; i < n; i++) {
-            buf.push('<td><input type="text" disabled="disabled"/></td>');
+            buf.push('<td><input type="tel" disabled="disabled"/></td>');
         }
     };
     buf.push('<div class="spreadsheet"><table><thead>');

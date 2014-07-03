@@ -5,7 +5,7 @@
 - var heads = headers == undefined ? true : headers
 - var l = layers || 3
 - var r = rows || 10
-- var c = cols || 10 
+- var c = cols || 10
 
 mixin filler(n)
   - for (var i = 0; i < n; i++)
@@ -33,7 +33,7 @@ mixin rowlayer(n)
 mixin td(n)
   - for (var i = 0; i < n; i++)
     td
-      input(type='text' disabled='disabled')
+      input(type='tel' disabled='disabled')
 
 .spreadsheet
   table
