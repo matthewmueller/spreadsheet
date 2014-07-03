@@ -52,13 +52,13 @@
   margin: 0;
   height: inherit;
   width: 100%;
-  
+
   font: inherit;
   color: inherit;
   text-align: inherit;
   line-height: inherit;
   -webkit-text-fill-color: inherit;
-  
+
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -67,6 +67,7 @@
 .spreadsheet input[disabled] {
   pointer-events: none;
   background: none;
+  opacity: 1;
 }
 
 .spreadsheet input:focus {
