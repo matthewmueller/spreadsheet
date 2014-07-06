@@ -140,7 +140,11 @@
          spreadsheet.select('19').hide()
          spreadsheet.select('26').hide()
          spreadsheet.select('D13:F13, D20:F20, D27:F27').addClass('top-border')
-         top
+
+
+         spreadsheet.on('move up', function(cell) {
+           console.log('moving up!', cell);
+         })
     </script>
 </body>
 

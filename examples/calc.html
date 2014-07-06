@@ -51,11 +51,11 @@
 
     document.body.appendChild(spreadsheet.el);
     window.spreadsheet = spreadsheet;
-    
+
     // spreadsheet.classes.add('headings');
 
     spreadsheet
-      .select('A').each(function(cell, i) { 
+      .select('A').each(function(cell, i) {
         cell.val('Year ' + i);
       })
       .select('B, C').each(function(cell) {

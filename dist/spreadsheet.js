@@ -4220,6 +4220,7 @@ Spreadsheet.prototype.merge = function(cells) {
   var merged = this.merged;
   var captain = smallest(cells);
   var at = captain.at;
+  var hidden = 0;
   var el, tr;
   merged[at] = [];
 
@@ -4227,6 +4228,9 @@ Spreadsheet.prototype.merge = function(cells) {
   for (var i = 0, cell; cell = cells[i]; i++) {
     if (captain == cell) continue;
     el = cell.el;
+    if (classes(el).has('hidden')) {
+      hidden++
+    }
     tr = el.parentNode;
     if (tr) tr.removeChild(el);
     spreadsheet[cell.at] = captain;
@@ -4236,8 +4240,8 @@ Spreadsheet.prototype.merge = function(cells) {
   // add the col and rowspan
   var biggest = largest(cells);
   var diff = subtract(biggest.at, captain.at);
-  captain.attr('rowspan', diff.row + 1);
-  captain.attr('colspan', diff.col + 1);
+  captain.attr('rowspan', diff.row - hidden + 1);
+  captain.attr('colspan', diff.col - hidden + 1);
 
   return this;
 }
@@ -4845,6 +4849,7 @@ Cell.prototype.update = function(val, opts) {
   opts = opts || {};
   opts.compute = undefined == opts.compute ? true : opts.compute;
 
+  var prevComputed = this.input.value;
   var spreadsheet = this.spreadsheet;
   var input = this.input;
   var prev = this.value;
@@ -4865,7 +4870,7 @@ Cell.prototype.update = function(val, opts) {
   if (opts.compute) {
     computed = input.value = this.compute(val);
     if (!opts.silent) {
-      spreadsheet.emit('change ' + at, computed)
+      spreadsheet.emit('change ' + at, computed, prevComputed, this);
     }
   }
 
@@ -4875,7 +4880,6 @@ Cell.prototype.update = function(val, opts) {
 
   return this;
 };
-
 
 /**
  * Compute the value and apply formatting
