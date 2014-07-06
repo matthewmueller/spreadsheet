@@ -4267,6 +4267,10 @@ Spreadsheet.prototype.move = function(dir) {
       active.deactivate();
       self.active = cell;
 
+      // emitters
+      self.emit('move', dir, cell);
+      self.emit('move ' + dir, cell);
+
       return false;
     }
   });
