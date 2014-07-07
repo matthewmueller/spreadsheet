@@ -4228,9 +4228,7 @@ Spreadsheet.prototype.merge = function(cells) {
   for (var i = 0, cell; cell = cells[i]; i++) {
     if (captain == cell) continue;
     el = cell.el;
-    if (classes(el).has('hidden')) {
-      hidden++
-    }
+    if (classes(el).has('hidden')) hidden++;
     tr = el.parentNode;
     if (tr) tr.removeChild(el);
     spreadsheet[cell.at] = captain;
