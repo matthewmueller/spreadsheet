@@ -4858,13 +4858,6 @@ Cell.prototype.update = function(val, opts) {
   var at = this.at;
   var computed;
 
-  // when formatting is percentage and value is
-  // greater than 1, update 5 to .05
-  if ('(0.0)%' == this.formatting && val >= 1) {
-    val = val / 100;
-  }
-
-
   // update the internal value
   this.value = val;
 
@@ -4984,7 +4977,8 @@ Cell.prototype.editable = function() {
   event.bind(input, 'input', function(e) {
     if (rexpr.test(input.value)) return;
     recomputing = {};
-    self.update(input.value, { compute: false });
+    var val = percentage(input.value);
+    self.update(val, { compute: false });
   });
 
   event.bind(input, 'focus', function(e) {
@@ -4995,8 +4989,16 @@ Cell.prototype.editable = function() {
     // TODO: temporary fix for blur firing twice, i think...
     e.stopImmediatePropagation();
     if ('' == input.value) return;
-    self.update(input.value);
+    var val = percentage(input.value);
+    self.update(val);
   });
+
+
+  function percentage(val) {
+    return '(0.0)%' == self.formatting && val >= 1
+      ? val / 100
+      : val;
+  }
 
   return this;
 };
