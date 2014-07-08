@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>DCF Model</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <link rel="stylesheet" href="../build/build.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <style>
+
+      #wrapper {
+        max-width: 600px;
+        min-width: 550px;
+      }
+
+      .spreadsheet .highlight[name="C32"] {
+        border-right: 1px solid #eedc00 !important;
+      }
+
+
+      /**
+       * Layout
+       */
+
+      html, body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+      }
+
+      #wrapper {
+        position: relative;
+        margin: 0 auto 20px auto;
+      }
+
+      a img {
+        border: 0;
+      }
+
+      a,
+      a:focus,
+      a:active {
+        text-decoration: none;
+      }
+
+      /**
+       * Logo
+       */
+
+      .lr-logo, .lr-link {
+        z-index: 1;
+        position: absolute;
+      }
+
+      .lr-logo {
+        background: white;
+        right: 0px;
+        top: 42px;
+        width: 56px;
+        /* this width * svg height / svg width */
+        height: 34px;
+      }
+
+      .lr-link {
+        right: 0px;
+        bottom: -5px;
+        width: 210px;
+        /* this width * svg height / svg width */
+        height: 25px;
+      }
+
+      /**
+       * Spreadsheet
+       */
+
+      .spreadsheet {
+        width: 100%;
+        height: 100%;
+      }
+
+      .spreadsheet table {
+        font-size: 8pt;
+        text-align: right;
+      }
+
+      .spreadsheet table td {
+        border-right: none !important;
+        border-bottom: none !important;
+      }
+
+      .spreadsheet .editable input {
+        font-weight: bold;
+        font-style: normal;
+        text-decoration: underline;
+      }
+
+      .spreadsheet td:first-of-type {
+        border-left: none
+      }
+
+      .spreadsheet tr:last-of-type td {
+        border-bottom: 1px solid #ccc !important;
+      }
+
+      .spreadsheet .h1,
+      .spreadsheet .h2,
+      .spreadsheet .h3 {
+        text-align: left;
+      }
+
+      .spreadsheet .h1 {
+        font-weight: bold;
+        font-size: 18px;
+        border-bottom: solid #333 2px !important;
+        color: #1AA260;
+      }
+
+      .spreadsheet .h2 {
+        border-bottom: solid #333 1px !important;
+        color: #1AA260;
+      }
+
+      .spreadsheet .bold {
+        font-weight: bold;
+      }
+
+      .spreadsheet .italic {
+        font-style: italic;
+      }
+
+      .spreadsheet .center {
+        text-align: center;
+      }
+
+      .spreadsheet .top-border {
+        border-top: solid #333333 1px !important;
+      }
+
+      .spreadsheet .highlight {
+        border: 1px solid #eedc00 !important;
+        border-right: none !important ;
+        background-color: #FFFBCC !important;
+      }
+
+      .spreadsheet .highlight + .highlight {
+        border-left: none !important;
+      }
+
+      .spreadsheet.initial .outline.editable {
+        -webkit-animation: pulsate 1000ms infinite linear;
+        -moz-animation: pulsate 1000ms infinite linear;
+        -ms-animation: pulsate 1000ms infinite linear;
+        -o-animation: pulsate 1000ms infinite linear;
+        animation: pulsate 1000ms infinite linear;
+      }
+
+      @-webkit-keyframes pulsate {
+        0% { -webkit-transform: scale(1); }
+        30% { -webkit-transform: scale(1); }
+        40% { -webkit-transform: scale(1.20); }
+        50% { -webkit-transform: scale(1); }
+        60% { -webkit-transform: scale(1); }
+        70% { -webkit-transform: scale(1.10); }
+        80% { -webkit-transform: scale(1); }
+        100% { -webkit-transform: scale(1); }
+      }
+
+      @-moz-keyframes pulsate {
+        0% { -moz-transform: scale(1); }
+        30% { -moz-transform: scale(1); }
+        40% { -moz-transform: scale(1.20); }
+        50% { -moz-transform: scale(1); }
+        60% { -moz-transform: scale(1); }
+        70% { -moz-transform: scale(1.10); }
+        80% { -moz-transform: scale(1); }
+        100% { -moz-transform: scale(1); }
+      }
+
+      @-o-keyframes pulsate {
+        0% { -o-transform: scale(1); }
+        30% { -o-transform: scale(1); }
+        40% { -o-transform: scale(1.20); }
+        50% { -o-transform: scale(1); }
+        60% { -o-transform: scale(1); }
+        70% { -o-transform: scale(1.10); }
+        80% { -o-transform: scale(1); }
+        100% { -o-transform: scale(1); }
+      }
+
+      @keyframes pulsate {
+        0% { transform: scale(1); }
+        30% { transform: scale(1); }
+        40% { transform: scale(1.20); }
+        50% { transform: scale(1); }
+        60% { transform: scale(1); }
+        70% { transform: scale(1.10); }
+        80% { transform: scale(1); }
+        100% { transform: scale(1); }
+      }
+
+      .spreadsheet .spacer-header-top {
+        padding-top: 20px !important;
+      }
+
+      .spreadsheet .spacer-top {
+        padding-top: 7px !important;
+      }
+
+      .spreadsheet .spacer-bottom {
+        padding-bottom: 7px !important;
+      }
+
+      .spreadsheet .result-region {
+        background-color: rgba(242, 242, 242, 0.57);
+        font-size: 14px;
+      }
+
+      .spreadsheet .result-text {
+        color: #1AA260;
+      }
+
+      .spreadsheet .border-left {
+        border-left: solid #333333 1px !important;
+      }
+
+      .spreadsheet .spacer-right {
+        padding-right: 7px !important;
+      }
+
+      /*.spreadsheet td.changed input {
+        -webkit-animation: pulsate 1000ms 1 linear;
+        -moz-animation: pulsate 1000ms 1 linear;
+        -ms-animation: pulsate 1000ms 1 linear;
+        -o-animation: pulsate 1000ms 1 linear;
+        animation: pulsate 1000ms 1 linear;
+      }
+      */
+      /*.spreadsheet .spacer-right:after {
+        content: '\0';
+        position: absolute;
+        z-index: 1;
+        height: 100%;
+        width: 2px;
+        background: #000;
+        right: 0;
+        top: -20px;
+      }*/
+
+    </style>
+</head>
+
+<body>
+    <div id="wrapper">
+    </div>
+
+    <script src="../build/build.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      var Spreadsheet = require('spreadsheet');
+      var spreadsheet = Spreadsheet('I40');
+      var wrapper = document.getElementById('wrapper');
+      wrapper.appendChild(spreadsheet.el);
+
+      // ***********************************************************
+      // Input Assumptions
+      // ***********************************************************
+
+      // inputs
+        var company_name = "ORCL";
+        var val_date = 41825;
+        var fy_date = 41790;
+        var fy_p_date = 42155;
+        var dates = ['FY 2012', 'FY 2013', '', 'FY 2014P', 'FY 2015P', 'FY 2016P'];
+        var sales_fy = 37180;
+        var sales_fy_prior = 37121;
+        var sales_g_fy = 0.002;
+        var sales_g_fy_prior = 0.042;
+        var oi_fy = 14432;
+        var oi_fy_prior = 14057;
+        var oi_g_fy = 0.388;
+        var oi_g_fy_prior = 0.379;
+        var sales_proj = [0.022, 0.022, 0.022];
+        var oi_proj = [0.388, 0.388, 0.388];
+        var capex = -650;
+        var dep = 1734;
+        var nwc = 6.6;
+        var net_debt = 14083;
+        var other = -569;
+        var shares = 4454.9;
+        var stock_price = 41.34;
+        var capex_proj = 0.016;
+        var nwc_proj = -0.112;
+        var dep_proj = 0.99;
+        var terminal_growth = 0.022;
+        var wacc = 0.09;
+        var tax_rate = 0.3;
+
+
+      // ***********************************************************
+      // Start Assumption Collection
+      // ***********************************************************
+
+      // column titles
+      spreadsheet.select('A').hide()
+      spreadsheet.select('1').hide()
+      spreadsheet.select('I').hide()
+      spreadsheet.select('1').hide()
+      spreadsheet.select('3').hide()
+      spreadsheet.select('4').hide()
+      spreadsheet.select('7').hide()
+      spreadsheet.select('10').hide()
+      spreadsheet.select('13:14').hide()
+      spreadsheet.select('22:24').hide()
+      spreadsheet.select('33').hide()
+      spreadsheet.select('38').hide()
+
+
+      spreadsheet.select('B').width(200)
+      spreadsheet.select('C6:H6').insert(dates)
+      spreadsheet.select('B1:B40').addClass('h3')
+        .insert(['',
+          company_name + ": DCF Analysis",
+          '',
+          '',
+          '',
+          '',
+          '',
+          'Sales',
+          '   Growth',
+          '',
+          'Operating Income',
+          '   Margin',
+          '',
+          'Operating Income',
+          '  (-) Pro-forma Taxes',
+          'Net Operating Profit After Tax',
+          '  (-) Capital Expenditures',
+          '  (-) Working Capital Investment',
+          '  (+) Depreciation',
+          'Normalized Free Cash Flow',
+          '   Growth',
+          '',
+          'Discount Factor',
+          '',
+          'Results',
+          'Enterprise Value',
+          '  (-) Net Debt',
+          '  (+) Other',
+          'Equity Value',
+          '  (/) Shares Outstanding',
+          'Implied Fair Value Per Share',
+          'Discount / (Premium)',
+          '',
+          'Key Assumptions',
+          '  Capital Expend. % of Sales',
+          '  Working Capital % or Sales',
+          '  Depreciation % or Capital Expend.',
+          '',
+          '',
+          ''
+        ])
+
+      spreadsheet.select('E').width(10)
+
+      spreadsheet.select('F5:G5').insert('Input Forecast').merge().addClass('center').addClass('bold')
+      spreadsheet.select('F6:H6').addClass('top-border')
+      spreadsheet.select('F35:G35').insert(['Terminal Growth Rate']).merge().addClass('h3')
+      spreadsheet.select('F36:G36').insert(['WACC']).merge().addClass('h3')
+      spreadsheet.select('F37:G37').insert(['Tax Rate']).merge().addClass('h3')
+
+
+      // Sales and Operating Income Build-up
+      spreadsheet.select('C8:D8').insert([sales_fy_prior, sales_fy]).format('$')
+      spreadsheet.select('C9:D9').insert([sales_g_fy_prior, sales_g_fy]).format('%')
+
+      spreadsheet.select('F9:H9').insert(sales_proj).format('%').editable()
+
+      spreadsheet.select('F8').calc('(1+{F9})*{D8}').format('$')
+      spreadsheet.select('G8').calc('(1+{G9})*{F8}').format('$')
+      spreadsheet.select('H8').calc('(1+{H9})*{G8}').format('$')
+
+      spreadsheet.select('C11:D11').insert([oi_fy_prior, oi_fy]).format('#')
+      spreadsheet.select('C12:D12').insert([oi_g_fy_prior, oi_g_fy]).format('%')
+
+      spreadsheet.select('F12:H12').insert(oi_proj).format('%').editable()
+
+      spreadsheet.select('F11').calc('{F12}*{F8}').format('#')
+      spreadsheet.select('G11').calc('{G12}*{G8}').format('#')
+      spreadsheet.select('H11').calc('{H12}*{H8}').format('#')
+
+      spreadsheet.select('B9, B12, B21').addClass('italic')
+
+      spreadsheet.select('D14').insert(oi_fy).format('$')
+      spreadsheet.select('F14').calc('{F11}').format('$')
+      spreadsheet.select('G14').calc('{G11}').format('$')
+      spreadsheet.select('H14').calc('{H11}').format('$')
+
+      // Free Cash Flow to Firm
+        // Key Assumptions
+      spreadsheet.select('C35:C37').insert([capex_proj, nwc_proj, dep_proj]).editable().format('%')
+      spreadsheet.select('H35:H37').insert([terminal_growth, wacc, tax_rate]).editable().format('%')
+
+        // Taxes
+      spreadsheet.select('D15').calc('-{D14}*{H37}').format('#')
+      spreadsheet.select('F15').calc('-{F14}*{H37}').format('#')
+      spreadsheet.select('G15').calc('-{G14}*{H37}').format('#')
+      spreadsheet.select('H15').calc('-{H14}*{H37}').format('#')
+
+        // NOPAT
+      spreadsheet.select('D16').calc('{D11}+{D15}').format('#')
+      spreadsheet.select('F16').calc('{F11}+{F15}').format('#')
+      spreadsheet.select('G16').calc('{G11}+{G15}').format('#')
+      spreadsheet.select('H16').calc('{H11}+{H15}').format('#')
+
+        // CAPEX
+      spreadsheet.select('F17').calc('-{F8}*{C35}').format('#')
+      spreadsheet.select('G17').calc('-{G8}*{C35}').format('#')
+      spreadsheet.select('H17').calc('-{H8}*{C35}').format('#')
+
+        // NWC
+      spreadsheet.select('F18').calc('{D8}*{C36}-{F8}*{C36}').format('#')
+      spreadsheet.select('G18').calc('{F8}*{C36}-{G8}*{C36}').format('#')
+      spreadsheet.select('H18').calc('{G8}*{C36}-{H8}*{C36}').format('#')
+
+        // Dep
+      spreadsheet.select('F19').calc('-{F17}*{C37}').format('#')
+      spreadsheet.select('G19').calc('-{G17}*{C37}').format('#')
+      spreadsheet.select('H19').calc('-{H17}*{C37}').format('#')
+
+        // Normalized FCF
+      spreadsheet.select('D17:D19').insert([capex, nwc, dep]).format('#')
+      spreadsheet.select('B20').addClass('bold')
+      spreadsheet.select('D20').calc('{D16}+{D17}+{D18}+{D19}').format('$').addClass('bold')
+      spreadsheet.select('F20').calc('{F16}+{F17}+{F18}+{F19}').format('#').addClass('bold')
+      spreadsheet.select('G20').calc('{G16}+{G17}+{G18}+{G19}').format('#').addClass('bold')
+      spreadsheet.select('H20').calc('{H16}+{H17}+{H18}+{H19}').format('#').addClass('bold')
+
+      spreadsheet.select('F21').calc('{F20}/{D20}-1').format('%').addClass('italic')
+      spreadsheet.select('G21').calc('{G20}/{F20}-1').format('%').addClass('italic')
+      spreadsheet.select('H21').calc('{H20}/{G20}-1').format('%').addClass('italic')
+
+      spreadsheet.select('D16, F16:H16, D20, D21, F20:H20, F21:H21').addClass('top-border')
+
+        // Discount Factor
+      spreadsheet.select('C22').insert(val_date)
+      spreadsheet.select('D22').insert(fy_date)
+      spreadsheet.select('F22').insert(fy_p_date)
+
+      spreadsheet.select('F23').calc('1 / Math.pow((1+{H36}),(({D22}+{F22})/2-{C22})/365)').format('##')
+      spreadsheet.select('G23').calc('1 / Math.pow((1+{H36}),(({D22}+{F22})/2-{C22})/365 +1)').format('##')
+      spreadsheet.select('H23').calc('1 / Math.pow((1+{H36}),(({D22}+{F22})/2-{C22})/365+2)').format('##')
+
+        // Equity Waterfall
+      spreadsheet.select('C26').calc('Math.max({F20}*{F23}+{G20}*{G23}+{H20}*{H23}+{H20}*(1+{H35})/({H36}-{H35})*{H23},0)').format('$')
+
+      spreadsheet.select('C27:C28').insert([net_debt, other]).format('#')
+      spreadsheet.select('C29').calc('{C26}+{C27}+{C28}').format('#')
+
+      spreadsheet.select('C26').calc('Math.max({F20}*{F23}+{G20}*{G23}+{H20}*{H23}+{H20}*(1+{H35})/({H36}-{H35})*{H23},0)').format('$')
+      spreadsheet.select('C30').insert(shares).format('#')
+      spreadsheet.select('C31').calc('{C29}/{C30}').format('$$')
+      spreadsheet.select('C32').calc('{C31}/{G31}-1').format('%')
+      spreadsheet.select('B32:C32').addClass('bold').addClass('highlight')
+
+      // Result Region
+      spreadsheet.select('F27:H27').insert(['Model Price']).merge().addClass('center').addClass('bold')
+      spreadsheet.select('F27').addClass('result-text')
+      spreadsheet.select('G28').calc('{C31}').format('$$').addClass('result-text')
+      spreadsheet.select('F30:H30').insert(['Market Price (7/1/14)']).merge().addClass('center').addClass('bold')
+      spreadsheet.select('G31').insert(stock_price).format('$$').editable()
+      spreadsheet.select('F26:H32').addClass('result-region')
+
+      //  // Formatting Clean-up
+      spreadsheet.select('B2:G2').merge().addClass('h1')
+      spreadsheet.select('5').addClass('spacer-header-top')
+      spreadsheet.select('11, 15, 25, 34, 38').addClass('spacer-top')
+      spreadsheet.select('6').addClass('spacer-bottom').addClass('bold')
+      spreadsheet.select('B25:C25, B34:H34').addClass('h2').addClass('bold')
+      spreadsheet.select('E8:E20').addClass('border-left')
+      spreadsheet.select('D6:D20').addClass('spacer-right')
+      spreadsheet.select('B26:C26, B29:C29, B31:C31').addClass('bold')
+      spreadsheet.select('C29, C31').addClass('top-border')
+
+      // source
+      spreadsheet.select('B39:C39').insert('Numbers in blue are editable').merge().editable().addClass('spacer-top');
+      spreadsheet.select('B40:C40').insert('Sources: SEC Filings, Yahoo!, Levered Returns').merge();
+
+      spreadsheet.select('F9').activate()
+
+    </script>
+
+</body>
+
+</html>
