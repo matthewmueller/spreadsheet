@@ -2137,9 +2137,10 @@ var modifiers = {
 
 /**
  * Super key.
+ * (must use subscript vs. dot notation to avoid issues with older browsers)
  */
 
-exports.super = 'mac' == os
+exports[ 'super' ] = 'mac' == os
   ? 'command'
   : 'ctrl';
 
@@ -2163,7 +2164,7 @@ exports.handle = function(e, fn){
   // modifiers
   var mod = modifiers[code];
   if ('keydown' == event && mod) {
-    this.super = exports.super == mod;
+    this[ 'super' ] = exports[ 'super' ] == mod;
     this[mod] = true;
     this.modifiers = true;
     return;
@@ -2361,7 +2362,7 @@ exports.ignore = function(e){
  */
 
 function parseKeys(keys){
-  keys = keys.replace('super', exports.super);
+  keys = keys.replace('super', exports[ 'super' ]);
 
   var all = ',' != keys
     ? keys.split(/ *, */)
@@ -4783,6 +4784,12 @@ var rexpr = /\s*=/;
 var touch = 'ontouchstart' in window;
 
 /**
+ * iFrame
+ */
+
+var iframe = parent != window;
+
+/**
  * Token compiler
  */
 
@@ -4829,7 +4836,17 @@ function Cell(el, at, spreadsheet) {
   this.observing = [];
 
   // bind the events
-  this.tap = tap(this.el, this.onclick.bind(this));
+  //
+  // insane iOS bug if we're in an iframe
+  // in a webview and define a touch event
+  // input stops accepting keyboard input.
+  if (iframe) {
+    this.tap = events(this.el, this);
+    this.tap.bind('click', 'onclick');
+  } else {
+    this.tap = tap(this.el, this.onclick.bind(this));
+  }
+
 }
 
 /**
