@@ -1,4 +1,18 @@
 
+0.1.2 / 2014-08-19
+==================
+
+ * change .val() to be a getter
+ * fix mother effing input bug on mobile
+ * update dist
+ * fix short-dcf
+ * update dist
+ * cleanup
+ * update dist/
+ * 'change' consistent with 'changing'. now emitting 'move' events.
+ * fix spreadsheet.on('change ..', fn)
+ * fix for merged hidden cells. isn't full-proof
+
 0.1.1 / 2014-07-03
 ==================
 

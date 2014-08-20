@@ -4854,6 +4854,7 @@ function Cell(el, at, spreadsheet) {
  */
 
 Cell.prototype.val = function(val, opts) {
+  if (!arguments.length) return this.compute(this.value);
   recomputing = {};
   this.update(val);
 };
@@ -4863,8 +4864,6 @@ Cell.prototype.val = function(val, opts) {
  */
 
 Cell.prototype.update = function(val, opts) {
-  if (undefined == val) return this.compute(this.value, opts);
-
   opts = opts || {};
   opts.compute = undefined == opts.compute ? true : opts.compute;
 
