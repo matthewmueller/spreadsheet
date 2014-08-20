@@ -4864,6 +4864,7 @@ Cell.prototype.val = function(val, opts) {
  */
 
 Cell.prototype.update = function(val, opts) {
+  if (undefined == val) return this.val();
   opts = opts || {};
   opts.compute = undefined == opts.compute ? true : opts.compute;
 
