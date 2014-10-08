@@ -45,7 +45,8 @@
     "lib/expand.js",
     "lib/match.js",
     "lib/outline.js",
-    "lib/collapsible.js"
+    "lib/collapsible.js",
+    "lib/format.js"
   ],
   "styles": [
     "spreadsheet.css"

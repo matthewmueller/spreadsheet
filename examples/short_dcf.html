@@ -372,7 +372,7 @@
       spreadsheet.select('C8:D8').insert([sales_fy_prior, sales_fy]).format('$')
       spreadsheet.select('C9:D9').insert([sales_g_fy_prior, sales_g_fy]).format('%')
 
-      spreadsheet.select('F9:H9').insert(sales_proj).format('%').editable()
+      spreadsheet.select('F9:H9').insert(sales_proj).format('x').editable()
 
       spreadsheet.select('F8').calc('(1+{F9})*{D8}').format('$')
       spreadsheet.select('G8').calc('(1+{G9})*{F8}').format('$')
