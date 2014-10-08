@@ -4765,6 +4765,7 @@ var classes = require('classes');
 var modifier = require('modifier');
 var props = require('props');
 var type = require('./type');
+var formatter = require('./format');
 var shortcuts = require('shortcuts');
 var tokenizer = require('mini-tokenizer');
 var throttle = require('per-frame');
@@ -4902,6 +4903,7 @@ Cell.prototype.compute = function(value, opts) {
   opts = opts || {};
 
   var format = undefined == opts.format ? true : opts.format;
+  var formatting = this.formatting;
 
   if (rexpr.test(value)) {
     this.expr = (this.expr && this.value == value) ? this.expr : this.compile(value);
@@ -4910,7 +4912,14 @@ Cell.prototype.compute = function(value, opts) {
   }
 
   value = this.expr ? this.expr() : value;
-  value = (format && this.formatting && isNumber(value)) ? numeral(value).format(this.formatting) : value;
+
+  // apply formatting
+  if (format && formatting && isNumber(value)) {
+    value = formatter[formatting]
+      ? formatter[formatting](value)
+      : numeral(value).format(formatting)
+  }
+
   return value;
 };
 
@@ -4954,7 +4963,11 @@ Cell.prototype.compile = function(expr, opts) {
 };
 
 /**
- * Format
+ * Set the formatting
+ *
+ * @param {String} format
+ * @return {Cell}
+ * @api public
  */
 
 Cell.prototype.format = function(format) {
@@ -5009,7 +5022,6 @@ Cell.prototype.editable = function() {
     var val = percentage(input.value);
     self.update(val);
   });
-
 
   function percentage(val) {
     return '(0.0)%' == self.formatting && val >= 1
@@ -6141,6 +6153,29 @@ Connector.prototype.hide = function() {
   this.hidden = true;
 };
 
+
+});
+require.register("spreadsheet/lib/format.js", function(exports, require, module){
+/**
+ * Custom formats
+ */
+
+exports['x'] = function(val) {
+  return round(val, 1) + 'x';
+}
+
+/**
+ * Round
+ *
+ * @param {Number} n
+ * @return {Number} decimals
+ * @return {Number}
+ */
+
+function round(n, decimals) {
+  decimals *= 10;
+  return Math.round(n * decimals) / decimals;
+}
 
 });
 
