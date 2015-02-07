@@ -1,3 +1,4 @@
+;(function(){
 
 /**
  * Require the given path.
@@ -6354,4 +6355,10 @@ require.alias("component-event/index.js", "component-tap/deps/event/index.js");
 
 require.alias("component-bind/index.js", "component-tap/deps/bind/index.js");
 
-require.alias("spreadsheet/index.js", "spreadsheet/index.js");
+require.alias("spreadsheet/index.js", "spreadsheet/index.js");if (typeof exports == "object") {
+  module.exports = require("spreadsheet");
+} else if (typeof define == "function" && define.amd) {
+  define([], function(){ return require("spreadsheet"); });
+} else {
+  this["Spreadsheet"] = require("spreadsheet");
+}})();

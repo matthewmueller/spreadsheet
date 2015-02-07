@@ -8,7 +8,7 @@ components: component.json
 dist: components dist-build dist-minify
 
 dist-build:
-	@component build -o dist -n spreadsheet
+	@component build -o dist -n spreadsheet -s Spreadsheet
 
 dist-minify: dist/spreadsheet.js
 	@curl -s \
