@@ -1,0 +1,27 @@
+{
+  "name": "spreadsheet",
+  "version": "0.1.4",
+  "description": "create spreadsheets with excel-like features",
+  "main": "dist/spreadsheet.browserify.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MatthewMueller/spreadsheet.git"
+  },
+  "author": "Levered Returns",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MatthewMueller/spreadsheet/issues"
+  },
+  "homepage": "https://github.com/MatthewMueller/spreadsheet",
+  "dependencies": {},
+  "devDependencies": {
+    "browserify": "^9.0.8",
+    "derequire": "^2.0.0"
+  }
+}

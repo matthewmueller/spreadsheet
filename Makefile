@@ -5,7 +5,12 @@ build: components spreadsheet.css template.js
 components: component.json
 	@component install --dev
 
-dist: components dist-build dist-minify
+browserify: dist/spreadsheet.js
+	@cat dist/spreadsheet.js | ./node_modules/.bin/derequire > dist/spreadsheet.b.tmp.js
+	@./node_modules/.bin/browserify -s Spreadsheet dist/spreadsheet.b.tmp.js > dist/spreadsheet.browserify.js
+	@rm dist/spreadsheet.b.tmp.js
+
+dist: components dist-build browserify dist-minify
 
 dist-build:
 	@component build -o dist -n spreadsheet -s Spreadsheet
