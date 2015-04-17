@@ -1,4 +1,15 @@
 
+0.1.5 / 2015-04-16
+==================
+
+  * provide a browserify build
+  * add dist
+  * update dist/
+  * added: spreadsheet#format(x) plus custom formatting framework for future
+  * ignore DS_Store
+  * update dist
+  * use test keyboard for decimal point
+
 0.1.4 / 2014-08-20
 ==================
 
